@@ -1,0 +1,45 @@
+# Файлы и папки, которые следует игнорировать
+*.pyc
+*.db
+instance/
+__pycache__/
+env/
+migrations/
+static/
+tests/
+
+# Environments 
+.env 
+.venv 
+env/ 
+venv/ 
+ENV/ 
+
+# Файлы IDE
+.vscode/
+.idea/
+
+# Файлы системы контроля версий
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Логи
+*.log
+# dependencies
+/node_modules
+/.pnp
+.pnp.js
+
+# testing
+/coverage
+
+# production
+/build
+
+# misc
+.DS_Store
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local

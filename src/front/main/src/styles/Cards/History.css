@@ -1,0 +1,103 @@
+.History {
+    width: 100%;
+    color: var(--color-primary-text);
+
+}
+
+.HistoryDateWrapper {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px;
+    padding-right: 0px;
+}
+
+.DateInputWrapper {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.HistoryNav {
+    margin-top: 15px;
+    margin-bottom: 15px;
+    padding: 5px;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    justify-content: center;
+}
+
+.CurrentHistoryNavButton,
+.HistoryNavButton {
+    background-color: var(--color-base-fill);
+    color: var(--color-primary-text);
+    border: 0;
+    border-bottom: solid 1px;
+    padding: 5px;
+}
+
+.HistoryNavButton {
+    color: var(--color-secondary-text);
+    border-color: var(--color-base-border);
+}
+
+.CurrentHistoryNavButton {
+    border-color: var(--color-control-elements);
+}
+
+.HistoryItem {
+    display: flex;
+    gap: 15px;
+    justify-content: space-between;
+    align-items: center;
+    background-color: var(--color-component-background);
+    padding: 15px;
+    border-radius: 5px;
+    border: 1px solid;
+    border-color: var(--color-base-border);
+}
+
+.HistoryItemContent {
+    width: 100%;
+    display: grid;
+    grid-template-columns: 53% 47%;
+    flex-direction: column;
+    gap: 0 20px;
+    position: relative;
+}
+
+
+.HistoryItemRightText {
+    width: 70%;
+}
+
+.HistoryItem .TextName {
+    color: var(--color-primary-dark-text);
+}
+
+.ItemCountWrapper {
+    display: flex;
+    align-items: flex-end;
+}
+
+.ItemPriceWrapper {
+    display: flex;
+    flex-direction: column;
+}
+
+.ItemDateWrapper {
+    display: flex;
+    flex-direction: column;
+}
+
+.HistoryItemsWrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.HistoryModalItem {
+    display: grid;
+    grid-template-columns: 50% 50%;
+    grid-template-columns: calc(50% - 7.5px) calc(50% - 7.5px);
+    gap: 15px;
+}

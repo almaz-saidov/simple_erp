@@ -1,0 +1,55 @@
+.Detail {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    background-color: var(--color-component-background);
+    
+    padding: 15px;
+    border-radius: 5px;
+    border: 1px solid;
+    border-color: var(--color-base-border);
+}
+
+.DetailLeft {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.DetailRight {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 10px;
+}
+
+.DetailNumberWrapper {
+    justify-content: center;
+    display: flex;
+    flex-direction: column;
+    padding: 5px;
+    border-radius: 5px;
+    border: 1px solid;
+    border-color: var(--color-base-border);
+    background-color: var(--color-input-background);
+}
+
+.DetailName {
+    color: var(--color-primary-text);
+}
+
+.CountText {
+    color: var(--color-primary-dark-text);
+}
+
+.DetailCount {
+    color: var(--color-primary-text);
+}
+
+.NumberText {
+    color: var(--color-primary-dark-text);
+}
+
+.DetailNumber {
+    color: var(--color-primary-text);
+}

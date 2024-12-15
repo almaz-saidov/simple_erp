@@ -1,0 +1,45 @@
+.Card {
+    box-sizing: border-box;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    flex-direction: column;
+    width: 100%;
+    padding: 0 15px;
+
+}
+
+.Card * {
+    box-sizing: border-box;
+    max-width: 700px;
+}
+
+.CardHeader {
+    display: flex;
+    align-self: flex-start;
+    color: var(--color-primary-text);
+    text-align: left;
+    padding-top: 20px;
+    padding-bottom: 10px;
+}
+
+.CardHeader h1 {
+    font-weight: 500;
+}
+
+.CardContent {
+    min-height: 250px;
+  
+    box-sizing: border-box;
+
+    display: grid;
+    width: 100%;
+    background-color: var(--color-component-background);
+    grid-template-columns: calc(50% - 7.5px) calc(50% - 7.5px);
+    gap: 15px;
+    padding: 10px;
+    border-radius: 5px;
+    border: solid 1px;
+    border-color: var(--color-base-border);
+
+}

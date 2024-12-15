@@ -1,0 +1,121 @@
+.Returns {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    box-sizing: border-box;
+}
+
+.Returns span {
+    color: var(--color-primary-dark-text);
+    margin-bottom: 10px;
+}
+
+.CreateReturnWrapper {
+    align-items: center;
+    justify-content: center;
+    box-sizing: border-box;
+    position: fixed;
+    bottom: 110px;
+    width: 100%;
+    max-width: 100%;
+    padding: 15px;
+    gap: 5px;
+    display: flex;
+    flex-direction: column;
+}
+
+
+
+.CreateReturn,
+.CreateReturnAir {
+    max-width: 700px;
+    width: 100%;
+    padding: 15px;
+    border: 1px solid;
+    color: var(--color-primary-text);
+    border-radius: 5px;
+}
+
+.CreateReturn {
+    opacity: 50;
+    padding: 15px;
+    background-color: var(--color-cool-background);
+    border-color: var(--color-light-border);
+    backdrop-filter: blur(7px);
+}
+
+.CreateReturnAir {
+
+    background-color: var(--color-base-fill);
+    border-collapse: var(--color-primary-text);
+}
+
+.ReturnsWrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.Return {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    background-color: var(--color-component-background);
+    padding: 15px;
+    border-radius: 5px;
+    border: 1px solid;
+    border-color: var(--color-base-border);
+}
+
+.EditReturn {
+    display: grid;
+    grid-template-columns: 50% 50%;
+    grid-template-columns: calc(50% - 7.5px) calc(50% - 7.5px);
+    gap: 15px;
+}
+
+.Return:active {
+    background-color: var(--color-base-background);
+}
+
+.Return .ReturnLeft {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    position: relative;
+
+}
+
+.Return .AirIcon {
+    position: absolute;
+    width: 50px;
+    height: 50px;
+    right: 2px;
+    top: 12px;
+    transform: translate(50%, -50%);
+}
+
+.Return .ReturnRight {
+
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 10px;
+}
+
+
+.DateText {
+    color: var(--color-primary-text);
+}
+
+.ReturnDate {
+    color: var(--color-primary-dark-text);
+}
+
+.ReturnDateWrapper {
+    width: 80%;
+}

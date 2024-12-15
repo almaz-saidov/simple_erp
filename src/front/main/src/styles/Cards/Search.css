@@ -1,0 +1,10 @@
+.Search {
+    width: 100%;
+}
+
+.DetailsWrapper {
+    margin-top: 15px;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}

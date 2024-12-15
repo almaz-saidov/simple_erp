@@ -1,0 +1,146 @@
+:root {
+    --color-base-fill: #0D0D0D;
+    --color-base-background: #131313;
+    --color-component-background: #1D1D1D;
+    --color-input-background: #2B2B2B;
+    --color-secondary-text: #616161;
+    --color-primary-dark-text: #A7A7A7;
+    --color-primary-text: #DBDBDB;
+    --color-base-border: #3F3F3F;
+    --color-light-border: #525252;
+    --color-selected-border: #DBDBDB;
+    --color-control-elements: #017AFE;
+    --color-cool-background: rgba(39, 39, 39, 0.3);
+}
+
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap');
+
+
+:root {
+    font-family: "Open Sans", sans-serif;
+    box-sizing: border-box;
+}
+
+body {
+    height: 100%;
+    width: 100%;
+    background-color: var(--color-base-fill);
+}
+
+
+@media (max-width: 400px) {
+    body {
+        font-size: 14px;
+    }
+
+    input {
+        font-size: 14px;
+    }
+
+    input::placeholder {
+        font-size: 14px;
+    }
+
+    .NumberDoesNotExist {
+        font-size: 28px;
+    }
+
+    .Checkbox label {
+        font-size: 16px;
+    }
+
+    input[type="checkbox"]:checked::before {
+        font-size: 16px;
+    }
+
+    .close {
+        font-size: 20px;
+    }
+
+    .ModalHeader h1 {
+        font-size: 22px;
+    }
+
+    .backButton {
+        font-size: 16px;
+    }
+
+    .NavButton {
+        font-size: 12px;
+    }
+
+    .CurrentHistoryNavButton,
+    .HistoryNavButton {
+        font-size: 18px;
+    }
+
+    .HistoryItem .TextName {
+        font-size: 14px;
+    }
+
+    .SubmitButton {
+        font-size: 16px;
+    }
+
+}
+
+@media (min-width: 401px) and (max-width: 800px) {
+    body {
+        font-size: 20px;
+    }
+
+    input {
+        font-size: 18px;
+    }
+
+    input::placeholder {
+        font-size: 18px;
+    }
+
+    .SubmitButton {
+        font-size: 20px;
+    }
+
+    .NumberDoesNotExist {
+        font-size: 34px;
+    }
+
+    .Checkbox label {
+        font-size: 20px;
+    }
+
+    input[type="checkbox"]:checked::before {
+        font-size: 20px;
+    }
+
+    .close {
+        font-size: 24px;
+    }
+
+    .ModalHeader h1 {
+        font-size: 26px;
+    }
+
+    .backButton {
+        font-size: 20px;
+    }
+
+    .NavButton {
+        font-size: 14px;
+    }
+
+    .CurrentHistoryNavButton,
+    .HistoryNavButton {
+        font-size: 22px;
+    }
+
+    .HistoryItem .TextName {
+        font-size: 18px;
+    }
+}
+
+@media (min-width: 1201px) {
+    body {
+        font-size: 18px;
+    }
+}

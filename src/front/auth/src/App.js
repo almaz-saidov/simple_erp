@@ -20,39 +20,39 @@ function App() {
     const [loading, setLoading] = useState(true);
     const navigate = useNavigate(); // Используем useNavigate
 
-    useEffect(() => {
-        window.AuthPostRequest = {}
+    // useEffect(() => {
+    //     window.AuthPostRequest = {}
 
-        window.AuthPostRequest.initialize = function (post_url) {
-            const csrfToken = "{{ secret_key }}"
-            const init_data = window.Telegram.WebApp.initData
-            setLoading(true);
-            $.ajax({
-                url: post_url,
-                type: 'POST',
-                headers: {
-                    'Authorization': `Bearer ${init_data}`,
-                },
-                data: {
-                    csrf_token: csrfToken,
-                    initData: init_data,
-                },
-                success: function (response) {
-                    setAuthorized(true);
-                    localStorage.setItem('authorize', init_data);
-                    navigate('response.redirect_url', { state: { init_data } });
-                    window.location.reload()
-                },
-                error: function (xhr, status, error) {
-                    navigate('front/error');
-                    console.log(error)
-                },
-            })
-            setLoading(false);
-        }
+    //     window.AuthPostRequest.initialize = function (post_url) {
+    //         const csrfToken = "{{ secret_key }}"
+    //         const init_data = window.Telegram.WebApp.initData
+    //         setLoading(true);
+    //         $.ajax({
+    //             url: post_url,
+    //             type: 'POST',
+    //             headers: {
+    //                 'Authorization': `Bearer ${init_data}`,
+    //             },
+    //             data: {
+    //                 csrf_token: csrfToken,
+    //                 initData: init_data,
+    //             },
+    //             success: function (response) {
+    //                 setAuthorized(true);
+    //                 localStorage.setItem('authorize', init_data);
+    //                 navigate('response.redirect_url', { state: { init_data } });
+    //                 window.location.reload()
+    //             },
+    //             error: function (xhr, status, error) {
+    //                 navigate('front/error');
+    //                 console.log(error)
+    //             },
+    //         })
+    //         setLoading(false);
+    //     }
 
-        window.AuthPostRequest.initialize('https://asm3ceps.ru/api/auth')
-    }, [navigate]); // Добавляем navigate в зависимости
+    //     window.AuthPostRequest.initialize('https://asm3ceps.ru/api/auth')
+    // }, [navigate]); // Добавляем navigate в зависимости
 
 
 

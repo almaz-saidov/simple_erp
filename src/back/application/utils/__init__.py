@@ -1,1 +1,1 @@
-from application.utils import checker
+from application.utils.checker import init_data_checker

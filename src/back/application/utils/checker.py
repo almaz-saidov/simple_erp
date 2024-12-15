@@ -10,6 +10,7 @@ from config.config import settings
 def init_data_checker(func):
     @wraps(func)
     def wrapper(*args, **kwargs):
+        print(request.form)
         init_data = request.form.get('initData')
         if not init_data:
             return jsonify({'error': 'No initData'}), 400

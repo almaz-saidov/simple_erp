@@ -1,1 +1,1 @@
-from application.utils.checker import checker
+from application.utils import checker

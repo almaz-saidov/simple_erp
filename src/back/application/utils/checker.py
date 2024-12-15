@@ -1,5 +1,9 @@
+import urllib, json, hashlib, hmac
+from datetime import datetime, timedelta
 from functools import wraps
+
 from flask import request, jsonify
+
 from application.queries.orm import SyncORM
 from config.config import settings
 
@@ -99,8 +103,8 @@ def init_data_checker(func):
         all_users = SyncORM.get_all_users()
         for user in all_users:
             if user.id == telegram_user_id:
-                return jsonify({'status': 'Authorized'}), 200 # cool
-
+                return func(*args, **kwargs)
+            
         return jsonify({'status': 'Not authorized'}), 401 # redirect to error
-    
+
     return wrapper

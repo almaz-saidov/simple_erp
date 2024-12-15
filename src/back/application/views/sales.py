@@ -4,7 +4,7 @@ from application import app
 from application.forms import SalesForm
 from application.queries.orm import SyncORM
 from application.utils.checker import init_data_checker
-from application.views.auth import TelegramInitData
+from application.utils.init_data import TelegramInitData
 
 
 @app.post('/api/sales')

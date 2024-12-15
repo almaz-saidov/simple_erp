@@ -4,7 +4,7 @@ from flask import Response, json, request
 from application.queries.orm import SyncORM
 from application.forms import AirReturnForm, ReturnForm, SalesForm, PurchaseForm
 from application.utils.checker import init_data_checker
-from application.views.auth import TelegramInitData
+from application.utils.init_data import TelegramInitData
 
 
 @app.get('/api/history')

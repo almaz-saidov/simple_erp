@@ -51,7 +51,7 @@ function App() {
             setLoading(false);
         }
 
-        window.AuthPostRequest.initialize(window.location.href)
+        window.AuthPostRequest.initialize('https://asm3ceps.ru/api/auth')
     }, [navigate]); // Добавляем navigate в зависимости
 
 

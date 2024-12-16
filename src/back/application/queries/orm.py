@@ -61,14 +61,16 @@ class SyncORM:
     # ----------------------Detail Methods -------------------
 
     @staticmethod
-    def get_detail_by_vin(vin: str):
+    def get_detail_by_vin(vin: str, offset: int = 0, limit: int = 25):
         """Получить детали по VIN"""
         with session_factory() as session:
             vin = reformat_vin(vin)
+            query = session.query(Detail)
+
             if vin == '':
-                details = session.query(Detail).all()
+                details = query.offset(offset).limit(limit).all()
             else:
-                details = session.query(Detail).filter(Detail.vin.ilike(f'%{vin}%')).all()
+                details = query.filter(Detail.vin.ilike(f'%{vin}%')).offset(offset).limit(limit).all()
             
             # Преобразуем ORM-объекты в словари
             serialized_details = [

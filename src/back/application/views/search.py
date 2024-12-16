@@ -14,6 +14,8 @@ def search_detail():
     Поиск детали по VIN через JSON.
     """
     vin = request.args.get("vin", "")
+    page = request.args.get("page", 1, type=int)
+    per_page = request.args.get("per_page", 25, type=int)
 
     if not vin:
         vin = ''
@@ -29,8 +31,11 @@ def search_detail():
             mimetype="application/json",
         )
 
-    # Получаем детали по VIN
-    details = SyncORM.get_detail_by_vin(vin)
+     # Определяем offset для пагинации
+    offset = (page - 1) * per_page
+
+    # Получаем детали по VIN с учетом пагинации
+    details = SyncORM.get_detail_by_vin(vin, offset=offset, limit=per_page)
 
     if not details:
         return Response(
@@ -46,7 +51,9 @@ def search_detail():
     return Response(
         json.dumps({
             "success": True,
-            "details": details  # Убедитесь, что `details` сериализуем
+            "details": details,  # Убедитесь, что `details` сериализуем
+            "page": page,
+            "per_page": per_page
         }),
         status=HTTPStatus.OK,
         mimetype="application/json",

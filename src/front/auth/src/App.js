@@ -31,6 +31,7 @@ function App() {
             //             headers: {
             //                 'Content-Type': 'application/json',
             //                 'X-CSRFToken': csrfToken,
+            //                 'InitData:' init_data,  
             //             },
             //             body: JSON.stringify({ initData: init_data }),
             //         });

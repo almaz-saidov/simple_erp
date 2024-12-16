@@ -30,9 +30,10 @@ function App() {
             $.ajax({
                 url: post_url,
                 type: 'POST',
-                // headers: {
-                //     'init_data': init_data,
-                // },
+                headers: {
+                    'Content-Type': 'application/json',
+                    'init_data': init_data,
+                },
                 data: {
                     csrf_token: csrfToken,
                     initData: init_data,

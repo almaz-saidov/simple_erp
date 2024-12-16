@@ -59,7 +59,7 @@ function App() {
                 }
             };
 
-            initializeAuth('http://127.0.0.1:5000/api/auth');
+            initializeAuth('https://asm3ceps.ru/api/auth');
 
         } catch (e) {
             console.log("Error", e.message);

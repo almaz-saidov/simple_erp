@@ -3,6 +3,7 @@ import { useEffect, useState, Fragment } from 'react';
 import { SyncLoader } from 'react-spinners';
 import { ReactComponent as FailIcon } from './assets/auth_fail_icon.svg';
 import { useNavigate } from 'react-router-dom'; // Импортируем useNavigate
+import { retrieveLaunchParams } from "@telegram-apps/sdk"
 import $ from 'jquery';
 
 import "./styles/LoaderWrapper.css";
@@ -18,39 +19,48 @@ export const auth = () => {
 function App() {
     const [authorized, setAuthorized] = useState(false);
     const [loading, setLoading] = useState(true);
+
     const navigate = useNavigate(); // Используем useNavigate
 
     useEffect(() => {
-        window.AuthPostRequest = {}
-
-        window.AuthPostRequest.initialize = function (post_url) {
-            const csrfToken = "{{ secret_key }}"
-            const init_data = window.Telegram.WebApp.initData
-            setLoading(true);
-            $.ajax({
-                url: post_url,
-                type: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'X-CSRFToken': csrfToken
-                },
-                contentType: 'application/json',
-                data: JSON.stringify({ initData: init_data }),
-                success: function (response) {
-                    setAuthorized(true);
-                    localStorage.setItem('authorize', init_data);
-                    navigate('response.redirect_url', { state: { init_data } });
-                    window.location.reload()
-                },
-                error: function (xhr, status, error) {
-                    navigate('front/error');
-                    console.log(error)
-                },
-            })
+        setTimeout(() => {
             setLoading(false);
+        }, 4000);
+        try {
+            const csrfToken = "{{ secret_key }}";
+            const { init_data } = retrieveLaunchParams();
+            console.log(init_data);
+        } catch (e) {
+            console.log("Error", e.message);
         }
 
-        window.AuthPostRequest.initialize('https://asm3ceps.ru/api/auth')
+        // window.AuthPostRequest = {}
+
+        // window.AuthPostRequest.initialize = (post_url)=> {
+
+        // $.ajax({
+        //     url: post_url,
+        //     type: 'POST',
+        //     headers: {
+        //         'Content-Type': 'application/json',
+        //         'X-CSRFToken': csrfToken
+        //     },
+        //     contentType: 'application/json',
+        //     data: JSON.stringify({ initData: init_data }),
+        //     success: function (response) {
+        //         setAuthorized(true);
+        //         localStorage.setItem('authorize', init_data);
+        //         navigate('response.redirect_url', { state: { init_data } });
+        //         window.location.reload()
+        //     },
+        //     error: function (xhr, status, error) {
+        //         navigate('front/error');
+        //         console.log(error)
+        //     },
+        // })
+        // }
+
+        // window.AuthPostRequest.initialize('https://asm3ceps.ru/api/auth')
     }, [navigate]); // Добавляем navigate в зависимости
 
 

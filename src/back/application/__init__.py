@@ -2,9 +2,12 @@ from datetime import timedelta
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from config.config import settings
+from flask_cors import CORS
 
 #! Создание приложения
 app = Flask(__name__)
+
+CORS(app, resources={r'/api/*': {'origins': ['https://asm3ceps.ru']}})
 
 # Add Database
 app.config['SQLALCHEMY_DATABASE_URI'] = settings.DATABASE_URL_psycopg

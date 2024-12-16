@@ -31,7 +31,7 @@ function App() {
                 url: post_url,
                 type: 'POST',
                 headers: {
-                    'Authorization': `Bearer ${init_data}`,
+                    'init_data': init_data,
                 },
                 data: {
                     csrf_token: csrfToken,

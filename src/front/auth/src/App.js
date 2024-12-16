@@ -3,18 +3,10 @@ import { useEffect, useState, Fragment } from 'react';
 import { SyncLoader } from 'react-spinners';
 import { ReactComponent as FailIcon } from './assets/auth_fail_icon.svg';
 import { useNavigate } from 'react-router-dom'; // Импортируем useNavigate
-import { retrieveLaunchParams } from "@telegram-apps/sdk"
-import $ from 'jquery';
+import { retrieveLaunchParams } from "@telegram-apps/sdk";
 
 import "./styles/LoaderWrapper.css";
 
-export const auth = () => {
-    return new Promise((resolve) => {
-        setTimeout(() => {
-            resolve(false);
-        }, 2000);
-    });
-};
 
 function App() {
     const [authorized, setAuthorized] = useState(false);
@@ -26,44 +18,45 @@ function App() {
         setTimeout(() => {
             setLoading(false);
         }, 4000);
+
         try {
-            const csrfToken = "{{ secret_key }}";
+            const csrfToken = "{{ secret_key }}"; // Замените на реальный токен
             const { init_data } = retrieveLaunchParams();
             console.log(init_data);
+
+            //`const initializeAuth = async (postUrl) => {
+            //     try {
+            //         const response = await fetch(postUrl, {
+            //             method: 'POST',
+            //             headers: {
+            //                 'Content-Type': 'application/json',
+            //                 'X-CSRFToken': csrfToken,
+            //             },
+            //             body: JSON.stringify({ initData: init_data }),
+            //         });
+
+            //         if (!response.ok) {
+            //             throw new Error('Network response was not ok');
+            //         }
+
+            //         const data = await response.json();
+            //         setAuthorized(true);
+            //         localStorage.setItem('authorize', init_data);
+            //         navigate(data.redirect_url, { state: { init_data } }); // используйте правильный путь для редиректа
+            //         window.location.reload();
+            //     } catch (error) {
+            //         console.error('Ошибка при авторизации:', error);
+            //         navigate('front/error');
+            //     }
+            // };
+
+            //initializeAuth('https://asm3ceps.ru/api/auth');
+
         } catch (e) {
             console.log("Error", e.message);
         }
 
-        // window.AuthPostRequest = {}
-
-        // window.AuthPostRequest.initialize = (post_url)=> {
-
-        // $.ajax({
-        //     url: post_url,
-        //     type: 'POST',
-        //     headers: {
-        //         'Content-Type': 'application/json',
-        //         'X-CSRFToken': csrfToken
-        //     },
-        //     contentType: 'application/json',
-        //     data: JSON.stringify({ initData: init_data }),
-        //     success: function (response) {
-        //         setAuthorized(true);
-        //         localStorage.setItem('authorize', init_data);
-        //         navigate('response.redirect_url', { state: { init_data } });
-        //         window.location.reload()
-        //     },
-        //     error: function (xhr, status, error) {
-        //         navigate('front/error');
-        //         console.log(error)
-        //     },
-        // })
-        // }
-
-        // window.AuthPostRequest.initialize('https://asm3ceps.ru/api/auth')
-    }, [navigate]); // Добавляем navigate в зависимости
-
-
+    }, []); // Добавляем navigate в зависимости
 
     return (
         <div className="App">

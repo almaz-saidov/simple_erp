@@ -32,12 +32,10 @@ function App() {
                 type: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
-                    'init_data': init_data,
+                    'X-CSRFToken': csrfToken
                 },
-                data: {
-                    csrf_token: csrfToken,
-                    initData: init_data,
-                },
+                data: JSON.stringify({ initData: init_data }),
+                contentType: 'application/json',
                 success: function (response) {
                     setAuthorized(true);
                     localStorage.setItem('authorize', init_data);

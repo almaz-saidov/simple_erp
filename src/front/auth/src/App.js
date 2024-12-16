@@ -18,20 +18,12 @@ function App() {
         // setTimeout(() => {
         //     setLoading(false);
         // }, 4000);
-      
+
         try {
             const csrfToken = "almaz-ymeet-delat-graz"; // Замените на реальный токен
-            //const { init_data } = retrieveLaunchParams();
-            // const init_data = {
-            //     user_id:"123456789",
-            //     auth_date:"1609459200",
-            //     first_name:"John",
-            //     last_name:"Doe",
-            //     username:"johndoe",
-            //     photo_url:"https://example.com/photo.png&hash=abcdef1234567890",
-            // };
+            const { init_data } = retrieveLaunchParams();
             //const init_data  = "user_id=123456789&auth_date=1609459200&first_name=John&last_name=Doe&username=johndoe&photo_url=https://example.com/photo.png&hash=abcdef1234567890"
-            const init_data = 'query_id=123&user=%7B%22id%22%3A1230%2C%22first_name%22%3A%22TestFirstName%22%2C%22last_name%22%3A%22TestSurname%22%2C%22username%22%3A%22TestUsername%22%2C%22language_code%22%3A%22ru%22%2C%22allows_write_to_pm%22%3Atrue%7D&auth_date=1729453387&hash=123'
+            //const init_data = 'query_id=123&user=%7B%22id%22%3A1230%2C%22first_name%22%3A%22TestFirstName%22%2C%22last_name%22%3A%22TestSurname%22%2C%22username%22%3A%22TestUsername%22%2C%22language_code%22%3A%22ru%22%2C%22allows_write_to_pm%22%3Atrue%7D&auth_date=1729453387&hash=123'
             console.log(init_data);
 
             const initializeAuth = async (postUrl) => {
@@ -58,8 +50,8 @@ function App() {
                     const data = await response.json();
                     setAuthorized(true);
                     localStorage.setItem('authorize', init_data);
-                    //navigate('/cool/', { state: { init_data } }); // используйте правильный путь для редиректа
-                    //window.location.reload();
+                    navigate('/front', { state: { init_data } }); // используйте правильный путь для редиректа
+                    window.location.reload();
                 } catch (error) {
                     console.error('Ошибка при авторизации:', error);
                     navigate('front/error');

@@ -34,8 +34,8 @@ function App() {
                     'Content-Type': 'application/json',
                     'X-CSRFToken': csrfToken
                 },
-                data: JSON.stringify({ initData: init_data }),
                 contentType: 'application/json',
+                data: JSON.stringify({ initData: init_data }),
                 success: function (response) {
                     setAuthorized(true);
                     localStorage.setItem('authorize', init_data);

@@ -1,5 +1,7 @@
 from http import HTTPStatus
+
 from flask import Response, json, request
+
 from application import app
 from application.forms import PurchaseForm
 from application.queries.orm import SyncORM

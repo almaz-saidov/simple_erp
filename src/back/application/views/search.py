@@ -1,6 +1,8 @@
-from application import app
 from http import HTTPStatus
+
 from flask import json, request, Response
+
+from application import app
 from application.queries.orm import SyncORM
 from application.utils.checker import init_data_checker
 
@@ -11,11 +13,7 @@ def search_detail():
     """
     Поиск детали по VIN через JSON.
     """
-    # Получаем данные из JSON запроса
-    data = request.get_json()
-
-    # Извлекаем VIN из данных
-    vin = data["vin"]
+    vin = request.args.get("vin", "")
 
     if not vin:
         vin = ''

@@ -1,11 +1,11 @@
 import re
-from application.database import Base, engine, session_factory # движок, сессии, базовый класс
-
-from application.models import Detail, Purchase, Sell, Return, User, AirReturn
-from sqlalchemy import and_, select
-from application.database import engine, session_factory
 from datetime import datetime
 from typing import Optional
+
+from sqlalchemy import and_, literal, select
+
+from application.database import Base, engine, session_factory # движок, сессии, базовый класс
+from application.models import Detail, Purchase, Sell, Return, User, AirReturn
 
 
 def reformat_vin(vin: str):
@@ -456,6 +456,7 @@ class SyncORM:
 
 # -------------------------- History -------------------------
 
+    
     @staticmethod
     def get_records(record_type: str, vin_filter: str, date_from: str, date_before: str):
         """
@@ -469,9 +470,32 @@ class SyncORM:
         with session_factory() as session:
             # Инициализируем запрос в зависимости от типа
             if record_type == 'vozvraty':
-                # Для типа vozvraty объединяем таблицы Return и AirReturn
-                return_query = session.query(Return.id, Return.vin, Return.amount, Return.sell_date, Return.return_date, Return.to_seller, Return.price, Return.comment, Return.is_end).where(Return.is_end == True)
-                air_return_query = session.query(AirReturn.id, AirReturn.vin, AirReturn.amount, AirReturn.sell_date, AirReturn.return_date, AirReturn.to_seller, AirReturn.price, AirReturn.comment, AirReturn.is_end).where(AirReturn.is_end == True)
+            # Для типа vozvraty объединяем таблицы Return и AirReturn
+                return_query = session.query(
+                    Return.id,
+                    Return.vin,
+                    Return.amount,
+                    Return.sell_date,
+                    Return.return_date,
+                    Return.to_seller,
+                    Return.price,
+                    Return.comment,
+                    Return.is_end,
+                    literal('return').label('type')  # Указываем тип записи
+                ).where(Return.is_end == True)
+
+                air_return_query = session.query(
+                    AirReturn.id,
+                    AirReturn.vin,
+                    AirReturn.amount,
+                    AirReturn.sell_date,
+                    AirReturn.return_date,
+                    AirReturn.to_seller,
+                    AirReturn.price,
+                    AirReturn.comment,
+                    AirReturn.is_end,
+                    literal('airreturn').label('type')  # Указываем тип записи
+                ).where(AirReturn.is_end == True)
 
                 # Применяем фильтры, если они заданы
                 if vin_filter:
@@ -489,34 +513,50 @@ class SyncORM:
 
                 # Получаем результаты
                 records = combined_query.all()
+            
 
             elif record_type == 'postupleniya':
-                query = session.query(Purchase)
-                vin_field = Purchase.vin
-                id = Purchase.id
-                date_field = Purchase.add_to_shop_date
+                query = session.query(
+                    Purchase.id,
+                    Purchase.vin,
+                    Purchase.amount,
+                    Purchase.add_to_shop_date.label('date'),
+                    Purchase.price,
+                    literal('postupleniya').label('type')  # Указываем тип записи
+                )
+                filters = []
+                if vin_filter:
+                    filters.append(Purchase.vin.ilike(f"%{vin_filter}%"))
+                if date_from:
+                    filters.append(Purchase.add_to_shop_date >= date_from)
+                if date_before:
+                    filters.append(Purchase.add_to_shop_date <= date_before)
+                records = query.filter(and_(*filters)).all()
+                
             elif record_type == 'vidyacha':
-                query = session.query(Sell)
-                id = Purchase.id
-                vin_field = Sell.vin
-                date_field = Sell.sell_from_shop_date
+                query = session.query(
+                    Sell.id,
+                    Sell.vin,
+                    Sell.amount,
+                    Sell.sell_from_shop_date.label('date'),
+                    Sell.price,
+                    literal('vidyacha').label('type')  # Указываем тип записи
+                )
+                filters = []
+                if vin_filter:
+                    filters.append(Sell.vin.ilike(f"%{vin_filter}%"))
+                if date_from:
+                    filters.append(Sell.sell_from_shop_date >= date_from)
+                if date_before:
+                    filters.append(Sell.sell_from_shop_date <= date_before)
+                records = query.filter(and_(*filters)).all()
             else:
                 raise ValueError("Invalid type parameter")
 
-            # Если тип не 'vozvraty', фильтруем по стандартному запросу
-            if record_type != 'vozvraty':
-                filters = []
-                if vin_filter:
-                    filters.append(vin_field.ilike(f"%{vin_filter}%"))
-                if date_from:
-                    filters.append(date_field >= date_from)
-                if date_before:
-                    filters.append(date_field <= date_before)
-                records = query.filter(and_(*filters)).all()
 
-        # Преобразуем результаты в формат для шаблона
+        # Если тип не 'vozvraty', фильтруем по стандартному запросу
         result = [
-            {      
+            {
                 "id": record.id,
                 "vin": record.vin,
                 "date": (
@@ -532,12 +572,14 @@ class SyncORM:
                 ).strftime('%Y-%m-%d') if isinstance(getattr(record, 'return_date', None), datetime) else '',
                 "amount": record.amount,
                 "price": record.price,
-                "type": 'return' if isinstance(record, AirReturn) else 'airreturn',  # Добавляем type
+                "type":  record.type,  # Используем заранее добавленный тип
             }
             for record in records
         ]
 
         return result
+
+
     
 
 # ------------------------API---------------------------

@@ -1,8 +1,10 @@
 from http import HTTPStatus
-from application import app
+
 from flask import Response, json, request
-from application.queries.orm import SyncORM
+
+from application import app
 from application.forms import AirReturnForm, ReturnForm, SalesForm, PurchaseForm
+from application.queries.orm import SyncORM
 from application.utils.checker import init_data_checker
 from application.utils.init_data import TelegramInitData
 

@@ -1,10 +1,11 @@
 import datetime
 import enum
 from typing import Annotated, Optional
+
 from sqlalchemy import Date, String, Integer, ForeignKey, Enum, Boolean, func, text, BigInteger
 from sqlalchemy.orm import Mapped, mapped_column, relationship
+
 from application.database import Base
-from flask_login import UserMixin
 
 intpk = Annotated[int, mapped_column(primary_key=True)]
 
@@ -31,7 +32,7 @@ class Detail(Base):
 	amount: Mapped[int] = mapped_column(Integer, nullable=False, default=0)
 
 
-class User(Base, UserMixin):
+class User(Base):
 	"""Пользователи с tg"""
 	__tablename__ = "User"
 	id: Mapped[BigInteger] = mapped_column(BigInteger, primary_key=True)
@@ -106,8 +107,3 @@ class AirReturn(Base):
     is_end: Mapped[bool] = mapped_column(Boolean, nullable=False, default=False)
     who_added: Mapped[int] = mapped_column(Integer, ForeignKey("User.id"), nullable=False)
     user_who_added = relationship("User", backref="airreturn", lazy="joined", uselist=False) # !  автоматически создаем обратное отношение в другой таблице без явного указания relationship там.
-
-
-
-
-

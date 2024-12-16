@@ -54,7 +54,7 @@ function App() {
                     window.location.reload();
                 } catch (error) {
                     console.error('Ошибка при авторизации:', error);
-                    navigate('front/error');
+                    //navigate('front/error');
                 }
             };
 

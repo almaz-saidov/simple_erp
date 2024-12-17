@@ -1,6 +1,6 @@
 import { id } from "date-fns/locale";
 
-export const API_URL = 'http://127.0.0.1:5000'
+export const API_URL = 'https://asm3ceps.ru/api'
 
 function formatDate(inputDate) {
     const date = new Date(inputDate); // Создаем объект Date

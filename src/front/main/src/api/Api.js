@@ -1,6 +1,6 @@
 import { id } from "date-fns/locale";
 
-export const API_URL = 'https://asm3ceps.ru'
+export const API_URL = 'https://asm3ceps.ru/api'
 
 function formatDate(inputDate) {
     const date = new Date(inputDate); // Создаем объект Date
@@ -259,7 +259,7 @@ export const fetchReturnById = async (returnId, isAir, setLoading) => {
     return ({});
 };
 
-export const fetchPurchaseById = async (itemId, setLoading) => {
+export const fetchPurchaseById = async (itemId, setLoadinhasg) => {
     setLoading(true); // Устанавливаем загрузку в true перед запросом
     try {
         const response = await fetch(`${API_URL}/history/purchase/${itemId}`, {

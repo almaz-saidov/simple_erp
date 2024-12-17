@@ -1,6 +1,6 @@
 from functools import wraps
 
-from flask import request, jsonify, make_response
+from flask import request, jsonify
 
 from application.queries.orm import SyncORM
 from application.utils.init_data import TelegramInitData
@@ -29,8 +29,6 @@ def initial_init_data_checker(func):
         all_users = SyncORM.get_all_users()
         for user in all_users:
             if user.id == telegram_user_id:
-                response = make_response('Cookie was set!')
-                response.set_cookie('initData', init_data)
                 return func(*args, **kwargs)
         # return func(*args, **kwargs)
             

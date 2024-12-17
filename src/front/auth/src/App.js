@@ -52,7 +52,7 @@ function App() {
                     const data = await response.json();
                     setAuthorized(true);
                     localStorage.setItem('authorize', init_data);
-                    navigate('/front', { state: { init_data } }); // используйте правильный путь для редиректа
+                    navigate('/front'); // используйте правильный путь для редиректа
                     window.location.reload();
                 } catch (error) {
                     console.error('Ошибка при авторизации:', error);

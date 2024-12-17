@@ -123,7 +123,7 @@ class SyncORM:
     # ----------------------Purchase Methods -------------------
 
     @staticmethod
-    def add_purchase(vin: str, amount: int, date: datetime, price: int, detail_name: str):
+    def add_purchase(vin: str, amount: int, date: datetime, price: int, detail_name: str, who_added: int):
         """
         Добавить приход товара на склад.
 
@@ -158,6 +158,7 @@ class SyncORM:
                     amount=amount,
                     name=detail_name,
                     add_to_shop_date=date,
+                    who_added=who_added
                 )
                 session.add(purchase)
 

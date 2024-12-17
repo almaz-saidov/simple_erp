@@ -6,6 +6,7 @@ from application import app
 from application.forms import PurchaseForm
 from application.queries.orm import SyncORM
 from application.utils.checker import init_data_checker
+from application.utils.init_data import TelegramInitData
 
 
 @app.post('/api/purchases')
@@ -41,6 +42,9 @@ def purchases():
     date = data["date"]
     price = data["price"]
     detail_name = data["detail_name"]
+    telegram_data = TelegramInitData(request.cookies.get('initData'))
+    user_data = telegram_data.to_dict().get('user')
+    who_added = user_data.get('id')
 
     # Проверяем корректность VIN
     if not SyncORM.is_valid_vin(vin):
@@ -55,7 +59,7 @@ def purchases():
 
     # Пытаемся добавить покупку
     try:
-        purchase = SyncORM.add_purchase(vin, amount, date, price, detail_name)
+        purchase = SyncORM.add_purchase(vin, amount, date, price, detail_name, who_added)
         return Response(
             json.dumps({
                 "success": True,

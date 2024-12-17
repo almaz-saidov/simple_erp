@@ -94,7 +94,7 @@ def create_return():
     price = data['price']
     comment = data['comment']
     is_compleat = data['is_compleat']
-    telegram_data = TelegramInitData(request.form.get('initData'))
+    telegram_data = TelegramInitData(request.cookies.get('initData'))
     user_data = telegram_data.to_dict().get('user')
     who_added = user_data.get('id')
 

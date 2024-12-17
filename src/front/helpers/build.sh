@@ -17,4 +17,4 @@ cd ../helpers || { echo "Не удалось перейти в ../helpers"; exit
 # Запуск python3 inline.py в папке helpers
 python3 build.py || { echo "Ошибка при запуске python3 build.py в ../helpers"; exit 1; }
 pwd
-mv  modified_file.html ../../back/application/templates/main/modified_file.html
+mv  modified_file.html ../../back/application/templates/main/index.html

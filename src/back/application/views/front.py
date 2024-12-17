@@ -6,5 +6,5 @@ from application import app
 
 @app.get('/front')
 @init_data_checker
-def telegram_auth():
+def front():
     return render_template('main/index.html')

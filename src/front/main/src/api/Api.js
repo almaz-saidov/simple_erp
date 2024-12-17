@@ -259,7 +259,7 @@ export const fetchReturnById = async (returnId, isAir, setLoading) => {
     return ({});
 };
 
-export const fetchPurchaseById = async (itemId, setLoadinhasg) => {
+export const fetchPurchaseById = async (itemId, setLoading) => {
     setLoading(true); // Устанавливаем загрузку в true перед запросом
     try {
         const response = await fetch(`${API_URL}/history/purchase/${itemId}`, {

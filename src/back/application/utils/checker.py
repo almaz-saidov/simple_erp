@@ -41,7 +41,12 @@ def init_data_checker(func):
     @wraps(func)
     def wrapper(*args, **kwargs):
         # init_data = request.get_json().get('initData')
-        init_data = request.cookies.get('initData')
+        print(request.cookies)
+        if 'initData' in request.cookies:
+            print(f'\n\n\ncookies are in request\n\n\n')
+            init_data = request.cookies.get('initData')
+        else:
+            print(f'\n\n\ncookies are not in request, idite nahoi\n\n\n')
         print(f'\n\n\n{init_data}\n\n\n')
         if not init_data:
             return jsonify({'error': 'No initData'}), 400

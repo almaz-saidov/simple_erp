@@ -8,7 +8,7 @@ from application import app
 @initial_init_data_checker
 def telegram_auth():
     response = make_response(jsonify({'status': 'Cookie was set!'}))
-    response.set_cookie('initData', request.get_json().get('initData'))
+    response.set_cookie('initData', request.get_json().get('initData'), path='/', httponly=True, secure=True)
     response.status_code = 200
     # return jsonify({'status': 'authorized'}), 200 # cool
     return response

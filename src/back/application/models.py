@@ -51,7 +51,7 @@ class Purchase(Base):
     amount: Mapped[int] = mapped_column(Integer, nullable=False, default=0)
     add_to_shop_date: Mapped[datetime.date] = mapped_column(Date,server_default=text("TIMEZONE('utc', now())"))
     # seller: Mapped[str] = mapped_column(String, nullable=False) 
-    who_added: Mapped[int] = mapped_column(Integer, ForeignKey("User.id"), nullable=False)
+    who_added: Mapped[BigInteger] = mapped_column(BigInteger, ForeignKey("User.id"), nullable=False)
     # supplier: Mapped[str] = mapped_column(String, nullable=True) # ? на будущее поставщик кто поставил запчасть
     detail = relationship("Detail", backref="purchase", lazy="joined", uselist=False) # !  автоматически создаем обратное отношение в другой таблице без явного указания relationship там.
     user_who_added = relationship("User", backref="purchase", lazy="joined", uselist=False) # !  автоматически создаем обратное отношение в другой таблице без явного указания relationship там.
@@ -66,7 +66,7 @@ class Sell(Base):
     amount: Mapped[int] = mapped_column(Integer, nullable=False, default=0)
     sell_from_shop_date: Mapped[datetime.date] = mapped_column(Date,server_default=text("TIMEZONE('utc', now())"))
     seller: Mapped[str] = mapped_column(String, nullable=False) # ? какой продавец на авито продал деталь (получил заказ)
-    who_added: Mapped[int] = mapped_column(Integer, ForeignKey("User.id"), nullable=False)
+    who_added: Mapped[BigInteger] = mapped_column(BigInteger, ForeignKey("User.id"), nullable=False)
     # client: Mapped[str] = mapped_column(String, nullable=True) # ? на будущее кому продали
     details = relationship("Detail", backref="sell", lazy="joined", uselist=False) # !  автоматически создаем обратное отношение в другой таблице без явного указания relationship там.
     user_who_added = relationship("User", backref="sell", lazy="joined", uselist=False) # !  автоматически создаем обратное отношение в другой таблице без явного указания relationship там.
@@ -85,7 +85,7 @@ class Return(Base):
     price: Mapped[int] = mapped_column(nullable=False)
     comment: Mapped[str] = mapped_column(String(2000), nullable=True)
     is_end: Mapped[bool] = mapped_column(Boolean, nullable=False, default=False)
-    who_added: Mapped[int] = mapped_column(Integer, ForeignKey("User.id"), nullable=False)
+    who_added: Mapped[BigInteger] = mapped_column(BigInteger, ForeignKey("User.id"), nullable=False)
     # another_shop: Mapped[str | None] = mapped_column(String, nullable=True)
     user_who_added = relationship("User", backref="return", lazy="joined", uselist=False) # !  автоматически создаем обратное отношение в другой таблице без явного указания relationship там.
 
@@ -105,5 +105,5 @@ class AirReturn(Base):
     another_shop: Mapped[str] = mapped_column(nullable=False)
     comment: Mapped[str] = mapped_column(String(2000), nullable=True)
     is_end: Mapped[bool] = mapped_column(Boolean, nullable=False, default=False)
-    who_added: Mapped[int] = mapped_column(Integer, ForeignKey("User.id"), nullable=False)
+    who_added: Mapped[BigInteger] = mapped_column(BigInteger, ForeignKey("User.id"), nullable=False)
     user_who_added = relationship("User", backref="airreturn", lazy="joined", uselist=False) # !  автоматически создаем обратное отношение в другой таблице без явного указания relationship там.

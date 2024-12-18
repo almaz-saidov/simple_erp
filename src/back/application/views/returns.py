@@ -185,7 +185,9 @@ def create_air_return():
     another_shop = data['another_shop']
     comment = data['comment']
     is_compleat = data['is_compleat']
-    # who_added = 
+    telegram_data = TelegramInitData(request.cookies.get('initData'))
+    user_data = telegram_data.to_dict().get('user')
+    who_added = user_data.get('id')
 
     # Проверяем корректность VIN
     if not SyncORM.is_valid_vin(vin):
@@ -295,7 +297,9 @@ def check_return(return_id):
             returned.price = data.get("price", returned.price)
             returned.comment = data.get("comment", returned.comment)
             returned.is_end = data.get("is_compleat", returned.is_end)
-            # returned.who_added = 
+            telegram_data = TelegramInitData(request.cookies.get('initData'))
+            user_data = telegram_data.to_dict().get('user')
+            returned.who_added = user_data.get('id')
 
             # Для AirReturn добавляем обработку поля другого магазина
             if return_type == "airreturn":

@@ -37,10 +37,10 @@ async def notifications(bot: Bot):
 
                 data = await conn.fetch("SELECT * FROM \"Return\" WHERE is_end is FALSE;")
                 for normal_return in data:
-                    days_for_return = (air_return[3] + datetime.timedelta(days=13) - currrent_date).days
+                    days_for_return = (normal_return[3] + datetime.timedelta(days=13) - currrent_date).days
                     if days_for_return <= 3:
                         await bot.send_message(normal_return[-1], f'Незавершенный возврат:\nДата продажи: {normal_return[3].isoformat()}\nДата возврата: {normal_return[4].isoformat()}\nДней до возврата: {days_for_return}\nЦена: {normal_return[6]}\nПричина возврата: {normal_return[7]}')
-        
+
                 data = await conn.fetch("SELECT * FROM \"Detail\" WHERE amount = 0;")
                 users = await conn.fetch("SELECT id FROM \"User\";")
                 for detail in data:

@@ -6,8 +6,8 @@ import { useEffect, useState } from 'react';
 import '../../styles/Card.css';
 import '../../styles/Cards/Issuance.css';
 import { submitData, postData } from '../../api/Api'
-
 import CoolDatePicker from '../../components/CoolDatePicker'
+
 function Receipt() {
     const [isNeedText, setIsNeedText] = useState(false);
     const [partNumber, setPartNumber] = useState('');
@@ -72,7 +72,6 @@ function Receipt() {
                     color: '#DBDBDB',
                 }
             }} />
-            <CoolDatePicker />
         </div >
 
     );

@@ -212,3 +212,7 @@ input[type="date"] {
     padding: '16px';
     background-color: var(--color-base-background);
 }
+
+.MGDatePicker {
+    height: 50px;
+}

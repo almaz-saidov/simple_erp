@@ -1,6 +1,9 @@
 import { useState, useEffect } from 'react';
 import { ReactComponent as SearchIcon } from '../assets/search_icon.svg';
+import CoolDatePicker from './CoolDatePicker'
 import '../styles/Components.css';
+import dayjs from 'dayjs';
+
 
 function Input(props) {
     const { label, hint, value, isLong, parentText, setParentText, isDynamic, type, isSearch, maxlength, isNeedText, iconOnClick } = props;
@@ -43,15 +46,21 @@ function Input(props) {
             <label>{label}</label>
             <div className={isNeedText ? "NeedText" : ""}>
                 <div className='SearchInput'>
-                    <input
-                        type={type}
-                        placeholder={hint}
-                        onChange={handleChange}
-                        onKeyDown={handleKeyDown}
-                        value={text}
-                        maxLength={maxlength ? maxlength : 255}
-                        required
-                    />
+                    {type == 'date' ?
+                        <CoolDatePicker
+                            //onChangeFunc={handleChange}
+                            value={dayjs('')}
+                        />
+                        : <input
+                            type={type}
+                            placeholder={hint}
+                            onChange={handleChange}
+                            onKeyDown={handleKeyDown}
+                            value={text}
+                            maxLength={maxlength ? maxlength : 255}
+                            required
+                        />}
+
                     {isSearch ? (
                         <SearchIcon className='InputSearchIcon' onClick={handleIconClick} />
                     ) : <></>}

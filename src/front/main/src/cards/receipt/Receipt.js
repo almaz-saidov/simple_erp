@@ -6,6 +6,7 @@ import { useEffect, useState } from 'react';
 import '../../styles/Card.css';
 import '../../styles/Cards/Issuance.css';
 import { submitData, postData } from '../../api/Api'
+import CoolDatePicker from '../../components/CoolDatePicker'
 
 function Receipt() {
     const [isNeedText, setIsNeedText] = useState(false);
@@ -71,7 +72,7 @@ function Receipt() {
                     color: '#DBDBDB',
                 }
             }} />
-        </div>
+        </div >
 
     );
 }

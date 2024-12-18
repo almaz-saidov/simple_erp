@@ -12,26 +12,26 @@ import { auth } from './api/Api';
 import { ReactComponent as FailIcon } from './assets/auth_fail_icon.svg'
 
 function App() {
-  const [currentCardId, setCurrentCardId] = useState(1);
-  const [authorized, setAuthorized] = useState(false);
-  const [loading, setLoading] = useState(true); // Start with loading true
+  const [currentCardId, setCurrentCardId] = useState(0);
+  const [authorized, setAuthorized] = useState(true);
+  const [loading, setLoading] = useState(false); // Start with loading true
 
-  useEffect(() => {
-    const checkAuthorization = async () => {
-      try {
-        // Call the auth function and wait for it to resolve
-        const authSuccess = await auth();
-        setAuthorized(authSuccess); // Set authorized based on the result
-      } catch (error) {
-        console.error("Authorization error:", error);
-        setAuthorized(false); // In case of an error, set authorized to false
-      } finally {
-        setLoading(false); // Stop loading regardless of success or failure
-      }
-    };
+  // useEffect(() => {
+  //   const checkAuthorization = async () => {
+  //     try {
+  //       // Call the auth function and wait for it to resolve
+  //       const authSuccess = await auth();
+  //       setAuthorized(authSuccess); // Set authorized based on the result
+  //     } catch (error) {
+  //       console.error("Authorization error:", error);
+  //       setAuthorized(false); // In case of an error, set authorized to false
+  //     } finally {
+  //       setLoading(false); // Stop loading regardless of success or failure
+  //     }
+  //   };
 
-    checkAuthorization(); // Call the authorization function on component mount
-  }, []); // Empty dependency array means this runs once when the component mounts
+  //   checkAuthorization(); // Call the authorization function on component mount
+  // }, []); // Empty dependency array means this runs once when the component mounts
 
   const cards = [<Search />, <Issuance />, <Receipt />, <Returns />, <History />];
 

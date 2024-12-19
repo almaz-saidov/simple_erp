@@ -10,14 +10,21 @@
     --color-light-border: #525252;
     --color-selected-border: #DBDBDB;
     --color-control-elements: #017AFE;
-    --color-cool-background: rgba(39, 39, 39, 0.3);
+    --color-cool-background: #27272780;
 }
 
 @import url('https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap');
 
+@font-face {
+    font-family: 'VelaSans';
+    src: url('../assets/VelaSans-Medium.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+}
 
 :root {
-    font-family: "Open Sans", sans-serif;
+    font-family: "VelaSans";
+    font-weight: 400;
     box-sizing: border-box;
 }
 

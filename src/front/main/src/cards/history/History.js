@@ -8,7 +8,8 @@ import { SyncLoader } from 'react-spinners';
 import ReturnModal from '../returns/ReturnModal';
 import HistoryItemModal from "./HistoryItemModal";
 import HistoryItem from "./HistoryItem";
-
+import toast, { Toaster } from 'react-hot-toast';
+import { postData, fetchReturnById, updateReturnById } from '../../api/Api';
 import '../../styles/Card.css';
 import '../../styles/Cards/History.css';
 import '../../styles/Components.css';
@@ -42,6 +43,23 @@ function History() {
             date_before: endDate,
         }
     }
+    const handleApiResponse = (editedReturn, isNew, isAir, onSuccess, setLoading) => {
+        const successMessage = isNew ? 'Возврат создан' : 'Возврат изменён';
+
+        toast.promise(
+            isNew ? postData(editedReturn, isAir ? "returns/create_air_return" : "returns/create_return") :
+                updateReturnById(editedReturn.id, editedReturn, isAir, setLoading),
+            {
+                loading: 'Создание',
+                success: () => {
+                    onSuccess();
+                    return successMessage;
+                },
+                error: 'Что-то пошло не так',
+            }
+        );
+    };
+
     const loadData = async () => {
         setLoading(true); // Начинаем загрузку
         try {
@@ -186,6 +204,7 @@ function History() {
                 isCreating={false}
                 isAir={isAir}
                 loadReturns={loadData}
+                handleApiResponse={handleApiResponse}
             />
             <HistoryItemModal
                 isOpen={isSellModalOpen}

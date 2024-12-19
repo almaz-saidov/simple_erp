@@ -65,13 +65,13 @@ function Receipt() {
                 <Input label="Название" hint="hint" isLong={true} parentText={seller} setParentText={setSeller} type="text" isDynamic={true} maxlength={40} isNeedText={isNeedText} />
             </div>
             <IssuanceButton onClick={submitButtonClick} label="Оформить поступление" />
-            <Toaster toastOptions={{
+            {/* <Toaster toastOptions={{
                 duration: 1000,
                 style: {
                     backgroundColor: '#131313',
                     color: '#DBDBDB',
                 }
-            }} />
+            }} /> */}
         </div >
 
     );

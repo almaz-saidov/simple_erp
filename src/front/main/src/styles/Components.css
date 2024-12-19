@@ -239,12 +239,12 @@ input[type="date"] {
 
 @media (min-width: 401px) and (max-width: 800px) {
     .HelperText {
-        font-size: 16px;
-        line-height: 16px;
-    }
-    .PrimaryText {
         font-size: 18px;
         line-height: 18px;
+    }
+    .PrimaryText {
+        font-size: 16px;
+        line-height: 20px;
     }
 }
 

@@ -13,7 +13,7 @@ import toast, { Toaster } from 'react-hot-toast';
 import '../../styles/Cards/Returns.css';
 import '../../styles/LoaderWrapper.css'
 
-const ReturnModal = ({ isOpen, onClose, returnData, isCreating, isAir, isHistory, loadReturns }) => {
+const ReturnModal = ({ isOpen, onClose, returnData, isCreating, isAir, isHistory, loadReturns, handleApiResponse }) => {
     const [isCompleted, setCompleted] = useState(isHistory);
     const [loading, setLoading] = useState(false);
     const [vin, setVin] = useState('');
@@ -87,47 +87,25 @@ const ReturnModal = ({ isOpen, onClose, returnData, isCreating, isAir, isHistory
         }
     };
 
+    const onSuccess = () => {
+        setVin('');
+        setAmount('');
+        setSellDate('');
+        setReturnDate('');
+        setPrice('');
+        setSeller('');
+        setComment('');
+        setStore('');
+        loadReturns();
+
+    }
+
+    const isNecessaryData = () => { }
+
     const handleOnClick = () => {
-        if (isCreating) {
-            toast.promise(postData(getReturn(), isAir ? "returns/create_air_return" : "returns/create_return"), {
-                loading: 'Создание',
-                success: () => {
-                    setVin('');
-                    setAmount('');
-                    setSellDate('');
-                    setReturnDate('');
-                    setPrice('');
-                    setSeller('');
-                    setComment('');
-                    setStore('');
-                    loadReturns();
+        handleClose({ target: { id: 'modal-overlay' } });
+        handleApiResponse(getReturn(), isCreating, isAir, returnData, onSuccess);
 
-                    return 'Выдача создана';
-                },
-                error: 'Что то пошло не так',
-            });
-
-        } else {
-            toast.promise(updateReturnById(returnData.id, getReturn(), isAir, setLoading), {
-                loading: 'Создание',
-                success: () => {
-                    setVin('');
-                    setAmount('');
-                    setSellDate('');
-                    setReturnDate('');
-                    setPrice('');
-                    setSeller('');
-                    setComment('');
-                    setStore('');
-                    loadReturns();
-
-                    return 'Выдача создана';
-                },
-                error: 'Что то пошло не так',
-            });
-
-        }
-        onClose();
     }
 
     const getSubmitButtonText = () => {
@@ -162,7 +140,7 @@ const ReturnModal = ({ isOpen, onClose, returnData, isCreating, isAir, isHistory
                             <div className='EditReturn'>
                                 <Input label="Номер запчасти" hint="A22222222" value={vin} parentText={vin} setParentText={setVin} isDynamic={true} maxlength={11} />
                                 <Input label="Количество" hint="000" value={amount} type="number" parentText={amount} setParentText={setAmount} isDynamic={true} maxlength={10} />
-                                <Input label="Дата продажи" hint="дд.мм.гггг" value={ sellDate} type="date" parentText={sellDate} setParentText={setSellDate} isDynamic={true} maxlength={10} />
+                                <Input label="Дата продажи" hint="дд.мм.гггг" value={sellDate} type="date" parentText={sellDate} setParentText={setSellDate} isDynamic={true} maxlength={10} />
                                 <Input label="Дата возврата" hint="дд.мм.гггг" value={returnDate} type="date" parentText={returnDate} setParentText={setReturnDate} isDynamic={true} maxlength={10} />
                                 <Input label="Продавец" hint="Женя Зеленов" value={seller} type="text" parentText={seller} setParentText={setSeller} isDynamic={true} maxlength={40} />
                                 <Input label="Цена" hint="00 000.00 ₽" value={price} type="number" parentText={price} setParentText={setPrice} isDynamic={true} maxlength={15} />
@@ -180,13 +158,13 @@ const ReturnModal = ({ isOpen, onClose, returnData, isCreating, isAir, isHistory
                     </button>
                 }
             </div>
-            <Toaster toastOptions={{
+            {/* <Toaster toastOptions={{
                 duration: 1000,
                 style: {
                     backgroundColor: '#131313',
                     color: '#DBDBDB',
                 }
-            }} />
+            }} /> */}
         </div >
     );
 };

@@ -4,6 +4,7 @@
     display: flex;
     flex-direction: column;
     box-sizing: border-box;
+    overflow: hidden;
 }
 
 /* .Returns span {
@@ -21,11 +22,11 @@
     align-items: center;
     justify-content: center;
     box-sizing: border-box;
-    position: fixed;
-    bottom: 110px;
+    position: relative;
+    bottom: 20px;
     width: 100%;
     max-width: 100%;
-    padding: 15px;
+    padding: 0;
     gap: 5px;
     display: flex;
     flex-direction: column;
@@ -48,7 +49,7 @@
     padding: 15px;
     background-color: var(--color-cool-background);
     border-color: var(--color-light-border);
-    backdrop-filter: blur(7px);
+    backdrop-filter: blur(25px);
 }
 
 .CreateReturnAir {
@@ -60,7 +61,11 @@
 .ReturnsWrapper {
     display: flex;
     flex-direction: column;
-    gap: 15px;
+    gap: 10px;
+    overflow-y: scroll;
+    padding-bottom: 100px;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
 }
 
 .Return {
@@ -135,6 +140,12 @@
     .DetailNumber {
         font-size: 16px;
     }
+
+
+    .CreateReturn,
+    .CreateReturnAir {
+        font-size: 16px;
+    }
 }
 
 @media (min-width: 401px) and (max-width: 800px) {
@@ -151,11 +162,23 @@
     .DetailNumber {
         font-size: 16px;
     }
+
+
+    .CreateReturn,
+    .CreateReturnAir {
+        font-size: 18px;
+    }
 }
 
 @media (min-width: 1201px) {
     .DetailNumber {
         font-size: 18px;
+    }
+
+
+    .CreateReturn,
+    .CreateReturnAir {
+        font-size: 20px;
     }
 }
 

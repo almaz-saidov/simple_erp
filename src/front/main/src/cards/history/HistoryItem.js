@@ -11,20 +11,20 @@ function HistoryItem(props) {
             <div className='HistoryItemContent'>
 
                 <div className='HistoryNumberWrapper'>
-                    <span className='TextName'>Номер запчасти</span>
-                    <span className='DetailNumber'>{item.detailNumber}</span>
+                    <span className='HelperText'>Номер запчасти</span>
+                    <span className='PrimaryText'>{item.detailNumber}</span>
                 </div>
                 <div className='ItemDateWrapper'>
-                    <span className='TextName'>{isSell ? "Дата выдачи" : "Дата поступления"}: </span>
-                    <span className='ItemDate'>{isSell ? item.sellDate : item.purchaseDate}</span>
+                    <span className='HelperText'>{isSell ? "Дата выдачи" : "Дата поступления"}: </span>
+                    <span className='PrimaryText'>{isSell ? item.sellDate : item.purchaseDate}</span>
                 </div>
                 <div className='ItemCountWrapper'>
-                    <span className='TextName'>Количество: </span>
-                    <span className='ItemCount'>{item.count}</span>
+                    <span className='HelperText'>Количество: </span>
+                    <span className='PrimaryText'>{item.count}</span>
                 </div>
                 <div className='ItemPriceWrapper'>
-                    <span className='TextName'>Цена: </span>
-                    <span className='ItemPrice'>{item.price}</span>
+                    <span className='HelperText'>Цена: </span>
+                    <span className='PrimaryText'>{item.price}</span>
                 </div>
 
 

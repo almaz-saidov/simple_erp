@@ -4,6 +4,8 @@ import Return from './Return';
 import { SyncLoader } from 'react-spinners'
 import ReturnModal from './ReturnModal';
 import { fetchReturns, fetchReturnsAll } from '../../api/Api'
+import { postData, fetchReturnById, updateReturnById } from '../../api/Api';
+import toast, { Toaster } from 'react-hot-toast';
 
 import '../../styles/Card.css';
 import '../../styles/Card.css'
@@ -44,6 +46,22 @@ function Returns() {
 
     const getSubmitButtonOnClick = () => { }
 
+    const handleApiResponse = (editedReturn, isNew, isAir, onSuccess, setLoading) => {
+        const successMessage = isNew ? 'Возврат создан' : 'Возврат изменён';
+
+        toast.promise(
+            isNew ? postData(editedReturn, isAir ? "returns/create_air_return" : "returns/create_return") :
+                updateReturnById(editedReturn.id, editedReturn, isAir, setLoading),
+            {
+                loading: 'Создание',
+                success: () => {
+                    onSuccess();
+                    return successMessage;
+                },
+                error: 'Что-то пошло не так',
+            }
+        );
+    };
 
     return (
         <>
@@ -52,32 +70,32 @@ function Returns() {
 
                 <span className='ReturnAddictionHeader' >Незавершённые возвраты</span>
 
-            {loading ?
-                <div className='LoaderWrapper'>
-                    <SyncLoader color="#A7A7A7" />
-                </div>
-                : returns.length != 0 ?
-                    < div className="ReturnsWrapper">
-                        {returns.map((returnData, index) => (
-                            <Return
-                                key={index}
-                                returnData={returnData}
-                                onClick={() => {
-                                    setIsAir(returnData.isAir);
-                                    setIsCreating(false);
-                                    setModalReturnData(returnData);
-                                    toggleModal();
-                                }}
-                            />
-                        ))}
-                        <div className='Space' />
+                {loading ?
+                    <div className='LoaderWrapper'>
+                        <SyncLoader color="#A7A7A7" />
                     </div>
-                    : <div className="NumberDoesNotExist">
-                        <span>Ничего  <br /> не найдено</span>
-                    </div>
-            }
+                    : returns.length != 0 ?
+                        < div className="ReturnsWrapper">
+                            {returns.map((returnData, index) => (
+                                <Return
+                                    key={index}
+                                    returnData={returnData}
+                                    onClick={() => {
+                                        setIsAir(returnData.isAir);
+                                        setIsCreating(false);
+                                        setModalReturnData(returnData);
+                                        toggleModal();
+                                    }}
+                                />
+                            ))}
+                            <div className='Space' />
+                        </div>
+                        : <div className="NumberDoesNotExist">
+                            <span>Ничего  <br /> не найдено</span>
+                        </div>
+                }
 
-        </div >
+            </div >
             <div className='CreateReturnWrapper'>
                 <button
                     className='CreateReturn'
@@ -108,8 +126,15 @@ function Returns() {
                 isAir={isAir}
                 isHistory={false}
                 loadReturns={loadReturns}
+                handleApiResponse={handleApiResponse}
             />
-
+            {/* <Toaster toastOptions={{
+                duration: 1000,
+                style: {
+                    backgroundColor: '#131313',
+                    color: '#DBDBDB',
+                }
+            }} /> */}
         </>
     );
 }

@@ -31,7 +31,7 @@
 
 .HistoryNav {
     margin-top: 15px;
-    margin-bottom: 15px;
+    margin-bottom: 10px;
     padding: 5px;
     width: 100%;
     display: grid;
@@ -75,7 +75,6 @@
     grid-template-columns: auto 47%;
     flex-direction: column;
     column-gap: 20px;
-    row-gap: 10px;
     position: relative;
 }
 
@@ -131,7 +130,7 @@
     overflow-y: scroll;
     display: flex;
     flex-direction: column;
-    gap: 15px;
+    gap: 10px;
     padding-bottom: 50px;
     padding-top: 5px;
     scrollbar-width: none;

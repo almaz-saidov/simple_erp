@@ -10,7 +10,7 @@ import { Fragment } from 'react';
 import { SyncLoader } from 'react-spinners';
 import { auth } from './api/Api';
 import { ReactComponent as FailIcon } from './assets/auth_fail_icon.svg'
-
+import toast, { Toaster } from 'react-hot-toast';
 function App() {
   const [currentCardId, setCurrentCardId] = useState(0);
   const [authorized, setAuthorized] = useState(true);
@@ -51,12 +51,19 @@ function App() {
             {renderComponent()}
           </div>
           <Nav getCurrentCardId={() => currentCardId} setCurrentCardId={setCurrentCardId} />
+          <Toaster toastOptions={{
+            duration: 1000,
+            style: {
+              backgroundColor: '#131313',
+              color: '#DBDBDB',
+            }
+          }} />
         </Fragment>
       ) : (  // Show the unauthorized message if not authorized
         <Fragment>
-           <FailIcon className='FailAuthIcon' />
+          <FailIcon className='FailAuthIcon' />
           <h1 className='FailAuthMessage'>Unauthorized Access</h1>
-         
+
         </Fragment>
       )}
 

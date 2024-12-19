@@ -36,6 +36,7 @@ function CoolDatePicker(props) {
                 styleOverrides: {
                     root: {
                         width: "100%",
+                        minWidth: "100px",
                         height: "50px",
                         color: "var(--color-base-border)",
                         borderRadius: '5px',

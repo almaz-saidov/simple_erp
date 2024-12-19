@@ -52,7 +52,7 @@ function Input(props) {
                     {type == 'date' ?
                         <CoolDatePicker
                             onChangeFunc={handleDatePickerChange}
-                            value={value}
+                            value={parentText}
                         />
                         : <input
                             type={type}

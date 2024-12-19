@@ -1,5 +1,8 @@
 .venv
-.vnev
+vnev/
+example_server/
+/src/front/build/auth/
+/src/front/build/main/
 .env
 __pycache__
 node_modules

@@ -14,7 +14,6 @@ const HistoryItemModal = ({ isOpen, isSell, onClose, itemData }) => {
     const [loading, setLoading] = useState(false);
     const [item, setItem] = useState({});
     useEffect(() => {
-        console.log('Item data:', itemData.id);
         const fetchItemData = async () => {
             setLoading(true);
             try {

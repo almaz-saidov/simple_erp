@@ -6,7 +6,7 @@ import { MobileDatePicker } from '@mui/x-date-pickers/MobileDatePicker';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { TextField } from '@mui/material';
 import dayjs from 'dayjs';
-
+import 'dayjs/locale/ru';
 
 import '../styles/Components.css'
 
@@ -69,13 +69,13 @@ function CoolDatePicker(props) {
     const changeHandler = (newValue) => {
         setDate(newValue);
         onChangeFunc
-            && onChangeFunc();
+            && onChangeFunc(newValue);
     }
 
 
     return (
         <div className="MGDatePicker">
-            <LocalizationProvider dateAdapter={AdapterDayjs}>
+            <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale="ru">
                 <ThemeProvider theme={newTheme(baseTheme)}>
                     <MobileDatePicker
                         onChange={changeHandler} // Устанавливайте состояние
@@ -86,7 +86,8 @@ function CoolDatePicker(props) {
                                 fullWidth
                             />
                         )}
-                        value={value.isValid() ? value : undefined}
+                        value={value ? dayjs(value) : null}
+                        fullWidth
                     />
                 </ThemeProvider>
             </LocalizationProvider>

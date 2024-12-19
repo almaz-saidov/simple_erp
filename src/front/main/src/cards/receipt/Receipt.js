@@ -34,7 +34,7 @@ function Receipt() {
     }, [partNumber, count, date, price, seller]);
 
     const submitButtonClick = () => {
-        if (partNumber.length === 0 || count.length === 0 || date.length === 0 || seller.length === 0) {
+        if (partNumber.length === 0 || count.length === 0 || date.length === 0 || seller.length === 0 || price.length === 0) {
             setIsNeedText(true);
             notify();
         } else {

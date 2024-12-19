@@ -162,7 +162,9 @@ function History() {
                     <Input id="date_to" label="" isDynamic={true} parentText={endDate} setParentText={setEndDate} hint="дд.мм.гггг" type="date" />
                 </div>
             </div>
-            <Input hint="Номер детали" type="text" isSearch={true} isDynamic={true} setParentText={setVin} iconOnClick={loadData} />
+            <div className="HistoryVinInput">
+                <Input hint="Номер детали" type="text" isSearch={true} isDynamic={true} setParentText={setVin} iconOnClick={loadData} />
+            </div>
             <div className="HistoryNav">
                 <HistoryNavButton label="Выдача" type={0} getCurrentType={getCurrentType} setHistoryType={setHistoryType} />
                 <HistoryNavButton label="Поступления" type={1} getCurrentType={getCurrentType} setHistoryType={setHistoryType} />

@@ -10,6 +10,7 @@ import '../../styles/Card.css'
 import '../../styles/Cards/Returns.css'
 import '../../styles/LoaderWrapper.css'
 import '../../styles/Modal.css';
+import '../../styles/Components.css'
 
 function Returns() {
     const [returns, setReturns] = useState([]);
@@ -48,33 +49,35 @@ function Returns() {
         <>
             <div className="Returns">
                 <CardHeader label="Возврат" />
-                <span>Незавершённые возвраты</span>
-                {loading ?
-                    <div className='LoaderWrapper'>
-                        <SyncLoader color="#A7A7A7" />
-                    </div>
-                    : returns.length != 0 ?
-                        < div className="ReturnsWrapper">
-                            {returns.map((returnData, index) => (
-                                <Return
-                                    key={index}
-                                    returnData={returnData}
-                                    onClick={() => {
-                                        setIsAir(returnData.isAir);
-                                        setIsCreating(false);
-                                        setModalReturnData(returnData);
-                                        toggleModal();
-                                    }}
-                                />
-                            ))}
-                            <div className='Space' />
-                        </div>
-                        : <div className="NumberDoesNotExist">
-                            <span>Ничего  <br /> не найдено</span>
-                        </div>
-                }
 
-            </div >
+                <span className='ReturnAddictionHeader' >Незавершённые возвраты</span>
+
+            {loading ?
+                <div className='LoaderWrapper'>
+                    <SyncLoader color="#A7A7A7" />
+                </div>
+                : returns.length != 0 ?
+                    < div className="ReturnsWrapper">
+                        {returns.map((returnData, index) => (
+                            <Return
+                                key={index}
+                                returnData={returnData}
+                                onClick={() => {
+                                    setIsAir(returnData.isAir);
+                                    setIsCreating(false);
+                                    setModalReturnData(returnData);
+                                    toggleModal();
+                                }}
+                            />
+                        ))}
+                        <div className='Space' />
+                    </div>
+                    : <div className="NumberDoesNotExist">
+                        <span>Ничего  <br /> не найдено</span>
+                    </div>
+            }
+
+        </div >
             <div className='CreateReturnWrapper'>
                 <button
                     className='CreateReturn'

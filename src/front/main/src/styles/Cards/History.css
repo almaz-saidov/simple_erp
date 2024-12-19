@@ -1,26 +1,39 @@
 .History {
     width: 100%;
     color: var(--color-primary-text);
-
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
+
 
 .HistoryDateWrapper {
     display: flex;
     justify-content: space-between;
-    padding: 10px;
+    padding-bottom: 10px;
+    gap: 10px;
     padding-right: 0px;
+    width: 100%;
 }
 
 .DateInputWrapper {
     display: flex;
     align-items: center;
     gap: 10px;
+
 }
+
+.HistoryVinInput {
+    width: 100%;
+}
+
 
 .HistoryNav {
     margin-top: 15px;
     margin-bottom: 15px;
     padding: 5px;
+    width: 100%;
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     justify-content: center;
@@ -59,9 +72,10 @@
 .HistoryItemContent {
     width: 100%;
     display: grid;
-    grid-template-columns: 53% 47%;
+    grid-template-columns: auto 47%;
     flex-direction: column;
-    gap: 0 20px;
+    column-gap: 20px;
+    row-gap: 10px;
     position: relative;
 }
 
@@ -75,6 +89,7 @@
 }
 
 .ItemCountWrapper {
+    gap: 7px;
     display: flex;
     align-items: flex-end;
 }
@@ -82,6 +97,7 @@
 .ItemPriceWrapper {
     display: flex;
     flex-direction: column;
+    gap: 7px;
 }
 
 .ItemDateWrapper {
@@ -89,10 +105,37 @@
     flex-direction: column;
 }
 
+.HistoryNumberWrapper {
+    width: 100%;
+    height: 100%;
+    justify-content: space-between;
+    display: flex;
+    flex-direction: column;
+    padding: 10px;
+    gap: 5px;
+    border-radius: 5px;
+    border: 1px solid;
+    border-color: var(--color-base-border);
+    background-color: var(--color-input-background);
+}
+
+.HistoryContent {
+    overflow: hidden;
+    height: 100%;
+    width: 100%;
+}
+
+
 .HistoryItemsWrapper {
+    height: 100%;
+    overflow-y: scroll;
     display: flex;
     flex-direction: column;
     gap: 15px;
+    padding-bottom: 50px;
+    padding-top: 5px;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
 }
 
 .HistoryModalItem {

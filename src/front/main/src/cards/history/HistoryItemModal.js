@@ -61,7 +61,7 @@ const HistoryItemModal = ({ isOpen, isSell, onClose, itemData }) => {
                             }
                             <TextField textDescription="Цена" text={item.price} />
                             {isSell ? <TextField textDescription="Продавец" text={item.name} isLong={true} />
-                                : <TextField textDescription="Название детали" text={item.detailName} />
+                                : <TextField textDescription="Название детали" text={item.detailName} isLong={true} />
                             }
                             <TextField textDescription="USER ID" text="USER ID" isLong={true} />
                         </div>

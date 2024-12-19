@@ -31,55 +31,68 @@ body {
 @media (max-width: 400px) {
     body {
         font-size: 14px;
+        line-height: 14px;
     }
 
     input {
         font-size: 14px;
+        line-height: 14px;
     }
 
     input::placeholder {
         font-size: 14px;
+        line-height: 14px;
     }
 
     .NumberDoesNotExist {
         font-size: 28px;
+        line-height: 28px;
     }
 
     .Checkbox label {
         font-size: 16px;
+        line-height: 16px;
     }
 
     input[type="checkbox"]:checked::before {
         font-size: 16px;
+        line-height: 16px;
     }
 
     .close {
         font-size: 20px;
+        line-height: 20px;
     }
 
     .ModalHeader h1 {
         font-size: 22px;
+        line-height: 22px;
     }
 
     .backButton {
         font-size: 16px;
+        line-height: 16px;
     }
 
     .NavButton {
         font-size: 12px;
+        line-height: 12px;
     }
 
     .CurrentHistoryNavButton,
     .HistoryNavButton {
         font-size: 18px;
+        line-height: 18px;
     }
 
     .HistoryItem .TextName {
         font-size: 14px;
+        line-height: 14px;
     }
 
     .SubmitButton {
         font-size: 16px;
+        line-height: 16px;
     }
 
 }
@@ -135,7 +148,7 @@ body {
     }
 
     .HistoryItem .TextName {
-        font-size: 18px;
+        font-size: 14px;
     }
 }
 

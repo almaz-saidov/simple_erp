@@ -17,6 +17,9 @@ function Input(props) {
         }
     };
 
+    const handleDatePickerChange = (newTextDayjs) => {
+        setParentText(newTextDayjs.format('YYYY-MM-DD'));
+    }
     const handleKeyDown = (event) => {
         if (event.key === 'Enter') {
             event.preventDefault(); // 1 
@@ -32,7 +35,7 @@ function Input(props) {
         handleSearch();
         iconOnClick();
     };
-
+    
     useEffect(() => {
         setText(value); // Обновляйте текст при изменении value
     }, [value]);
@@ -48,8 +51,8 @@ function Input(props) {
                 <div className='SearchInput'>
                     {type == 'date' ?
                         <CoolDatePicker
-                            //onChangeFunc={handleChange}
-                            value={dayjs('')}
+                            onChangeFunc={handleDatePickerChange}
+                            value={value}
                         />
                         : <input
                             type={type}

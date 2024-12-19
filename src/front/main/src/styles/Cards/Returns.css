@@ -6,8 +6,14 @@
     box-sizing: border-box;
 }
 
-.Returns span {
+/* .Returns span {
     color: var(--color-primary-dark-text);
+    margin-bottom: 10px;
+} */
+
+.ReturnAddictionHeader {
+    color: var(--color-primary-dark-text);
+    font-size: 16px;
     margin-bottom: 10px;
 }
 
@@ -80,7 +86,7 @@
 }
 
 .Return .ReturnLeft {
-    width: 100%;
+    width: auto;
     display: flex;
     flex-direction: column;
     gap: 20px;
@@ -99,14 +105,13 @@
 
 .Return .ReturnRight {
 
-    width: 100%;
+    width: 50%;
     display: flex;
     flex-direction: row;
     align-items: center;
     justify-content: flex-end;
     gap: 10px;
 }
-
 
 .DateText {
     color: var(--color-primary-text);
@@ -116,6 +121,62 @@
     color: var(--color-primary-dark-text);
 }
 
+@media (max-width: 400px) {
+    .DateText {
+        font-size: 14px;
+        line-height: 14px;
+    }
+
+    .ReturnDate {
+        line-height: 14px;
+        font-size: 16px;
+    }
+
+    .DetailNumber {
+        font-size: 16px;
+    }
+}
+
+@media (min-width: 401px) and (max-width: 800px) {
+    .DateText {
+        font-size: 14px;
+        line-height: 16px;
+    }
+
+    .ReturnDate {
+        line-height: 16px;
+        font-size: 18px;
+    }
+
+    .DetailNumber {
+        font-size: 16px;
+    }
+}
+
+@media (min-width: 1201px) {
+    .DetailNumber {
+        font-size: 18px;
+    }
+}
+
 .ReturnDateWrapper {
     width: 80%;
+    gap: 5px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.ReturnNumberWrapper {
+    width: 100%;
+    height: 100%;
+    justify-content: space-between;
+    display: flex;
+    flex-direction: column;
+    padding: 10px;
+    gap: 5px;
+    border-radius: 5px;
+    border: 1px solid;
+    border-color: var(--color-base-border);
+    background-color: var(--color-input-background);
 }

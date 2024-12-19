@@ -6,7 +6,7 @@
     height: 100px;
     width: 100%;
     bottom: 0;
-    position: fixed;
+    position: relative;
     background-color: var(--color-base-background);
 
     font-family: "Open Sans", sans-serif;
@@ -14,14 +14,15 @@
 
 .NavButtonWrapper{
     max-width: 150px;
+ 
 }
 
 .NavButton {
     max-width: 150px;
     box-sizing: border-box;
     display: flex;
+    justify-content: flex-start;
     flex-direction: column;
-    justify-content: center;
     align-items: center;
     width: fit-content;
     width: 20vw;

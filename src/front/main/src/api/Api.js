@@ -1,13 +1,14 @@
 import { id } from "date-fns/locale";
 
-export const API_URL = 'https://asm3ceps.ru/api'
+//export const API_URL = 'https://asm3ceps.ru/api'
+export const API_URL = 'http://127.0.0.1:5000/api'
 
-function formatDate(inputDate) {
+export function formatDateToSend(inputDate) {
     const date = new Date(inputDate); // Создаем объект Date
 
     // Проверяем, является ли дата валидной
     if (isNaN(date)) {
-       return "";
+        return "";
     }
 
     // Получаем год, месяц и день
@@ -18,6 +19,24 @@ function formatDate(inputDate) {
     // Форматируем в нужный вид
     return `${year}.${month}.${day}`;
 }
+
+export function formatDateToDisplay(inputDate) {
+    const date = new Date(inputDate); // Создаем объект Date
+
+    // Проверяем, является ли дата валидной
+    if (isNaN(date)) {
+        return "";
+    }
+
+    // Получаем год, месяц и день
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0'); // Месяцы с 0
+    const day = String(date.getDate()).padStart(2, '0'); // День с ведущим нулем
+
+    // Форматируем в нужный вид и возвращаем
+    return `${day}.${month}.${year}`;
+}
+
 
 
 // export const fetchReturns = async (filters, setData, setLoading) => {
@@ -84,7 +103,7 @@ export const fetchPurchaseReal = async (filters, setData, setLoading) => {
         if (data.success && Array.isArray(data.records)) {
             const returnData = data.records.map(sell => ({
                 count: sell.amount || 0,
-                date: formatDate(sell.date),
+                date: formatDateToDisplay(sell.date),
                 id: sell.id,
                 price: sell.price,
                 type: sell.type,
@@ -124,7 +143,7 @@ export const fetchSellsReal = async (filters, setData, setLoading) => {
         if (data.success && Array.isArray(data.records)) {
             const returnData = data.records.map(sell => ({
                 count: sell.amount || 0,
-                date: formatDate(sell.date),
+                date: formatDateToDisplay(sell.date),
                 id: sell.id,
                 price: sell.price,
                 type: sell.type,
@@ -164,7 +183,7 @@ export const fetchReturnsReal = async (filters, setData, setLoading) => {
         if (data.success && Array.isArray(data.records)) {
             const returnData = data.records.map(returnData => ({
                 count: returnData.amount || 0,
-                returnDate: formatDate(returnData.date),
+                returnDate: formatDateToDisplay(returnData.date),
                 id: returnData.id,
                 price: returnData.price,
                 isAir: returnData.type === "airreturn",
@@ -242,8 +261,8 @@ export const fetchReturnById = async (returnId, isAir, setLoading) => {
             returnData.comment = data.return.comment;
             returnData.isCompleat = data.return.is_compleat;
             returnData.price = data.return.price;
-            returnData.date = formatDate(data.return.return_date);
-            returnData.sellDate =formatDate(data.return.sell_date);
+            returnData.date = formatDateToDisplay(data.return.return_date);
+            returnData.sellDate = formatDateToDisplay(data.return.sell_date);
             returnData.seller = data.return.to_seller;
             returnData.detailNumber = data.return.vin;
             return (returnData); // Устанавливаем данные
@@ -279,7 +298,7 @@ export const fetchPurchaseById = async (itemId, setLoading) => {
         if (data.success) {
             const purchase = {
                 count: data.purchase.amount,
-                date: formatDate(data.purchase.date),
+                date: formatDateToDisplay(data.purchase.date),
                 detailName: data.purchase.detail_name,
                 price: data.purchase.price,
                 detailNumber: data.purchase.vin,
@@ -319,7 +338,7 @@ export const fetchSellById = async (itemId, setLoading) => {
         if (data.success) {
             const sell = {
                 count: data.sell.amount,
-                date: formatDate(data.sell.date),
+                date: formatDateToDisplay(data.sell.date),
                 name: data.sell.name,
                 price: data.sell.price,
                 detailNumber: data.sell.vin,
@@ -360,7 +379,7 @@ export const fetchReturnsAll = async (setData, setLoading) => {
         if (data.success && Array.isArray(data.sorted_return_list)) {
             const returnData = data.sorted_return_list.map(returnData => ({
                 id: returnData.id,
-                returnDate:formatDate(returnData.return_date),
+                returnDate: formatDateToDisplay(returnData.return_date),
                 isAir: returnData.type == "airreturn",
                 detailNumber: returnData.vin,
             }));

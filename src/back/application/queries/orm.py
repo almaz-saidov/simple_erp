@@ -556,25 +556,37 @@ class SyncORM:
             else:
                 raise ValueError("Invalid type parameter")
 
-        # Если тип не 'vozvraty', фильтруем по стандартному запросу
-        result = [
-            {
+        result = []
+        for record in records:
+            if record.type in ['return', 'airreturn']:
+                date = record.return_date
+            elif record.type == 'postupleniya':
+                date = record.add_to_shop_date
+            elif record.type == 'vidyacha':
+                date = record.sell_from_shop_date
+            else:
+                None
+            result.append({
                 "id": record.id,
                 "vin": record.vin,
-                "date": (
-                    record.return_date
-                    if record.type in ['return', 'airreturn'] else
-                    record.add_to_shop_date
-                    if record.type == 'postupleniya' else
-                    record.sell_from_shop_date
-                    if record.type == 'vidyacha' else None
-                ),
+                "date": date,
                 "amount": record.amount,
                 "price": record.price,
                 "type": record.type,
-            }
-            for record in records
-        ]
+            })
+
+        # Если тип не 'vozvraty', фильтруем по стандартному запросу
+        # result = [
+        #     {
+        #         "id": record.id,
+        #         "vin": record.vin,
+        #         "date": date,
+        #         "amount": record.amount,
+        #         "price": record.price,
+        #         "type": record.type,
+        #     }
+        #     for record in records
+        # ]
 
         return result
 

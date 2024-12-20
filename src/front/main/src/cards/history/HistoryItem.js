@@ -16,7 +16,7 @@ function HistoryItem(props) {
                 </div>
                 <div className='ItemDateWrapper'>
                     <span className='HelperText'>{isSell ? "Дата выдачи" : "Дата поступления"}: </span>
-                    <span className='PrimaryText'>{isSell ? item.sellDate : item.purchaseDate}</span>
+                    <span className='PrimaryText'>{isSell ? item.date : item.date}</span>
                 </div>
                 <div className='ItemCountWrapper'>
                     <span className='HelperText'>Количество: </span>

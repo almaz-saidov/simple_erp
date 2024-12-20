@@ -44,6 +44,7 @@ function App() {
                     navigate('/front');
                     window.location.reload();
                 } catch (error) {
+                    setLoading(false);
                     console.error('Ошибка при авторизации:', error);
                 }
             };

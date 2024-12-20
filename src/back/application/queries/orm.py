@@ -555,30 +555,27 @@ class SyncORM:
                 records = query.filter(and_(*filters)).all()
             else:
                 raise ValueError("Invalid type parameter")
-
-
+        dates = []
+        for record in records:
+            if record.type in ['return', 'airreturn']:
+                dates.append(record.return_date).strftime('%Y-%m-%d')
+            elif record.type == 'postupleniya':
+                dates.append(record.add_to_shop_date).strftime('%Y-%m-%d')
+            elif record.type == 'vidyacha':
+                dates.append(record.sell_from_shop_date).strftime('%Y-%m-%d')
+            else:
+                dates.append(None)
         # Если тип не 'vozvraty', фильтруем по стандартному запросу
-        result = [
-            {
-                "id": record.id,
-                "vin": record.vin,
-                "date": (
-                    getattr(record, 'return_date', 
-                            getattr(record, 'purchase_date', 
-                                    getattr(record, 'sell_date', None)))
-                    if isinstance(getattr(record, 'return_date', None), datetime)
-                    else (
-                        datetime.strptime(getattr(record, 'return_date', ''), '%Y-%m-%d') 
-                        if isinstance(getattr(record, 'return_date', None), str)
-                        else ''
-                    )
-                ).strftime('%Y-%m-%d') if isinstance(getattr(record, 'return_date', None), datetime) else '',
-                "amount": record.amount,
-                "price": record.price,
-                "type":  record.type,  # Используем заранее добавленный тип
-            }
-            for record in records
-        ]
+        result = []
+        for i in range(len(records)):
+            result.append({
+                "id": records[i].id,
+                "vin": records[i].vin,
+                "date": dates[i],
+                "amount": records[i].amount,
+                "price": records[i].price,
+                "type":  records[i].type,  # Используем заранее добавленный тип
+            })
 
         return result
 

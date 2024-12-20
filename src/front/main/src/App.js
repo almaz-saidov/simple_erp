@@ -11,6 +11,7 @@ import { SyncLoader } from 'react-spinners';
 import { auth } from './api/Api';
 import { ReactComponent as FailIcon } from './assets/auth_fail_icon.svg'
 import toast, { Toaster } from 'react-hot-toast';
+import { retrieveLaunchParams } from "@telegram-apps/sdk";
 function App() {
   const [currentCardId, setCurrentCardId] = useState(0);
   const [authorized, setAuthorized] = useState(true);
@@ -32,6 +33,13 @@ function App() {
 
   //   checkAuthorization(); // Call the authorization function on component mount
   // }, []); // Empty dependency array means this runs once when the component mounts
+
+  useEffect(() => {
+    // Вызываем метод SDK при монтировании компонента
+    if (window.Telegram && window.Telegram.WebApp) {
+      window.Telegram.WebApp.expand();
+    }
+  }, []);
 
   const cards = [<Search />, <Issuance />, <Receipt />, <Returns />, <History />];
 

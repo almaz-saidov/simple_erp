@@ -563,14 +563,16 @@ class SyncORM:
                 "id": record.id,
                 "vin": record.vin,
                 "date": (
-                    record.return_date if record.type in ['return', 'airreturn'] else
-                    record.add_to_shop_date if record.type == 'postupleniya' else
-                    record.sell_from_shop_date if record.type == 'vidyacha' else None
-                ).strftime('%Y-%m-%d') if (
-                    record.return_date if record.type in ['return', 'airreturn'] else
-                    record.add_to_shop_date if record.type == 'postupleniya' else
-                    record.sell_from_shop_date if record.type == 'vidyacha' else None
-                ) else '',
+                    getattr(record, 'return_date', 
+                            getattr(record, 'purchase_date', 
+                                    getattr(record, 'sell_date', None)))
+                    if isinstance(getattr(record, 'return_date', None), datetime)
+                    else (
+                        datetime.strptime(getattr(record, 'return_date', ''), '%Y-%m-%d') 
+                        if isinstance(getattr(record, 'return_date', None), str)
+                        else ''
+                    )
+                ).strftime('%Y-%m-%d') if isinstance(getattr(record, 'return_date', None), datetime) else '',
                 "amount": record.amount,
                 "price": record.price,
                 "type":  record.type,  # Используем заранее добавленный тип

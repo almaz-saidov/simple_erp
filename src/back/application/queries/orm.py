@@ -516,6 +516,20 @@ class SyncORM:
 
                 # Получаем результаты
                 records = combined_query.all()
+
+                result = [
+                    {
+                        "id": record.id,
+                        "vin": record.vin,
+                        "date": (record.sell_from_shop_date).strftime('%Y-%m-%d'),
+                        "amount": record.amount,
+                        "price": record.price,
+                        "type":  record.type,  # Используем заранее добавленный тип
+                    }
+                    for record in records
+                ]
+
+                return result
             
 
             elif record_type == 'postupleniya':
@@ -535,6 +549,20 @@ class SyncORM:
                 if date_before:
                     filters.append(Purchase.add_to_shop_date <= date_before)
                 records = query.filter(and_(*filters)).all()
+
+                result = [
+                    {
+                        "id": record.id,
+                        "vin": record.vin,
+                        "date": (record.sell_from_shop_date).strftime('%Y-%m-%d'),
+                        "amount": record.amount,
+                        "price": record.price,
+                        "type":  record.type,  # Используем заранее добавленный тип
+                    }
+                    for record in records
+                ]
+
+                return result
                 
             elif record_type == 'vidyacha':
                 query = session.query(
@@ -553,6 +581,21 @@ class SyncORM:
                 if date_before:
                     filters.append(Sell.sell_from_shop_date <= date_before)
                 records = query.filter(and_(*filters)).all()
+
+                result = [
+                    {
+                        "id": record.id,
+                        "vin": record.vin,
+                        "date": (record.sell_from_shop_date).strftime('%Y-%m-%d'),
+                        "amount": record.amount,
+                        "price": record.price,
+                        "type":  record.type,  # Используем заранее добавленный тип
+                    }
+                    for record in records
+                ]
+
+                return result
+
             else:
                 raise ValueError("Invalid type parameter")
 

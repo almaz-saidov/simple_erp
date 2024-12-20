@@ -161,6 +161,7 @@ def history_purchase(purchase_id):
     data["vin"] = purchase.vin
     data["amount"] = purchase.amount
     data["date"] = purchase.add_to_shop_date
+    print(f'\n\n\n{data["date"]}\n\n\n{purchase.add_to_shop_date}\n\n\n')
     data["price"] = purchase.price
     data["detail_name"] = purchase.name
         

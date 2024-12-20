@@ -9,7 +9,7 @@ from flask_cors import CORS
 
 #! Создание приложения
 app = Flask(__name__)
-app.config['UPLOAD_FOLDER'] = os.path.abspath('./templates/')
+app.config['UPLOAD_FOLDER'] = os.path.abspath('./templates/static/')
 
 CORS(app, resources={r'/api/*': {'origins': ['https://asm3ceps.ru']}})
 

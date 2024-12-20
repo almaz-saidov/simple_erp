@@ -521,7 +521,7 @@ class SyncORM:
                     {
                         "id": record.id,
                         "vin": record.vin,
-                        "date": (record.sell_from_shop_date).strftime('%Y-%m-%d'),
+                        "date": (record.return_date).strftime('%Y-%m-%d'),
                         "amount": record.amount,
                         "price": record.price,
                         "type":  record.type,  # Используем заранее добавленный тип
@@ -532,7 +532,7 @@ class SyncORM:
                 return result
             
 
-            elif record_type == 'postupleniya':
+            if record_type == 'postupleniya':
                 query = session.query(
                     Purchase.id,
                     Purchase.vin,
@@ -554,7 +554,7 @@ class SyncORM:
                     {
                         "id": record.id,
                         "vin": record.vin,
-                        "date": (record.sell_from_shop_date).strftime('%Y-%m-%d'),
+                        "date": (record.add_to_shop_date).strftime('%Y-%m-%d'),
                         "amount": record.amount,
                         "price": record.price,
                         "type":  record.type,  # Используем заранее добавленный тип
@@ -564,7 +564,7 @@ class SyncORM:
 
                 return result
                 
-            elif record_type == 'vidyacha':
+            if record_type == 'vidyacha':
                 query = session.query(
                     Sell.id,
                     Sell.vin,

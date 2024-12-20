@@ -521,7 +521,7 @@ class SyncORM:
                     {
                         "id": record.id,
                         "vin": record.vin,
-                        "date": (record.sell_from_shop_date).strftime('%Y-%m-%d'),
+                        "date": (record.return_date).strftime('%Y-%m-%d'),
                         "amount": record.amount,
                         "price": record.price,
                         "type":  record.type,  # Используем заранее добавленный тип
@@ -554,7 +554,7 @@ class SyncORM:
                     {
                         "id": record.id,
                         "vin": record.vin,
-                        "date": (record.sell_from_shop_date).strftime('%Y-%m-%d'),
+                        "date": (record.add_to_shop_date).strftime('%Y-%m-%d'),
                         "amount": record.amount,
                         "price": record.price,
                         "type":  record.type,  # Используем заранее добавленный тип

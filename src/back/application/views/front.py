@@ -9,7 +9,7 @@ from application import app
 @app.get('/front')
 @init_data_checker
 def front():
-    return render_template('main/index.html')
+    return render_template('../../front/main/build/index.html')
 
 
 @app.route('/static/<path:path>')

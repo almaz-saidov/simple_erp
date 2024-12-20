@@ -556,40 +556,29 @@ class SyncORM:
             else:
                 raise ValueError("Invalid type parameter")
 
-        result = []
-        for record in records:
-            date_field = getattr(record, 'return_date') or getattr(record, 'purchase_date') or getattr(record, 'sell_date')
-            result.append(
-                {
-                    "id": record.id,
-                    "vin": record.vin,
-                    "date": date_field.strftime('%Y-%m-%d') if isinstance(date_field, datetime) else '',
-                    "amount": record.amount,
-                    "price": record.price,
-                    "type":  record.type,
-                })
-
-
 
         # Если тип не 'vozvraty', фильтруем по стандартному запросу
-        # result = [
-        #     {
-        #         "id": record.id,
-        #         "vin": record.vin,
-        #         "date": (
-        #             record.return_date
-        #             if record.type in ['return', 'airreturn'] else
-        #             record.add_to_shop_date
-        #             if record.type == 'postupleniya' else
-        #             record.sell_from_shop_date
-        #             if record.type == 'vidyacha' else None
-        #         ),
-        #         "amount": record.amount,
-        #         "price": record.price,
-        #         "type": record.type,
-        #     }
-        #     for record in records
-        # ]
+        result = [
+            {
+                "id": record.id,
+                "vin": record.vin,
+                "date": (
+                    getattr(record, 'return_date', 
+                            getattr(record, 'purchase_date', 
+                                    getattr(record, 'sell_date', None)))
+                    if isinstance(getattr(record, 'return_date', None), datetime)
+                    else (
+                        datetime.strptime(getattr(record, 'return_date', ''), '%Y-%m-%d') 
+                        if isinstance(getattr(record, 'return_date', None), str)
+                        else ''
+                    )
+                ).strftime('%Y-%m-%d') if isinstance(getattr(record, 'return_date', None), datetime) else '',
+                "amount": record.amount,
+                "price": record.price,
+                "type":  record.type,  # Используем заранее добавленный тип
+            }
+            for record in records
+        ]
 
         return result
 

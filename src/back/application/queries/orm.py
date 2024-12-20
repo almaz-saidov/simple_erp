@@ -558,11 +558,11 @@ class SyncORM:
         dates = []
         for record in records:
             if record.type in ['return', 'airreturn']:
-                dates.append(record.return_date).strftime('%Y-%m-%d')
+                dates.append(record.return_date)
             elif record.type == 'postupleniya':
-                dates.append(record.add_to_shop_date).strftime('%Y-%m-%d')
+                dates.append(record.add_to_shop_date)
             elif record.type == 'vidyacha':
-                dates.append(record.sell_from_shop_date).strftime('%Y-%m-%d')
+                dates.append(record.sell_from_shop_date)
             else:
                 dates.append(None)
         # Если тип не 'vozvraty', фильтруем по стандартному запросу

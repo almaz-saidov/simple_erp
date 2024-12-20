@@ -532,12 +532,12 @@ class SyncORM:
                 return result
             
 
-            if record_type == 'postupleniya':
+            elif record_type == 'postupleniya':
                 query = session.query(
                     Purchase.id,
                     Purchase.vin,
                     Purchase.amount,
-                    Purchase.add_to_shop_date.label('date'),
+                    Purchase.add_to_shop_date,
                     Purchase.price,
                     literal('postupleniya').label('type')  # Указываем тип записи
                 )
@@ -564,12 +564,12 @@ class SyncORM:
 
                 return result
                 
-            if record_type == 'vidyacha':
+            elif record_type == 'vidyacha':
                 query = session.query(
                     Sell.id,
                     Sell.vin,
                     Sell.amount,
-                    Sell.sell_from_shop_date.label('date'),
+                    Sell.sell_from_shop_date,
                     Sell.price,
                     literal('vidyacha').label('type')  # Указываем тип записи
                 )

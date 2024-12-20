@@ -26,7 +26,135 @@ def reformat_vin(vin: str):
     }
     return ''.join(replaces.get(char, char) for char in vin)
 
- 
+
+def get_records_return_air_return(vin_filter, date_from, date_before):
+    with session_factory() as session:
+        return_query = session.query(
+            Return.id,
+            Return.vin,
+            Return.amount,
+            Return.sell_date,
+            Return.return_date,
+            Return.to_seller,
+            Return.price,
+            Return.comment,
+            Return.is_end,
+            literal('return').label('type')  # Указываем тип записи
+        ).where(Return.is_end == True)
+
+        air_return_query = session.query(
+            AirReturn.id,
+            AirReturn.vin,
+            AirReturn.amount,
+            AirReturn.sell_date,
+            AirReturn.return_date,
+            AirReturn.to_seller,
+            AirReturn.price,
+            AirReturn.comment,
+            AirReturn.is_end,
+            literal('airreturn').label('type')  # Указываем тип записи
+        ).where(AirReturn.is_end == True)
+
+        # Применяем фильтры, если они заданы
+        if vin_filter:
+            return_query = return_query.filter(Return.vin.ilike(f"%{vin_filter}%"))
+            air_return_query = air_return_query.filter(AirReturn.vin.ilike(f"%{vin_filter}%"))
+        if date_from:
+            return_query = return_query.filter(Return.return_date >= date_from)
+            air_return_query = air_return_query.filter(AirReturn.return_date >= date_from)
+        if date_before:
+            return_query = return_query.filter(Return.return_date <= date_before)
+            air_return_query = air_return_query.filter(AirReturn.return_date <= date_before)
+
+        # Объединяем запросы через union
+        combined_query = return_query.union(air_return_query)
+
+        # Получаем результаты
+        records = combined_query.all()
+
+        result = [
+            {
+                "id": record.id,
+                "vin": record.vin,
+                "date": (record.return_date).strftime('%Y-%m-%d'),
+                "amount": record.amount,
+                "price": record.price,
+                "type":  record.type,  # Используем заранее добавленный тип
+            }
+            for record in records
+        ]
+
+        return result
+
+
+def get_records_purchases(vin_filter, date_from, date_before):
+    with session_factory() as session:
+        query = session.query(
+            Purchase.id,
+            Purchase.vin,
+            Purchase.amount,
+            Purchase.add_to_shop_date,
+            Purchase.price,
+            literal('postupleniya').label('type')  # Указываем тип записи
+        )
+        filters = []
+        if vin_filter:
+            filters.append(Purchase.vin.ilike(f"%{vin_filter}%"))
+        if date_from:
+            filters.append(Purchase.add_to_shop_date >= date_from)
+        if date_before:
+            filters.append(Purchase.add_to_shop_date <= date_before)
+        records = query.filter(and_(*filters)).all()
+
+        result = [
+            {
+                "id": record.id,
+                "vin": record.vin,
+                "date": (record.add_to_shop_date).strftime('%Y-%m-%d'),
+                "amount": record.amount,
+                "price": record.price,
+                "type":  record.type,  # Используем заранее добавленный тип
+            }
+            for record in records
+        ]
+
+        return result
+
+
+def get_records_sales(vin_filter, date_from, date_before):
+    with session_factory() as session:
+        query = session.query(
+            Sell.id,
+            Sell.vin,
+            Sell.amount,
+            Sell.sell_from_shop_date,
+            Sell.price,
+            literal('vidyacha').label('type')  # Указываем тип записи
+        )
+        filters = []
+        if vin_filter:
+            filters.append(Sell.vin.ilike(f"%{vin_filter}%"))
+        if date_from:
+            filters.append(Sell.sell_from_shop_date >= date_from)
+        if date_before:
+            filters.append(Sell.sell_from_shop_date <= date_before)
+        records = query.filter(and_(*filters)).all()
+
+        result = [
+            {
+                "id": record.id,
+                "vin": record.vin,
+                "date": (record.sell_from_shop_date).strftime('%Y-%m-%d'),
+                "amount": record.amount,
+                "price": record.price,
+                "type":  record.type,  # Используем заранее добавленный тип
+            }
+            for record in records
+        ]
+
+        return result
+
+
 class SyncORM:
     @staticmethod
     def create_tables():
@@ -469,136 +597,16 @@ class SyncORM:
         date_from = datetime.strptime(date_from, '%Y-%m-%d') if date_from else None
         date_before = datetime.strptime(date_before, '%Y-%m-%d') if date_before else None
 
-        # Открываем сессию внутри метода
-        with session_factory() as session:
-            # Инициализируем запрос в зависимости от типа
-            if record_type == 'vozvraty':
-            # Для типа vozvraty объединяем таблицы Return и AirReturn
-                return_query = session.query(
-                    Return.id,
-                    Return.vin,
-                    Return.amount,
-                    Return.sell_date,
-                    Return.return_date,
-                    Return.to_seller,
-                    Return.price,
-                    Return.comment,
-                    Return.is_end,
-                    literal('return').label('type')  # Указываем тип записи
-                ).where(Return.is_end == True)
+        if record_type == 'vozvraty':
+            result = get_records_return_air_return(vin_filter, date_from, date_before)
+        elif record_type == 'postupleniya':
+            result = get_records_purchases(vin_filter, date_from, date_before)
+        elif record_type == 'vidyacha':
+            result = get_records_sales(vin_filter, date_from, date_before)
+        else:
+            raise ValueError("Invalid type parameter")
 
-                air_return_query = session.query(
-                    AirReturn.id,
-                    AirReturn.vin,
-                    AirReturn.amount,
-                    AirReturn.sell_date,
-                    AirReturn.return_date,
-                    AirReturn.to_seller,
-                    AirReturn.price,
-                    AirReturn.comment,
-                    AirReturn.is_end,
-                    literal('airreturn').label('type')  # Указываем тип записи
-                ).where(AirReturn.is_end == True)
-
-                # Применяем фильтры, если они заданы
-                if vin_filter:
-                    return_query = return_query.filter(Return.vin.ilike(f"%{vin_filter}%"))
-                    air_return_query = air_return_query.filter(AirReturn.vin.ilike(f"%{vin_filter}%"))
-                if date_from:
-                    return_query = return_query.filter(Return.return_date >= date_from)
-                    air_return_query = air_return_query.filter(AirReturn.return_date >= date_from)
-                if date_before:
-                    return_query = return_query.filter(Return.return_date <= date_before)
-                    air_return_query = air_return_query.filter(AirReturn.return_date <= date_before)
-
-                # Объединяем запросы через union
-                combined_query = return_query.union(air_return_query)
-
-                # Получаем результаты
-                records = combined_query.all()
-
-                result = [
-                    {
-                        "id": record.id,
-                        "vin": record.vin,
-                        "date": (record.return_date).strftime('%Y-%m-%d'),
-                        "amount": record.amount,
-                        "price": record.price,
-                        "type":  record.type,  # Используем заранее добавленный тип
-                    }
-                    for record in records
-                ]
-
-                return result
-            
-
-            elif record_type == 'postupleniya':
-                query = session.query(
-                    Purchase.id,
-                    Purchase.vin,
-                    Purchase.amount,
-                    Purchase.add_to_shop_date,
-                    Purchase.price,
-                    literal('postupleniya').label('type')  # Указываем тип записи
-                )
-                filters = []
-                if vin_filter:
-                    filters.append(Purchase.vin.ilike(f"%{vin_filter}%"))
-                if date_from:
-                    filters.append(Purchase.add_to_shop_date >= date_from)
-                if date_before:
-                    filters.append(Purchase.add_to_shop_date <= date_before)
-                records = query.filter(and_(*filters)).all()
-
-                result = [
-                    {
-                        "id": record.id,
-                        "vin": record.vin,
-                        "date": (record.add_to_shop_date).strftime('%Y-%m-%d'),
-                        "amount": record.amount,
-                        "price": record.price,
-                        "type":  record.type,  # Используем заранее добавленный тип
-                    }
-                    for record in records
-                ]
-
-                return result
-                
-            elif record_type == 'vidyacha':
-                query = session.query(
-                    Sell.id,
-                    Sell.vin,
-                    Sell.amount,
-                    Sell.sell_from_shop_date,
-                    Sell.price,
-                    literal('vidyacha').label('type')  # Указываем тип записи
-                )
-                filters = []
-                if vin_filter:
-                    filters.append(Sell.vin.ilike(f"%{vin_filter}%"))
-                if date_from:
-                    filters.append(Sell.sell_from_shop_date >= date_from)
-                if date_before:
-                    filters.append(Sell.sell_from_shop_date <= date_before)
-                records = query.filter(and_(*filters)).all()
-
-                result = [
-                    {
-                        "id": record.id,
-                        "vin": record.vin,
-                        "date": (record.sell_from_shop_date).strftime('%Y-%m-%d'),
-                        "amount": record.amount,
-                        "price": record.price,
-                        "type":  record.type,  # Используем заранее добавленный тип
-                    }
-                    for record in records
-                ]
-
-                return result
-
-            else:
-                raise ValueError("Invalid type parameter")
-
+        return result
 
         # Если тип не 'vozvraty', фильтруем по стандартному запросу
         result = [

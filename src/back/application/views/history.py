@@ -160,7 +160,8 @@ def history_purchase(purchase_id):
 
     data["vin"] = purchase.vin
     data["amount"] = purchase.amount
-    data["date"] = purchase.add_to_shop_date
+    data["date"] = purchase.add_to_shop_date.isoformat()
+    print(f'\n\n\n{data["date"]}\n\n\npurchase.add_to_shop_date.isoformat()\n\n\n')
     data["price"] = purchase.price
     data["detail_name"] = purchase.name
         

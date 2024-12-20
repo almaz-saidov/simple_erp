@@ -20,7 +20,7 @@ def returns():
         return_list.append({
             "id": ret.id,
             "vin": ret.vin,
-            "return_date": ret.return_date.isoformat(),
+            "return_date": ret.return_date,
             "type": "airreturn"  # Добавляем тип для воздушных возвратов
         })
 
@@ -28,7 +28,7 @@ def returns():
         return_list.append({
             "id": ret.id,
             "vin": ret.vin,
-            "return_date": ret.return_date.isoformat(),
+            "return_date": ret.return_date,
             "type": "return"  # Добавляем тип для обычных возвратов
         })
     

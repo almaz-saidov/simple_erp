@@ -15,4 +15,4 @@ def front():
 @app.route('/static-front/<path:path>')
 @init_data_checker
 def static_index_build(path):
-    return send_from_directory(os.path.join('static/'), path)
+    return send_from_directory(os.path.join('/static/'), path)

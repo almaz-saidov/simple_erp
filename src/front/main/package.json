@@ -7,7 +7,7 @@
     "@emotion/styled": "^11.14.0",
     "@mui/material": "^6.2.1",
     "@mui/x-date-pickers": "^7.23.2",
-    "@telegram-apps/sdk": "^2.9.1",
+    "@telegram-apps/sdk": "^2.11.0",
     "cra-template": "1.2.0",
     "date-fns": "^4.1.0",
     "dayjs": "^1.11.13",

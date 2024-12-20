@@ -9,10 +9,10 @@ from application import app
 @app.get('/front')
 @init_data_checker
 def front():
-    return render_template('../../../front/main/build/index.html')
+    return render_template('/build/index.html')
 
 
 @app.route('/static/<path:path>')
 @init_data_checker
 def static_index_build(path):
-    return send_from_directory(os.path.join(app.config['UPLOAD_FOLDER'], '../../../front/main/build/static'), path)
+    return send_from_directory(os.path.join(app.config['UPLOAD_FOLDER'], '/build/static'), path)

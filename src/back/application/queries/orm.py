@@ -532,7 +532,7 @@ class SyncORM:
                 return result
             
 
-            elif record_type == 'postupleniya':
+            if record_type == 'postupleniya':
                 query = session.query(
                     Purchase.id,
                     Purchase.vin,
@@ -564,7 +564,7 @@ class SyncORM:
 
                 return result
                 
-            elif record_type == 'vidyacha':
+            if record_type == 'vidyacha':
                 query = session.query(
                     Sell.id,
                     Sell.vin,

@@ -564,11 +564,12 @@ class SyncORM:
                 "vin": record.vin,
                 "date": (
                     record.return_date if record.type in ['return', 'airreturn'] else
-                    record.date if record.type in ['postupleniya', 'vidyacha'] else None
-                ).strftime('%Y-%m-%d') if isinstance(
+                    record.add_to_shop_date if record.type == 'postupleniya' else
+                    record.sell_from_shop_date if record.type == 'vidyacha' else None
+                ).strftime('%Y-%m-%d') if (
                     record.return_date if record.type in ['return', 'airreturn'] else
-                    record.date if record.type in ['postupleniya', 'vidyacha'] else None,
-                    datetime
+                    record.add_to_shop_date if record.type == 'postupleniya' else
+                    record.sell_from_shop_date if record.type == 'vidyacha' else None
                 ) else '',
                 "amount": record.amount,
                 "price": record.price,

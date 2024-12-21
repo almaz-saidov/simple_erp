@@ -46,22 +46,32 @@ function Returns() {
 
     const getSubmitButtonOnClick = () => { }
 
-    const handleApiResponse = (editedReturn, isNew, isAir, onSuccess, setLoading) => {
+    const handleApiResponse = async (editedReturn, isNew, isAir) => {
         const successMessage = isNew ? 'Возврат создан' : 'Возврат изменён';
-
-        toast.promise(
-            isNew ? postData(editedReturn, isAir ? "returns/create_air_return" : "returns/create_return") :
-                updateReturnById(editedReturn.id, editedReturn, isAir, setLoading),
-            {
-                loading: 'Создание',
-                success: () => {
-                    onSuccess();
-                    return successMessage;
-                },
-                error: 'Что-то пошло не так',
+        try {
+            if (isNew) {
+                // Создание нового возврата
+                const endpoint = isAir ? "returns/create_air_return" : "returns/create_return";
+                await postData(editedReturn, endpoint);
+            } else {
+                // Обновление существующего возврата
+                await updateReturnById(editedReturn.id, editedReturn, isAir, setLoading);
             }
-        );
+
+            // Успешное завершение
+            if (isModalOpen) {
+                toggleModal();
+            }
+            toast.success(successMessage);
+        } catch (e) {
+            // Обработка ошибок
+            console.error('Ошибка в handleApiResponse:', e);
+            toast.error('Что-то пошло не так');
+        }
     };
+
+
+
 
     return (
         <>

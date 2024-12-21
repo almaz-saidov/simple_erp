@@ -9,7 +9,6 @@ import "./styles/LoaderWrapper.css";
 
 
 function App() {
-    const [authorized, setAuthorized] = useState(false);
     const [loading, setLoading] = useState(true);
 
     const navigate = useNavigate();
@@ -37,16 +36,15 @@ function App() {
                     });
 
 
-
                     if (!response.ok) {
                         throw new Error('Network response was not ok');
                     }
 
-                    setAuthorized(true);
                     localStorage.setItem('authorize', init_data);
                     navigate('/front');
                     window.location.reload();
                 } catch (error) {
+                    setLoading(false);
                     console.error('Ошибка при авторизации:', error);
                 }
             };
@@ -54,14 +52,17 @@ function App() {
             initializeAuth('https://asm3ceps.ru/api/auth');
 
         } catch (e) {
+            setLoading(false);
             console.log("Error", e.message);
         }
-        setLoading(false);
+
+
+
     }, []);
 
     return (
         <div className="App">
-            {loading || authorized ? (
+            {loading ? (
                 <div className='LoaderWrapper'>
                     <SyncLoader color="#A7A7A7" />
                 </div>

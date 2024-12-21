@@ -3,7 +3,7 @@
     height: 100%;
     display: flex;
     flex-direction: column;
-    justify-content: center;
+    justify-content: flex-start;
     overflow: hidden;
 }
 
@@ -19,7 +19,7 @@
     margin-top: 15px;
     display: flex;
     flex-direction: column;
-    gap: 15px;
+    gap: 10px;
     padding-bottom: 50px;
     overflow-y: scroll;
     scrollbar-width: none;

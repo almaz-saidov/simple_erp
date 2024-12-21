@@ -1,7 +1,7 @@
 import { id } from "date-fns/locale";
 
-export const API_URL = 'https://asm3ceps.ru/api'
-//export const API_URL = 'http://127.0.0.1:5000/api'
+//export const API_URL = 'https://asm3ceps.ru/api'
+export const API_URL = 'http://127.0.0.1:5000/api'
 
 export function formatDateToSend(inputDate) {
     const date = new Date(inputDate); // Создаем объект Date
@@ -86,7 +86,7 @@ export const fetchPurchaseReal = async (filters, setData, setLoading) => {
     setLoading(true); // Устанавливаем загрузку в true перед запросом
 
     try {
-        const response = await fetch(`${API_URL}/history?type=postupleniya&like=${filters.vin || ""}`, {
+        const response = await fetch(`${API_URL}/history?type=postupleniya&like=${filters.vin || ""}&date_from=${filters.date_from}&date_before=${filters.date_before}`, {
             method: 'GET', // Метод запроса,
             headers: {
                 'Content-Type': 'application/json',
@@ -166,7 +166,7 @@ export const fetchReturnsReal = async (filters, setData, setLoading) => {
     setLoading(true); // Устанавливаем загрузку в true перед запросом
 
     try {
-        const response = await fetch(`${API_URL}/history?type=vozvraty&like=${filters.vin || ""}`, {
+        const response = await fetch(`${API_URL}/history?type=vozvraty&like=${filters.vin || ""}&date_from=${filters.date_from}&date_before=${filters.date_before}`, {
             method: 'GET', // Метод запроса,
             headers: {
                 'Content-Type': 'application/json',
@@ -261,8 +261,8 @@ export const fetchReturnById = async (returnId, isAir, setLoading) => {
             returnData.comment = data.return.comment;
             returnData.isCompleat = data.return.is_compleat;
             returnData.price = data.return.price;
-            returnData.date = formatDateToDisplay(data.return.return_date);
-            returnData.sellDate = formatDateToDisplay(data.return.sell_date);
+            returnData.date = formatDateToSend(data.return.return_date);
+            returnData.sellDate = formatDateToSend(data.return.sell_date);
             returnData.seller = data.return.to_seller;
             returnData.detailNumber = data.return.vin;
             return (returnData); // Устанавливаем данные

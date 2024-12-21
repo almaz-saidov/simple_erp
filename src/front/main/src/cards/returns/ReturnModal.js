@@ -5,7 +5,7 @@ import Checkbox from '../../components/CheckBox';
 import { ReactComponent as LeftArrow } from '../../assets/left_arrow_icon.svg';
 import { ReactComponent as AirIcon } from '../../assets/air_icon.svg';
 import { SyncLoader } from 'react-spinners';
-
+import TextField from '../../components/TextField';
 
 import { postData, fetchReturnById, updateReturnById } from '../../api/Api';
 import toast, { Toaster } from 'react-hot-toast';
@@ -24,7 +24,7 @@ const ReturnModal = ({ isOpen, onClose, returnData, isCreating, isAir, isHistory
     const [seller, setSeller] = useState('');
     const [comment, setComment] = useState('');
     const [store, setStore] = useState('');
-
+    const [isNeedText, setIsNeedText] = useState(false);
 
     const initTmpReturn = (returnObj) => {
 
@@ -100,12 +100,28 @@ const ReturnModal = ({ isOpen, onClose, returnData, isCreating, isAir, isHistory
 
     }
 
-    const isNecessaryData = () => { }
+    const isRequiredEmpty = () => {
+        if (vin === '' ||
+            amount === '' ||
+            sellDate === '' ||
+            returnDate === '' ||
+            price === '' ||
+            seller === '' ||
+            comment === ''
+        ) {
+            return isAir ? store === '' : true;
+        }
+        return false;
+    }
 
     const handleOnClick = () => {
-        handleClose({ target: { id: 'modal-overlay' } });
-        handleApiResponse(getReturn(), isCreating, isAir, returnData, onSuccess);
-
+        if (isRequiredEmpty()) {
+            setIsNeedText(true);
+            toast.error('Заполниет все обязательные поля');
+        } else {
+            setIsNeedText(true);
+            handleApiResponse(getReturn(), isCreating, isAir);
+        }
     }
 
     const getSubmitButtonText = () => {
@@ -138,14 +154,17 @@ const ReturnModal = ({ isOpen, onClose, returnData, isCreating, isAir, isHistory
                         </div> :
                         <>
                             <div className='EditReturn'>
-                                <Input label="Номер запчасти" hint="A22222222" value={vin} parentText={vin} setParentText={setVin} isDynamic={true} maxlength={11} />
-                                <Input label="Количество" hint="000" value={amount} type="number" parentText={amount} setParentText={setAmount} isDynamic={true} maxlength={10} />
-                                <Input label="Дата продажи" hint="дд.мм.гггг" value={sellDate} type="date" parentText={sellDate} setParentText={setSellDate} isDynamic={true} maxlength={10} />
-                                <Input label="Дата возврата" hint="дд.мм.гггг" value={returnDate} type="date" parentText={returnDate} setParentText={setReturnDate} isDynamic={true} maxlength={10} />
-                                <Input label="Продавец" hint="Женя Зеленов" value={seller} type="text" parentText={seller} setParentText={setSeller} isDynamic={true} maxlength={40} />
-                                <Input label="Цена" hint="00 000.00 ₽" value={price} type="number" parentText={price} setParentText={setPrice} isDynamic={true} maxlength={15} />
-                                {isAir ? <Input label="Магазин посредник" isLong={true} hint="Магазин Посредник" parentText={store} setParentText={setStore} value={store} type="text" isDynamic={true} maxlength={40} /> : <></>}
-                                <Input label="Комментарий" isLong={true} hint="Коментарий" value={comment} parentText={comment} setParentText={setComment} type="text" isDynamic={true} maxlength={255} />
+                                {isHistory ?
+                                    <TextField textDescription="Номер запчасти" text={vin} />
+                                    : < Input label="Номер запчасти" hint="A22222222" value={vin} parentText={vin} setParentText={setVin} isDynamic={true} maxlength={11} isNeedText={isNeedText} />
+                                }
+                                <Input label="Количество" hint="000" value={amount} type="number" parentText={amount} setParentText={setAmount} isDynamic={true} maxlength={10} isNeedText={isNeedText} />
+                                <Input label="Дата продажи" hint="дд.мм.гггг" value={sellDate} type="date" parentText={sellDate} setParentText={setSellDate} isDynamic={true} maxlength={10} isNeedText={isNeedText} />
+                                <Input label="Дата возврата" hint="дд.мм.гггг" value={returnDate} type="date" parentText={returnDate} setParentText={setReturnDate} isDynamic={true} maxlength={10} isNeedText={isNeedText} />
+                                <Input label="Продавец" hint="Женя Зеленов" value={seller} type="text" parentText={seller} setParentText={setSeller} isDynamic={true} maxlength={40} isNeedText={isNeedText} />
+                                <Input label="Цена" hint="00 000.00 ₽" value={price} type="number" parentText={price} setParentText={setPrice} isDynamic={true} maxlength={15} isNeedText={isNeedText} />
+                                {isAir ? <Input label="Магазин посредник" isLong={true} hint="Магазин Посредник" parentText={store} setParentText={setStore} value={store} type="text" isDynamic={true} maxlength={40} isNeedText={isNeedText} /> : <></>}
+                                <Input label="Комментарий" isLong={true} hint="Коментарий" value={comment} parentText={comment} setParentText={setComment} type="text" isDynamic={true} maxlength={255} isNeedText={isNeedText} />
                             </div>
                             < Checkbox label="Возврат завершён" onChange={setCompleted} checkedDefault={isHistory} />
                         </>

@@ -17,7 +17,7 @@ export function formatDateToSend(inputDate) {
     const day = String(date.getDate()).padStart(2, '0'); // День с ведущим нулем
 
     // Форматируем в нужный вид
-    return `${year}.${month}.${day}`;
+    return `${year}-${month}-${day}`;
 }
 
 export function formatDateToDisplay(inputDate) {
@@ -206,6 +206,8 @@ export const fetchReturnsReal = async (filters, setData, setLoading) => {
 export const updateReturnById = async (returnId, updatedReturn, isAir, setLoading) => {
     setLoading(true); // Устанавливаем загрузку в true перед запросом
     const type = isAir ? "airreturn" : "return";
+    updateReturnById.sell_date = formatDateToSend(updateReturnById.sell_date);
+    updateReturnById.return_date = formatDateToSend(updateReturnById.return_date);
     try {
         const response = await fetch(`${API_URL}/returns/${returnId}?type=${type}`, {
             method: 'POST', // Метод запроса,
@@ -237,6 +239,8 @@ export const updateReturnById = async (returnId, updatedReturn, isAir, setLoadin
 export const updateReturnHistoryById = async (returnId, updatedReturn, isAir, setLoading) => {
     setLoading(true); // Устанавливаем загрузку в true перед запросом
     const type = isAir ? "airreturn" : "return";
+    updateReturnById.sell_date = formatDateToSend(updateReturnById.sell_date);
+    updateReturnById.return_date = formatDateToSend(updateReturnById.return_date);
     try {
         const response = await fetch(`${API_URL}/history/returns/${returnId}?type=${type}`, {
             method: 'POST', // Метод запроса,

@@ -34,11 +34,47 @@ function App() {
   //   checkAuthorization(); // Call the authorization function on component mount
   // }, []); // Empty dependency array means this runs once when the component mounts
 
+  const preventCollapse = (event) => {
+    if (window.scrollY === 0) {
+      // Prevent the default touch behavior if at the top of the page
+      event.preventDefault();
+      window.scrollTo(0, 1); // Scroll slightly down to avoid collapsing
+    }
+  }
+
+  // Attach the above function to the touchstart event handler of the scrollable element
+
+
   useEffect(() => {
-    // Вызываем метод SDK при монтировании компонента
+
+    const handleResize = () => {
+      // Например, вы можете установить флаг о том, что клавиатура открыта
+      if (window.innerHeight < window.outerHeight) {
+        // Клавиатура открыта
+        document.body.style.overflow = 'hidden'; // Прекратить прокрутку
+      } else {
+        // Клавиатура закрыта
+        document.body.style.overflow = 'auto'; // Включить прокрутку
+      }
+    };
+
+    window.addEventListener('resize', handleResize);
+
+    handleResize();
+
+    document.addEventListener("touchstart", preventCollapse);
+    document.addEventListener("touchmove", preventCollapse);
+
     if (window.Telegram && window.Telegram.WebApp) {
       window.Telegram.WebApp.expand();
     }
+
+    return () => {
+      document.removeEventListener("touchstart", preventCollapse);
+      document.removeEventListener("touchmove", preventCollapse);
+      window.removeEventListener('resize', handleResize);
+
+    };
   }, []);
 
   const cards = [<Search />, <Issuance />, <Receipt />, <Returns />, <History />];

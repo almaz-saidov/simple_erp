@@ -34,11 +34,39 @@ function App() {
   //   checkAuthorization(); // Call the authorization function on component mount
   // }, []); // Empty dependency array means this runs once when the component mounts
 
+  const preventCollapse = (event) => {
+    if (window.scrollY === 0) {
+      // Prevent the default touch behavior if at the top of the page
+      event.preventDefault();
+      window.scrollTo(0, 1); // Scroll slightly down to avoid collapsing
+    }
+  }
+
+  // Attach the above function to the touchstart event handler of the scrollable element
+
+
   useEffect(() => {
-    // Вызываем метод SDK при монтировании компонента
+    // Вызываем метод SDK при монт
+    //   const scrollableElement = document.querySelector(".scrollable-element");
+    // document.addEventListener("touchstart", preventCollapse);
+    // if (window.Telegram && window.Telegram.WebApp) {
+    //   window.Telegram.WebApp.expand();
+    // }
+    const scrollableElement = document.querySelector(".scrollable-element");
+
+    // Attach the preventCollapse function to both touchstart and touchmove events
+    document.addEventListener("touchstart", preventCollapse);
+    document.addEventListener("touchmove", preventCollapse);
+
     if (window.Telegram && window.Telegram.WebApp) {
       window.Telegram.WebApp.expand();
     }
+
+    // Cleanup listeners on component unmount
+    return () => {
+      document.removeEventListener("touchstart", preventCollapse);
+      document.removeEventListener("touchmove", preventCollapse);
+    };
   }, []);
 
   const cards = [<Search />, <Issuance />, <Receipt />, <Returns />, <History />];

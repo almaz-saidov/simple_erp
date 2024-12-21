@@ -83,6 +83,7 @@ const ReturnModal = ({ isOpen, onClose, returnData, isCreating, isAir, isHistory
     const handleClose = (e) => {
         if (e.target.id === 'modal-overlay') {
             setCompleted(false);
+            setIsNeedText(false);
             onClose();
         }
     };

@@ -9,7 +9,7 @@ import ReturnModal from '../returns/ReturnModal';
 import HistoryItemModal from "./HistoryItemModal";
 import HistoryItem from "./HistoryItem";
 import toast, { Toaster } from 'react-hot-toast';
-import { postData, fetchReturnById, updateReturnById } from '../../api/Api';
+import { postData, updateReturnHistoryById } from '../../api/Api';
 import '../../styles/Card.css';
 import '../../styles/Cards/History.css';
 import '../../styles/Components.css';
@@ -52,7 +52,7 @@ function History() {
                 await postData(editedReturn, endpoint);
             } else {
                 // Обновление существующего возврата
-                await updateReturnById(editedReturn.id, editedReturn, isAir, setLoading);
+                await updateReturnHistoryById(editedReturn.id, editedReturn, isAir, setLoading);
             }
 
             // Успешное завершение

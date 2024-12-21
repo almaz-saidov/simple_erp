@@ -7,7 +7,7 @@ import { ReactComponent as AirIcon } from '../../assets/air_icon.svg';
 import { SyncLoader } from 'react-spinners';
 import TextField from '../../components/TextField';
 
-import { postData, fetchReturnById, updateReturnById } from '../../api/Api';
+import { postData, fetchReturnById, fetchReturnHistoryById, updateReturnById } from '../../api/Api';
 import toast, { Toaster } from 'react-hot-toast';
 
 import '../../styles/Cards/Returns.css';
@@ -43,8 +43,12 @@ const ReturnModal = ({ isOpen, onClose, returnData, isCreating, isAir, isHistory
         const fetchReturnData = async () => {
             setLoading(true);
             try {
+                if (isHistory) {
+                    const tmpReturn = returnData.id !== undefined ? await fetchReturnHistoryById(returnData.id, isAir, setLoading) : {};
+                } else {
+                    const tmpReturn = returnData.id !== undefined ? await fetchReturnById(returnData.id, isAir, setLoading) : {};
+                }
 
-                const tmpReturn = returnData.id !== undefined ? await fetchReturnById(returnData.id, isAir, setLoading) : {};
                 initTmpReturn(tmpReturn);
             } catch (error) {
                 console.error('Ошибка при загрузке данных возврата:', error);

@@ -202,6 +202,7 @@ export const fetchReturnsReal = async (filters, setData, setLoading) => {
     }
 };
 
+
 export const updateReturnById = async (returnId, updatedReturn, isAir, setLoading) => {
     setLoading(true); // Устанавливаем загрузку в true перед запросом
     const type = isAir ? "airreturn" : "return";
@@ -224,6 +225,82 @@ export const updateReturnById = async (returnId, updatedReturn, isAir, setLoadin
         const data = await response.json();
         return (data);
 
+    } catch (error) {
+        console.error("Ошибка при получении данных:", error);
+        return ({}); // Обрабатываем ошибку, возвращая пустой массив
+    } finally {
+        setLoading(false); // Всегда отключаем загрузку после выполнения
+    }
+    return ({});
+};
+
+export const updateReturnHistoryById = async (returnId, updatedReturn, isAir, setLoading) => {
+    setLoading(true); // Устанавливаем загрузку в true перед запросом
+    const type = isAir ? "airreturn" : "return";
+    try {
+        const response = await fetch(`${API_URL}/hsitory/returns/${returnId}?type=${type}`, {
+            method: 'POST', // Метод запроса,
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(updatedReturn),
+
+
+        });
+
+        // Проверяем, успешен ли ответ
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        const data = await response.json();
+        return (data);
+
+    } catch (error) {
+        console.error("Ошибка при получении данных:", error);
+        return ({}); // Обрабатываем ошибку, возвращая пустой массив
+    } finally {
+        setLoading(false); // Всегда отключаем загрузку после выполнения
+    }
+    return ({});
+};
+
+export const fetchReturnHistoryById = async (returnId, isAir, setLoading) => {
+    setLoading(true); // Устанавливаем загрузку в true перед запросом
+    const type = isAir ? "airreturn" : "return";
+    try {
+        const response = await fetch(`${API_URL}/hsitory/returns/${returnId}?type=${type}`, {
+            method: 'GET', // Метод запроса,
+            headers: {
+                'Content-Type': 'application/json',
+            },
+
+        });
+
+        // Проверяем, успешен ли ответ
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        const data = await response.json();
+        if (data.success) {
+            const returnData = {
+            };
+            returnData.count = data.return.amount;
+            if (isAir) {
+                returnData.store = data.return.another_shop;
+            }
+            returnData.comment = data.return.comment;
+            returnData.isCompleat = data.return.is_compleat;
+            returnData.price = data.return.price;
+            returnData.date = formatDateToSend(data.return.return_date);
+            returnData.sellDate = formatDateToSend(data.return.sell_date);
+            returnData.seller = data.return.to_seller;
+            returnData.detailNumber = data.return.vin;
+            return (returnData); // Устанавливаем данные
+        } else {
+            return ({}); // Если ответ неудачный, возвращаем пустой массив
+        }
     } catch (error) {
         console.error("Ошибка при получении данных:", error);
         return ({}); // Обрабатываем ошибку, возвращая пустой массив

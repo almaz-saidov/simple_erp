@@ -50,17 +50,20 @@ async def notifications(bot: Bot):
     except Exception as e:
         print(f"Ошибка подключения к базе данных: {e}")
     finally:
-        if conn:
-            await conn.close()
+        await conn.close()
 
 
 async def main():
     bot = Bot(token=BOT_TOKEN)
-    await notifications(bot)
-    await bot.close()
+    try:
+        await notifications(bot)
+    except Exception as e:
+        print(e)
+    await bot.session.close()
     
 
 if __name__ == '__main__':
     asyncio.run(main())
     
+
 

@@ -1,0 +1,1053 @@
+@import url(https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap);
+
+:root {
+    --color-base-fill: #0d0d0d;
+    --color-base-background: #131313;
+    --color-component-background: #1d1d1d;
+    --color-input-background: #2b2b2b;
+    --color-secondary-text: #616161;
+    --color-primary-dark-text: #a7a7a7;
+    --color-primary-text: #dbdbdb;
+    --color-base-border: #3f3f3f;
+    --color-light-border: #525252;
+    --color-selected-border: #dbdbdb;
+    --color-control-elements: #017afe;
+    --color-cool-background: #27272780;
+    box-sizing: border-box;
+    font-family: VelaSans;
+    font-weight: 400
+}
+
+@font-face {
+    font-family: VelaSans;
+    font-style: normal;
+    font-weight: 400;
+    src: url(/static-front/media/VelaSans-Medium.f16ed904a5dd4a6aeb7f.woff) format("woff")
+}
+
+body {
+    --webkit-overflow-scrolling: touch;
+    background-color: #0d0d0d;
+    background-color: var(--color-base-fill);
+    height: 100%;
+    overflow: hidden;
+    overscroll-behavior: none;
+    width: 100%
+}
+
+@media (max-width:400px) {
+
+    body,
+    input,
+    input::placeholder {
+        font-size: 14px;
+        line-height: 14px
+    }
+
+    .NumberDoesNotExist {
+        font-size: 28px;
+        line-height: 28px
+    }
+
+    .Checkbox label,
+    input[type=checkbox]:checked:before {
+        font-size: 16px;
+        line-height: 16px
+    }
+
+    .close {
+        font-size: 20px;
+        line-height: 20px
+    }
+
+    .ModalHeader h1 {
+        font-size: 22px;
+        line-height: 22px
+    }
+
+    .backButton {
+        font-size: 16px;
+        line-height: 16px
+    }
+
+    .NavButton {
+        font-size: 12px;
+        line-height: 12px
+    }
+
+    .CurrentHistoryNavButton,
+    .HistoryNavButton {
+        font-size: 18px;
+        line-height: 18px
+    }
+
+    .HistoryItem .TextName {
+        font-size: 14px;
+        line-height: 14px
+    }
+
+    .SubmitButton {
+        font-size: 16px;
+        line-height: 16px
+    }
+}
+
+@media (min-width:401px) and (max-width:800px) {
+    body {
+        font-size: 20px
+    }
+
+    input,
+    input::placeholder {
+        font-size: 18px
+    }
+
+    .SubmitButton {
+        font-size: 20px
+    }
+
+    .NumberDoesNotExist {
+        font-size: 34px
+    }
+
+    .Checkbox label,
+    input[type=checkbox]:checked:before {
+        font-size: 20px
+    }
+
+    .close {
+        font-size: 24px
+    }
+
+    .ModalHeader h1 {
+        font-size: 26px
+    }
+
+    .backButton {
+        font-size: 20px
+    }
+
+    .NavButton {
+        font-size: 14px
+    }
+
+    .CurrentHistoryNavButton,
+    .HistoryNavButton {
+        font-size: 22px
+    }
+
+    .HistoryItem .TextName {
+        font-size: 14px
+    }
+}
+
+@media (min-width:1201px) {
+    body {
+        font-size: 18px
+    }
+}
+
+* {
+    margin: 0;
+    padding: 0
+}
+
+.App {
+    align-items: center;
+    background-color: var(--color-base-fill);
+    color: var(--color-text);
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    justify-content: space-between;
+    overflow: hidden;
+    width: 100%
+}
+
+.FailAuthMessage {
+    -webkit-backdrop-filter: blur(7px);
+    backdrop-filter: blur(7px);
+    background-color: var(--color-cool-background);
+    border: 1px solid;
+    border-color: var(--color-light-border);
+    box-sizing: border-box;
+    color: var(--color-light-border);
+    font-weight: 300;
+    opacity: 1;
+    padding: 15px;
+    position: absolute;
+    text-align: center;
+    top: 50%;
+    width: 70%
+}
+
+.FailAuthIcon {
+    position: absolute;
+    top: 40%
+}
+
+.Nav {
+    align-items: center;
+    background-color: var(--color-base-background);
+    bottom: 0;
+    display: flex;
+    flex-direction: row;
+    font-family: Open Sans, sans-serif;
+    height: 70px;
+    justify-content: center;
+    padding-top: 10px;
+    position: relative;
+    width: 100%
+}
+
+.NavButton,
+.NavButtonWrapper {
+    max-width: 150px
+}
+
+.NavButton {
+    align-items: center;
+    background-color: initial;
+    border: 0;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    height: 70px;
+    justify-content: flex-start;
+    width: -webkit-fit-content;
+    width: fit-content;
+    width: 20vw
+}
+
+.NavButton,
+.NavButtonIcon {
+    color: var(--color-secondary-text)
+}
+
+.NavCurrentButtonIcon {
+    color: var(--color-control-elements);
+    transition: all .3s ease
+}
+
+.Card {
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    justify-content: flex-start;
+    overflow: hidden;
+    padding: 0 15px;
+    width: 100%
+}
+
+.Card,
+.Card * {
+    box-sizing: border-box
+}
+
+.Card * {
+    max-width: 700px
+}
+
+.CardHeader {
+    align-self: flex-start;
+    color: var(--color-primary-text);
+    display: flex;
+    padding-bottom: 10px;
+    padding-top: 10px;
+    text-align: left
+}
+
+.CardHeader h1 {
+    font-weight: 500;
+    font: 2em;
+    line-height: 2em
+}
+
+.CardContent {
+    grid-gap: 15px;
+    background-color: var(--color-component-background);
+    border: 1px solid;
+    border-color: var(--color-base-border);
+    border-radius: 5px;
+    box-sizing: border-box;
+    display: grid;
+    gap: 15px;
+    grid-template-columns: calc(50% - 7.5px) calc(50% - 7.5px);
+    min-height: 250px;
+    padding: 10px;
+    width: 100%
+}
+
+.InputWrapper,
+.LongInputWrapper {
+    box-sizing: border-box;
+    color: var(--color-primary-dark-text);
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    justify-content: flex-end;
+    width: auto
+}
+
+.LongInputWrapper {
+    grid-column-end: span 2
+}
+
+.InputWrapper input,
+.LongInputWrapper input,
+input[type=date] {
+    background-color: var(--color-input-background);
+    border: 1px solid;
+    border-color: var(--color-base-border);
+    border-radius: 5px;
+    box-sizing: border-box;
+    color: var(--color-primary-dark-text);
+    height: 50px;
+    padding: 15px 5px
+}
+
+.InputWrapper .NeedText,
+.LongInputWrapper .NeedText {
+    border: 1px solid;
+    border-radius: 5px;
+    color: red
+}
+
+.SearchInput input {
+    border: 0
+}
+
+input[type=number]::-webkit-inner-spin-button,
+input[type=number]::-webkit-outer-spin-button {
+    -webkit-appearance: none
+}
+
+input[type=number],
+input[type=number]:focus,
+input[type=number]:hover {
+    -webkit-appearance: none;
+    appearance: none;
+    -moz-appearance: textfield
+}
+
+.SearchInput {
+    align-items: center;
+    background-color: var(--color-input-background);
+    border: 1px solid var(--color-base-border);
+    border-radius: 5px;
+    padding-left: 1px;
+    padding-right: 1px
+}
+
+.InputSearchIcon {
+    margin-right: 5px
+}
+
+.SearchInput input {
+    width: 100%
+}
+
+.SearchInput {
+    display: flex;
+    height: 100%;
+    width: 100%
+}
+
+::-webkit-calendar-picker-indicator {
+    opacity: .6
+}
+
+.LongTextField,
+.TextField {
+    box-sizing: border-box;
+    color: var(--color-primary-dark-text);
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    width: auto
+}
+
+.LongTextField {
+    grid-column-end: span 2
+}
+
+.LongTextField .Text,
+.TextField .Text {
+    background-color: var(--color-input-background);
+    border: 1px solid;
+    border-color: var(--color-base-border);
+    border-radius: 5px;
+    box-sizing: border-box;
+    color: var(--color-primary-dark-text);
+    height: 50px;
+    padding: 15px 5px
+}
+
+.TextField .LongTextField .TextDescription {
+    color: var(--color-secondary-text)
+}
+
+.TextField .LongTextField .Text {
+    color: var(--color-primary-text)
+}
+
+.SubmitButtonWrapper {
+    margin-top: 5px;
+    width: 100%
+}
+
+.SubmitButton {
+    background-color: var(--color-base-background);
+    border: 1px solid;
+    border-color: var(--color-base-border);
+    border-radius: 5px;
+    color: var(--color-primary-dark-text);
+    padding: 15px 0;
+    width: 100%
+}
+
+.SubmitButton:active {
+    background-color: var(--color-component-background);
+    color: var(--color-primary-text)
+}
+
+.NumberDoesNotExist {
+    color: var(--color-primary-dark-text);
+    display: flex;
+    font-weight: 300;
+    justify-content: center;
+    padding: 20px;
+    text-align: center;
+    width: 100%
+}
+
+.Checkbox {
+    align-items: center;
+    display: flex;
+    flex-direction: row
+}
+
+.Checkbox label {
+    color: var(--color-primary-text);
+    font-weight: 400;
+    line-height: 16px;
+    padding: 10px;
+    white-space: nowrap
+}
+
+input[type=checkbox] {
+    align-items: center;
+    -webkit-appearance: none;
+    appearance: none;
+    border: 2px solid var(--color-primary-text);
+    border-radius: 3px;
+    cursor: pointer;
+    height: 18px;
+    justify-content: center;
+    position: relative;
+    top: 2px;
+    width: 18px
+}
+
+input[type=checkbox]:checked {
+    border: 2px solid var(--color-control-elements);
+    position: relative
+}
+
+input[type=checkbox]:checked:before {
+    color: #fff;
+    content: "✓";
+    left: 1px;
+    position: absolute;
+    top: -4px
+}
+
+input::placeholder,
+input[type=date]::placeholder {
+    color: var(--color-secondary-text);
+    opacity: 1
+}
+
+input[type=date]:invalid::-webkit-datetime-edit {
+    color: var(--color-secondary-text)
+}
+
+input[type=date] {
+    font-family: Open Sans, sans-serif;
+    padding-left: 10px
+}
+
+.Space {
+    height: 300px
+}
+
+.CoolToast {
+    background-color: var(--color-base-background);
+    border: "1px solid #713200";
+    padding: "16px"
+}
+
+.MGDatePicker {
+    height: 50px;
+    width: 100%
+}
+
+.HelperText {
+    color: var(--color-primary-dark-text)
+}
+
+.PrimaryText {
+    color: var(--color-primary-text)
+}
+
+@media (max-width:400px) {
+    .HelperText {
+        font-size: 14px;
+        line-height: 14px
+    }
+
+    .PrimaryText {
+        font-size: 16px;
+        line-height: 16px
+    }
+}
+
+@media (min-width:401px) and (max-width:800px) {
+    .HelperText {
+        font-size: 18px;
+        line-height: 18px
+    }
+
+    .PrimaryText {
+        font-size: 16px;
+        line-height: 20px
+    }
+}
+
+@media (min-width:1201px) {
+    .HelperText {
+        font-size: 18px;
+        line-height: 18px
+    }
+
+    .PrimaryText {
+        font-size: 20px;
+        line-height: 20px
+    }
+}
+
+.Detail {
+    background-color: var(--color-component-background);
+    border: 1px solid;
+    border-color: var(--color-base-border);
+    border-radius: 5px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    padding: 15px
+}
+
+.DetailLeft {
+    display: flex;
+    flex-direction: column;
+    gap: 20px
+}
+
+.DetailRight {
+    align-items: center;
+    display: flex;
+    flex-direction: row;
+    gap: 10px
+}
+
+.DetailNumberWrapper {
+    background-color: var(--color-input-background);
+    border: 1px solid;
+    border-color: var(--color-base-border);
+    border-radius: 5px;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    height: 100%;
+    justify-content: space-between;
+    padding: 10px;
+    width: 100%
+}
+
+.DetailName {
+    color: var(--color-primary-text)
+}
+
+.CountText {
+    color: var(--color-primary-dark-text)
+}
+
+.DetailCount {
+    color: var(--color-primary-text)
+}
+
+.NumberText {
+    color: var(--color-primary-dark-text)
+}
+
+.DetailNumber {
+    color: var(--color-primary-text)
+}
+
+.Returns {
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    overflow: hidden;
+    width: 100%
+}
+
+.ReturnAddictionHeader {
+    color: var(--color-primary-dark-text);
+    font-size: 16px;
+    margin-bottom: 10px
+}
+
+.CreateReturnWrapper {
+    align-items: center;
+    bottom: 20px;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    justify-content: center;
+    max-width: 100%;
+    padding: 0;
+    position: relative;
+    width: 100%
+}
+
+.CreateReturn,
+.CreateReturnAir {
+    border: 1px solid;
+    border-radius: 5px;
+    color: var(--color-primary-text);
+    max-width: 700px;
+    padding: 15px;
+    width: 100%
+}
+
+.CreateReturn {
+    -webkit-backdrop-filter: blur(25px);
+    backdrop-filter: blur(25px);
+    background-color: var(--color-cool-background);
+    border-color: var(--color-light-border);
+    opacity: 1;
+    padding: 15px
+}
+
+.CreateReturnAir {
+    background-color: var(--color-base-fill);
+    border-collapse: var(--color-primary-text)
+}
+
+.ReturnsWrapper {
+    -ms-overflow-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    overflow-y: scroll;
+    padding-bottom: 100px;
+    scrollbar-width: none
+}
+
+.Return {
+    background-color: var(--color-component-background);
+    border: 1px solid;
+    border-color: var(--color-base-border);
+    border-radius: 5px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    padding: 15px
+}
+
+.EditReturn {
+    grid-gap: 15px;
+    display: grid;
+    gap: 15px;
+    grid-template-columns: 50% 50%;
+    grid-template-columns: calc(50% - 7.5px) calc(50% - 7.5px)
+}
+
+.Return:active {
+    background-color: var(--color-base-background)
+}
+
+.Return .ReturnLeft {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    position: relative;
+    width: auto
+}
+
+.Return .AirIcon {
+    height: 50px;
+    position: absolute;
+    right: 2px;
+    top: 12px;
+    transform: translate(50%, -50%);
+    width: 50px
+}
+
+.Return .ReturnRight {
+    align-items: center;
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+    justify-content: flex-end;
+    width: 50%
+}
+
+.DateText {
+    color: var(--color-primary-text)
+}
+
+.ReturnDate {
+    color: var(--color-primary-dark-text)
+}
+
+@media (max-width:400px) {
+    .DateText {
+        font-size: 14px;
+        line-height: 14px
+    }
+
+    .ReturnDate {
+        line-height: 14px
+    }
+
+    .CreateReturn,
+    .CreateReturnAir,
+    .DetailNumber,
+    .ReturnDate {
+        font-size: 16px
+    }
+}
+
+@media (min-width:401px) and (max-width:800px) {
+    .DateText {
+        font-size: 14px;
+        line-height: 16px
+    }
+
+    .ReturnDate {
+        font-size: 18px;
+        line-height: 16px
+    }
+
+    .DetailNumber {
+        font-size: 16px
+    }
+
+    .CreateReturn,
+    .CreateReturnAir {
+        font-size: 18px
+    }
+}
+
+@media (min-width:1201px) {
+    .DetailNumber {
+        font-size: 18px
+    }
+
+    .CreateReturn,
+    .CreateReturnAir {
+        font-size: 20px
+    }
+}
+
+.ReturnDateWrapper {
+    justify-content: center;
+    width: 80%
+}
+
+.ReturnDateWrapper,
+.ReturnNumberWrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 5px
+}
+
+.ReturnNumberWrapper {
+    background-color: var(--color-input-background);
+    border: 1px solid;
+    border-color: var(--color-base-border);
+    border-radius: 5px;
+    height: 100%;
+    justify-content: space-between;
+    padding: 10px;
+    width: 100%
+}
+
+.LoaderWrapper {
+    align-items: center;
+    display: flex;
+    height: 50vh;
+    justify-content: center;
+    margin: 0;
+    position: relative
+}
+
+.Loader {
+    pointer-events: none
+}
+
+.History {
+    align-items: center;
+    color: var(--color-primary-text);
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    width: 100%
+}
+
+.HistoryDateWrapper {
+    display: flex;
+    gap: 10px;
+    justify-content: space-between;
+    padding-bottom: 10px;
+    padding-right: 0;
+    width: 100%
+}
+
+.DateInputWrapper {
+    align-items: center;
+    display: flex;
+    gap: 10px
+}
+
+.HistoryVinInput {
+    width: 100%
+}
+
+.HistoryNav {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    justify-content: center;
+    margin-bottom: 10px;
+    margin-top: 15px;
+    padding: 5px;
+    width: 100%
+}
+
+.CurrentHistoryNavButton,
+.HistoryNavButton {
+    background-color: var(--color-base-fill);
+    border: 0;
+    border-bottom: 1px solid;
+    color: var(--color-primary-text);
+    padding: 5px
+}
+
+.HistoryNavButton {
+    border-color: var(--color-base-border);
+    color: var(--color-secondary-text)
+}
+
+.CurrentHistoryNavButton {
+    border-color: var(--color-control-elements)
+}
+
+.HistoryItem {
+    align-items: center;
+    background-color: var(--color-component-background);
+    border: 1px solid;
+    border-color: var(--color-base-border);
+    border-radius: 5px;
+    display: flex;
+    gap: 15px;
+    justify-content: space-between;
+    padding: 15px
+}
+
+.HistoryItemContent {
+    grid-column-gap: 20px;
+    column-gap: 20px;
+    display: grid;
+    flex-direction: column;
+    grid-template-columns: auto 47%;
+    position: relative;
+    width: 100%
+}
+
+.HistoryItemRightText {
+    width: 70%
+}
+
+.HistoryItem .TextName {
+    color: var(--color-primary-dark-text)
+}
+
+.ItemCountWrapper {
+    align-items: flex-end;
+    display: flex;
+    gap: 7px
+}
+
+.ItemPriceWrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 7px
+}
+
+.HistoryNumberWrapper,
+.ItemDateWrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 5px
+}
+
+.HistoryNumberWrapper {
+    background-color: var(--color-input-background);
+    border: 1px solid;
+    border-color: var(--color-base-border);
+    border-radius: 5px;
+    height: 100%;
+    justify-content: space-between;
+    padding: 10px;
+    width: 100%
+}
+
+.HistoryContent {
+    height: 100%;
+    overflow: hidden;
+    width: 100%
+}
+
+.HistoryItemsWrapper {
+    -ms-overflow-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    height: 100%;
+    overflow-y: scroll;
+    padding-bottom: 50px;
+    padding-top: 5px;
+    scrollbar-width: none
+}
+
+.HistoryModalItem {
+    grid-gap: 15px;
+    display: grid;
+    gap: 15px;
+    grid-template-columns: 50% 50%;
+    grid-template-columns: calc(50% - 7.5px) calc(50% - 7.5px)
+}
+
+.Issuance {
+    width: 100%
+}
+
+.modal-overlay {
+    -webkit-backdrop-filter: blur(3px);
+    backdrop-filter: blur(3px);
+    background: #00000040;
+    bottom: 0;
+    height: 100%;
+    justify-content: center;
+    left: 0;
+    max-width: none;
+    position: fixed;
+    right: 0;
+    top: 0;
+    width: 100vw;
+    z-index: 1000
+}
+
+.ModalContent,
+.modal-overlay {
+    align-items: center;
+    display: flex
+}
+
+.ModalContent {
+    flex-direction: column;
+    gap: 5px;
+    justify-content: flex-start;
+    padding: 10px;
+    width: 100%
+}
+
+.ModalMain {
+    background: var(--color-component-background);
+    border-radius: 5px;
+    box-shadow: 0 2px 10px #0000001a;
+    padding: 20px;
+    position: relative;
+    width: 100%
+}
+
+.close {
+    cursor: pointer;
+    position: absolute;
+    right: 15px;
+    top: 10px
+}
+
+.ModalHeader {
+    align-items: center;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    margin-bottom: 20px;
+    position: relative
+}
+
+.ModalHeader .AirIcon {
+    height: 50px;
+    position: absolute;
+    top: -7px;
+    width: 50px
+}
+
+.ModalHeader h1 {
+    color: var(--color-primary-text);
+    text-align: center
+}
+
+.backButton {
+    background-color: var(--color-component-background);
+    border: 0;
+    color: var(--color-secondary-text)
+}
+
+.ModalContent .SubmitButton {
+    border-color: var(--color-selected-border);
+    color: var(--color-primary-text)
+}
+
+.Search {
+    flex-direction: column;
+    justify-content: flex-start
+}
+
+.Search,
+.SearchContent {
+    display: flex;
+    height: 100%;
+    overflow: hidden;
+    width: 100%
+}
+
+.DetailsWrapper {
+    -ms-overflow-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-top: 15px;
+    overflow-y: scroll;
+    padding-bottom: 50px;
+    scrollbar-width: none;
+    width: 100%
+}
+
+/*# sourceMappingURL=main.6a7acb4b.css.map*/

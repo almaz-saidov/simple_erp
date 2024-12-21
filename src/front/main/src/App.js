@@ -46,15 +46,22 @@ function App() {
 
 
   useEffect(() => {
-    // Вызываем метод SDK при монт
-    //   const scrollableElement = document.querySelector(".scrollable-element");
-    // document.addEventListener("touchstart", preventCollapse);
-    // if (window.Telegram && window.Telegram.WebApp) {
-    //   window.Telegram.WebApp.expand();
-    // }
-    const scrollableElement = document.querySelector(".scrollable-element");
 
-    // Attach the preventCollapse function to both touchstart and touchmove events
+    const handleResize = () => {
+      // Например, вы можете установить флаг о том, что клавиатура открыта
+      if (window.innerHeight < window.outerHeight) {
+        // Клавиатура открыта
+        document.body.style.overflow = 'hidden'; // Прекратить прокрутку
+      } else {
+        // Клавиатура закрыта
+        document.body.style.overflow = 'auto'; // Включить прокрутку
+      }
+    };
+
+    window.addEventListener('resize', handleResize);
+
+    handleResize();
+
     document.addEventListener("touchstart", preventCollapse);
     document.addEventListener("touchmove", preventCollapse);
 
@@ -62,10 +69,11 @@ function App() {
       window.Telegram.WebApp.expand();
     }
 
-    // Cleanup listeners on component unmount
     return () => {
       document.removeEventListener("touchstart", preventCollapse);
       document.removeEventListener("touchmove", preventCollapse);
+      window.removeEventListener('resize', handleResize);
+
     };
   }, []);
 

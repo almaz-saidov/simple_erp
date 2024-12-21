@@ -86,7 +86,7 @@ export const fetchPurchaseReal = async (filters, setData, setLoading) => {
     setLoading(true); // Устанавливаем загрузку в true перед запросом
 
     try {
-        const response = await fetch(`${API_URL}/history?type=postupleniya&like=${filters.vin || ""}`, {
+        const response = await fetch(`${API_URL}/history?type=postupleniya&like=${filters.vin || ""}&date_from=${filters.date_from}&date_before=${filters.date_before}`, {
             method: 'GET', // Метод запроса,
             headers: {
                 'Content-Type': 'application/json',
@@ -166,7 +166,7 @@ export const fetchReturnsReal = async (filters, setData, setLoading) => {
     setLoading(true); // Устанавливаем загрузку в true перед запросом
 
     try {
-        const response = await fetch(`${API_URL}/history?type=vozvraty&like=${filters.vin || ""}`, {
+        const response = await fetch(`${API_URL}/history?type=vozvraty&like=${filters.vin || ""}&date_from=${filters.date_from}&date_before=${filters.date_before}`, {
             method: 'GET', // Метод запроса,
             headers: {
                 'Content-Type': 'application/json',

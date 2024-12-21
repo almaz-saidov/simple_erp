@@ -47,7 +47,7 @@ function Input(props) {
     return (
         <div className={isLong ? "LongInputWrapper" : "InputWrapper"}>
             <label>{label}</label>
-            <div className={isNeedText ? "NeedText" : ""}>
+            <div className={isNeedText ? "NeedText" : "NotNeedText"}>
                 <div className='SearchInput'>
                     {type == 'date' ?
                         <CoolDatePicker

@@ -22,10 +22,32 @@ input[type="date"] {
     color: var(--color-primary-dark-text);
     background-color: var(--color-input-background);
     padding: 15px 5px;
-    border: solid 1px;
+    border: solid 0px;
     border-radius: 5px;
-    border-color: var(--color-base-border);
+    /* border-color: var(--color-base-border); */
     box-sizing: border-box;
+
+}
+
+
+
+
+
+.InputWrapper:focus,
+.LongInputWrapper:focus {
+    border: solid 5px;
+    border-color: red;
+}
+
+input {
+    outline: none;
+}
+
+.InputWrapper input:focus,
+.LongInputWrapper input:focus {
+    outline: solid 2px var(--color-primary-text);
+    border-radius: 5px;
+
 }
 
 .InputWrapper .NeedText,
@@ -35,9 +57,15 @@ input[type="date"] {
     border-radius: 5px;
 }
 
-.SearchInput input {
-    border: 0;
+.InputWrapper .NotNeedText,
+.LongInputWrapper .NotNeedText {
+    /* color: red; */
+    border: 1px solid;
+    border-color: var(--color-light-border);
+    border-radius: 5px;
 }
+
+
 
 input[type="number"]::-webkit-outer-spin-button,
 input[type="number"]::-webkit-inner-spin-button {
@@ -55,9 +83,7 @@ input[type="number"]:focus {
     align-items: center;
     background-color: var(--color-input-background);
     border-radius: 5px;
-    border: 1px solid var(--color-base-border);
-    padding-left: 1px;
-    padding-right: 1px;
+    /* border: 1px solid var(--color-base-border); */
 }
 
 .InputSearchIcon {

@@ -43,11 +43,13 @@ const ReturnModal = ({ isOpen, onClose, returnData, isCreating, isAir, isHistory
         const fetchReturnData = async () => {
             setLoading(true);
             try {
+                let tmpReturn = {}
                 if (isHistory) {
-                    const tmpReturn = returnData.id !== undefined ? await fetchReturnHistoryById(returnData.id, isAir, setLoading) : {};
+                    tmpReturn = returnData.id !== undefined ? await fetchReturnHistoryById(returnData.id, isAir, setLoading) : {};
                 } else {
-                    const tmpReturn = returnData.id !== undefined ? await fetchReturnById(returnData.id, isAir, setLoading) : {};
+                    tmpReturn = returnData.id !== undefined ? await fetchReturnById(returnData.id, isAir, setLoading) : {};
                 }
+                tmpReturn.id = returnData.id;
 
                 initTmpReturn(tmpReturn);
             } catch (error) {
@@ -125,7 +127,9 @@ const ReturnModal = ({ isOpen, onClose, returnData, isCreating, isAir, isHistory
             toast.error('Заполниет все обязательные поля');
         } else {
             setIsNeedText(true);
-            handleApiResponse(getReturn(), isCreating, isAir);
+            let returnToSend = getReturn();
+            returnToSend.id = returnData.id;
+            handleApiResponse(returnToSend, isCreating, isAir);
         }
     }
 

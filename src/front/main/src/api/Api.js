@@ -238,7 +238,7 @@ export const updateReturnHistoryById = async (returnId, updatedReturn, isAir, se
     setLoading(true); // Устанавливаем загрузку в true перед запросом
     const type = isAir ? "airreturn" : "return";
     try {
-        const response = await fetch(`${API_URL}/hsitory/returns/${returnId}?type=${type}`, {
+        const response = await fetch(`${API_URL}/history/returns/${returnId}?type=${type}`, {
             method: 'POST', // Метод запроса,
             headers: {
                 'Content-Type': 'application/json',
@@ -269,7 +269,7 @@ export const fetchReturnHistoryById = async (returnId, isAir, setLoading) => {
     setLoading(true); // Устанавливаем загрузку в true перед запросом
     const type = isAir ? "airreturn" : "return";
     try {
-        const response = await fetch(`${API_URL}/hsitory/returns/${returnId}?type=${type}`, {
+        const response = await fetch(`${API_URL}/history/returns/${returnId}?type=${type}`, {
             method: 'GET', // Метод запроса,
             headers: {
                 'Content-Type': 'application/json',

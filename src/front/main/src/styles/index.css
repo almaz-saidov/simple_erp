@@ -26,6 +26,12 @@
     font-family: "VelaSans";
     font-weight: 400;
     box-sizing: border-box;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+}
+
+::-webkit-scrollbar {
+    display: none;
 }
 
 body {
@@ -33,7 +39,7 @@ body {
     width: 100%;
     background-color: var(--color-base-fill);
     overflow: hidden;
-    --webkit-overflow-scrolling:touch;
+    --webkit-overflow-scrolling: touch;
     overscroll-behavior: none;
 }
 

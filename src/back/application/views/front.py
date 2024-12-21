@@ -11,8 +11,8 @@ from application import app
 def front():
     return render_template('/build/index.html')
 
-
 @app.route('/static-front/<path:path>')
 @init_data_checker
 def static_index_build(path):
-    return send_from_directory(os.path.join('/static/'), path)
+    print(os.path.join('./application/templates/build/static/'))
+    return send_from_directory(os.path.join(os.getcwd(),'./application/templates/build/static/'), path)

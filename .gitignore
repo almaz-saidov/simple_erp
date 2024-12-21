@@ -6,4 +6,5 @@ example_server/
 .env
 __pycache__
 node_modules
-git 
+git
+log*

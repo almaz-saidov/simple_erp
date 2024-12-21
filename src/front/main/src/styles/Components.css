@@ -56,7 +56,8 @@ input[type="number"]:focus {
     background-color: var(--color-input-background);
     border-radius: 5px;
     border: 1px solid var(--color-base-border);
-
+    padding-left: 1px;
+    padding-right: 1px;
 }
 
 .InputSearchIcon {
@@ -231,6 +232,7 @@ input[type="date"] {
         font-size: 14px;
         line-height: 14px;
     }
+
     .PrimaryText {
         font-size: 16px;
         line-height: 16px;
@@ -242,6 +244,7 @@ input[type="date"] {
         font-size: 18px;
         line-height: 18px;
     }
+
     .PrimaryText {
         font-size: 16px;
         line-height: 20px;
@@ -253,6 +256,7 @@ input[type="date"] {
         font-size: 18px;
         line-height: 18px;
     }
+
     .PrimaryText {
         font-size: 20px;
         line-height: 20px;

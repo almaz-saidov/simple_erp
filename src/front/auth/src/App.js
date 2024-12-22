@@ -74,7 +74,7 @@ function App() {
 
     return (
         <div className="App">
-            {loading ? (
+            {loading || isAuthorized ? (
                 <div className='VideoLoaderWrapper'>
                     <div className='VideoWrapper'>
                         <video

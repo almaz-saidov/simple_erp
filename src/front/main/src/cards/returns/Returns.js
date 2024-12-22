@@ -62,6 +62,7 @@ function Returns() {
             if (isModalOpen) {
                 toggleModal();
             }
+            loadReturns();
             toast.success(successMessage);
         } catch (e) {
             // Обработка ошибок

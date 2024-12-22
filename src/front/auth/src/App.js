@@ -83,8 +83,10 @@ function App() {
                             autoPlay
                             loop
                             muted
+                            playsinline
                             type="video/mp4"
                             position="block"
+
                         />
                     </div>
                     <span>СОБИРАЕМ ДЕТАЛИ...</span>

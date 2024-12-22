@@ -49,33 +49,33 @@ function App() {
 
     const handleResize = () => {
       // Например, вы можете установить флаг о том, что клавиатура открыта
-      if (window.innerHeight < window.outerHeight) {
-        // Клавиатура открыта
-        document.body.style.overflow = 'hidden'; // Прекратить прокрутку
-      } else {
-        // Клавиатура закрыта
-        document.body.style.overflow = 'auto'; // Включить прокрутку
-      }
-    };
+      //   if (window.innerHeight < window.outerHeight) {
+      //     // Клавиатура открыта
+      //     document.body.style.overflow = 'hidden'; // Прекратить прокрутку
+      //   } else {
+      //     // Клавиатура закрыта
+      //     document.body.style.overflow = 'auto'; // Включить прокрутку
+      //   }
+      // };
 
-    window.addEventListener('resize', handleResize);
+      // window.addEventListener('resize', handleResize);
 
-    handleResize();
+      // handleResize();
 
-    document.addEventListener("touchstart", preventCollapse);
-    document.addEventListener("touchmove", preventCollapse);
+      // document.addEventListener("touchstart", preventCollapse);
+      // document.addEventListener("touchmove", preventCollapse);
 
-    if (window.Telegram && window.Telegram.WebApp) {
-      window.Telegram.WebApp.expand();
-    }
+      // if (window.Telegram && window.Telegram.WebApp) {
+      //   window.Telegram.WebApp.expand();
+      // }
 
-    return () => {
-      document.removeEventListener("touchstart", preventCollapse);
-      document.removeEventListener("touchmove", preventCollapse);
-      window.removeEventListener('resize', handleResize);
+      // return () => {
+      //   document.removeEventListener("touchstart", preventCollapse);
+      //   document.removeEventListener("touchmove", preventCollapse);
+      //   window.removeEventListener('resize', handleResize);
 
-    };
-  }, []);
+      // };
+    }, []);
 
   const cards = [<Search />, <Issuance />, <Receipt />, <Returns />, <History />];
 

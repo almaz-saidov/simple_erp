@@ -44,7 +44,7 @@ function Search() {
     return (
         <div className="Search">
             <CardHeader label="Поиск" />
-            <Input label="" hint="hint" isDynamic={true} isLong={false} setParentText={setDetailNumber} isSearch={true} />
+            <Input label="" hint="Номер детали" isDynamic={true} isLong={false} setParentText={setDetailNumber} isSearch={true} />
             {loading ?
                 <div className='LoaderWrapper'>
                     <SyncLoader color="#A7A7A7" />

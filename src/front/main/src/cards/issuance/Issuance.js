@@ -56,11 +56,11 @@ function Issuance() {
         <div className="Issuance">
             <CardHeader label="Выдача" />
             <div className="CardContent">
-                <Input label="Номер запчасти" hint="hint" isLong={false} parentText={partNumber} setParentText={setPartNumber} type="text" isDynamic={true} maxlength={20} isNeedText={isNeedText} />
-                <Input label="Количество" hint="hint" isLong={false} parentText={count} setParentText={setCount} type="number" isDynamic={true} maxlength={10} isNeedText={isNeedText} />
+                <Input label="Номер запчасти" hint="А2222222222" isLong={false} parentText={partNumber} setParentText={setPartNumber} type="text" isDynamic={true} maxlength={20} isNeedText={isNeedText} />
+                <Input label="Количество" hint="000" isLong={false} parentText={count} setParentText={setCount} type="number" isDynamic={true} maxlength={10} isNeedText={isNeedText} />
                 <Input label="Дата выдачи" hint="hint" isLong={false} parentText={date} setParentText={setDate} type="date" isDynamic={true} maxlength={10} isNeedText={isNeedText} />
-                <Input label="Цена" hint="hint" isLong={false} parentText={price} setParentText={setPrice} type="number" isDynamic={true} maxlength={15} isNeedText={isNeedText} />
-                <Input label="Продавец" hint="hint" isLong={true} parentText={seller} setParentText={setSeller} type="text" isDynamic={true} maxlength={40} isNeedText={isNeedText} />
+                <Input label="Цена" hint="00 000.00 ₽" isLong={false} parentText={price} setParentText={setPrice} type="number" isDynamic={true} maxlength={15} isNeedText={isNeedText} />
+                <Input label="Продавец" hint="Женя" isLong={true} parentText={seller} setParentText={setSeller} type="text" isDynamic={true} maxlength={40} isNeedText={isNeedText} />
             </div>
             <IssuanceButton onClick={submitButtonClick} label="Оформить выдачу" />
             {/* <Toaster toastOptions={{

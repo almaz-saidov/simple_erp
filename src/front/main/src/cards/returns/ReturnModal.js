@@ -172,11 +172,11 @@ const ReturnModal = ({ isOpen, onClose, returnData, isCreating, isAir, isHistory
                                 <Input label="Количество" hint="000" value={amount} type="number" parentText={amount} setParentText={setAmount} isDynamic={true} maxlength={10} isNeedText={isNeedText} />
                                 <Input label="Дата продажи" hint="дд.мм.гггг" value={sellDate} type="date" parentText={sellDate} setParentText={setSellDate} isDynamic={true} maxlength={10} isNeedText={isNeedText} />
                                 <Input label="Дата возврата" hint="дд.мм.гггг" value={returnDate} type="date" parentText={returnDate} setParentText={setReturnDate} isDynamic={true} maxlength={10} isNeedText={isNeedText} />
-                                <Input label="Продавец" hint="Женя Зеленов" value={seller} type="text" parentText={seller} setParentText={setSeller} isDynamic={true} maxlength={40} isNeedText={isNeedText} />
+                                <Input label="Продавец" hint="Женя" value={seller} type="text" parentText={seller} setParentText={setSeller} isDynamic={true} maxlength={40} isNeedText={isNeedText} />
                                 <Input label="Цена" hint="00 000.00 ₽" value={price} type="number" parentText={price} setParentText={setPrice} isDynamic={true} maxlength={15} isNeedText={isNeedText} />
-                                {isAir ? <Input label="Магазин посредник" isLong={true} hint="Магазин Посредник" parentText={store} setParentText={setStore} value={store} type="text" isDynamic={true} maxlength={40} isNeedText={isNeedText} /> : <></>}
+                                {isAir ? <Input label="Магазин посредник" isLong={true} hint="Avto Parts" parentText={store} setParentText={setStore} value={store} type="text" isDynamic={true} maxlength={40} isNeedText={isNeedText} /> : <></>}
                                 <Input label="Комментарий" isLong={true} hint="Коментарий" value={comment} parentText={comment} setParentText={setComment} type="text" isDynamic={true} maxlength={255} isNeedText={isNeedText} />
-                                {isHistory ? <TextField textDescription="USER ID" text={whoAdded} isLong={true} />
+                                {isHistory ? <TextField textDescription="User" text={whoAdded} isLong={true} />
                                     : <></>}
 
                             </div>

@@ -74,10 +74,10 @@ function App() {
 
     return (
         <div className="App">
-            {loading || isAuthorized || true ? (
+            {loading || isAuthorized ? (
                 <div className='VideoLoaderWrapper'>
                     <div className='VideoWrapper'>
-                        <img className="LoaderGif" src="/static/1.gif" alt="я джифка"></img>
+                        <img className="LoaderGif" src="/1.gif" alt="я джифка"></img>
                     </div>
                     <span>СОБИРАЕМ ДЕТАЛИ...</span>
                 </div>

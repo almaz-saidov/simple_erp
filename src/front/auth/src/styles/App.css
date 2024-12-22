@@ -73,6 +73,12 @@
   max-height: 50%;
 }
 
+.LoaderGif {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
 .LoaderVideo {
   width: 100%;
   height: 100%;

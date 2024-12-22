@@ -74,8 +74,8 @@ function App() {
       //   document.removeEventListener("touchmove", preventCollapse);
       //   window.removeEventListener('resize', handleResize);
 
-      // };
-    }, []);
+    };
+  }, []);
 
   const cards = [<Search />, <Issuance />, <Receipt />, <Returns />, <History />];
 

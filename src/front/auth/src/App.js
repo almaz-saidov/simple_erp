@@ -79,7 +79,7 @@ function App() {
                     <div className='VideoWrapper'>
                         <video
                             className="LoaderVideo"
-                            src="/loading.mp4" // Укажите путь к вашему видео
+                            src="/static/loading.mp4" // Укажите путь к вашему видео
                             autoPlay
                             loop
                             muted

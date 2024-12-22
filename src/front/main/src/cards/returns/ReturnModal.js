@@ -25,6 +25,7 @@ const ReturnModal = ({ isOpen, onClose, returnData, isCreating, isAir, isHistory
     const [comment, setComment] = useState('');
     const [store, setStore] = useState('');
     const [isNeedText, setIsNeedText] = useState(false);
+    const [whoAdded, setWhoAdded] = useState('');
 
     const initTmpReturn = (returnObj) => {
 
@@ -36,6 +37,7 @@ const ReturnModal = ({ isOpen, onClose, returnData, isCreating, isAir, isHistory
         setSeller(returnObj.seller || '');
         setComment(returnObj.comment || '');
         setStore(returnObj.store || '');
+        setWhoAdded(returnObj.whoAdded || '');
 
     }
 
@@ -174,6 +176,9 @@ const ReturnModal = ({ isOpen, onClose, returnData, isCreating, isAir, isHistory
                                 <Input label="Цена" hint="00 000.00 ₽" value={price} type="number" parentText={price} setParentText={setPrice} isDynamic={true} maxlength={15} isNeedText={isNeedText} />
                                 {isAir ? <Input label="Магазин посредник" isLong={true} hint="Магазин Посредник" parentText={store} setParentText={setStore} value={store} type="text" isDynamic={true} maxlength={40} isNeedText={isNeedText} /> : <></>}
                                 <Input label="Комментарий" isLong={true} hint="Коментарий" value={comment} parentText={comment} setParentText={setComment} type="text" isDynamic={true} maxlength={255} isNeedText={isNeedText} />
+                                {isHistory ? <TextField textDescription="USER ID" text={whoAdded} isLong={true} />
+                                    : <></>}
+
                             </div>
                             < Checkbox label="Возврат завершён" onChange={setCompleted} checkedDefault={isHistory} />
                         </>

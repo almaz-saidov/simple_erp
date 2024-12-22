@@ -26,9 +26,7 @@ function CoolDatePicker(props) {
                         width: "100%",
                         height: "50px",
                         color: 'var(--color-primary-text)',
-                    },
-                    '&.Mui-focused': {
-                        borderColor: 'var(--color-base-border)',
+                        paddingRight: '0px',
                     },
                 },
             },
@@ -40,9 +38,10 @@ function CoolDatePicker(props) {
                         height: "50px",
                         color: "var(--color-base-border)",
                         borderRadius: '5px',
-                        border: '5x solid',
                         backgroundColor: "var(--color-input-background)",
-                        borderColor: 'var(--color-base-border)',
+                        paddingRight: '0px',
+                        // Убираем отступы
+                        margin: 0, // Убираем отступы у корня текстового поля
                         '&.Mui-focused': {
                             borderColor: 'var(--color-primary-text)',
                         },
@@ -52,20 +51,23 @@ function CoolDatePicker(props) {
 
                         '& .MuiOutlinedInput-root': {
                             '& fieldset': {
-                                borderColor: 'var(--color-base-border)',
+                                border: 'none', // Убираем границу
                             },
                             '&:hover fieldset': {
-                                borderColor: 'var(--color-primary-text)',
+                                borderColor: 'transparent', // Убираем границу при наведении
                             },
                             '&.Mui-focused fieldset': {
-                                borderColor: 'var(--color-primary-text)',
+                                borderColor: 'transparent', // Убираем границу в фокусе
                             },
+                            // Убираем внутренние отступы
+                            padding: '0', // Убираем внутренние отступы
                         },
                     },
                 },
             },
         },
     });
+
 
     const changeHandler = (newValue) => {
         setDate(newValue);

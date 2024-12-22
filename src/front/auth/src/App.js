@@ -7,18 +7,18 @@ import { retrieveLaunchParams } from "@telegram-apps/sdk";
 import './styles/App.css';
 import "./styles/LoaderWrapper.css";
 
-
 function App() {
     const [loading, setLoading] = useState(true);
     const [timeoutReached, setTimeoutReached] = useState(false);
-
+    const [isAuthorized, setIsAuthorized] = useState(false);
     const navigate = useNavigate();
+
 
     useEffect(() => {
         const timeout = setTimeout(() => {
             setTimeoutReached(true);
             setLoading(false);
-        }, 10000); // Задержка на 3 секунды
+        }, 3000); // Задержка на 3 секунды
 
         try {
             const csrfToken = "almaz-ymeet-delat-graz";
@@ -44,11 +44,13 @@ function App() {
                         throw new Error('Network response was not ok');
                     }
 
-                    localStorage.setItem('authorize', init_data);
-                    navigate('/front');
-                    window.location.reload();
+                    //localStorage.setItem('authorize', init_data);
+                    setIsAuthorized(true);
+                    // Теперь этот редирект будет происходить в следующем useEffect 
+                    timeoutReached && setLoading(false); // Обновляем состояние загрузки
+                    return; // Выходим из функции
                 } catch (error) {
-                    setLoading(false);
+                    timeoutReached && setLoading(false);
                     console.error('Ошибка при авторизации:', error);
                 }
             };
@@ -56,7 +58,7 @@ function App() {
             initializeAuth('https://asm3ceps.ru/api/auth');
 
         } catch (e) {
-            setLoading(false);
+            timeoutReached && setLoading(false);
             console.log("Error", e.message);
         }
 
@@ -64,18 +66,15 @@ function App() {
     }, []);
 
     useEffect(() => {
-        if (!loading) {
-            setLoading(false);
-            console.log('end of loading')
+        if (!loading && timeoutReached && isAuthorized) {
+            navigate('/front'); // Редирект происходит только если loading = false и timeoutReached = true
+            window.location.reload();
         }
-    }, [timeoutReached, loading]);
+    }, [loading, timeoutReached, navigate]);
 
     return (
         <div className="App">
-            {loading && !timeoutReached ? (
-                // <div className='LoaderWrapper'>
-                //     <SyncLoader color="#A7A7A7" />
-                // </div>
+            {loading ? (
                 <div className='VideoLoaderWrapper'>
                     <div className='VideoWrapper'>
                         <video

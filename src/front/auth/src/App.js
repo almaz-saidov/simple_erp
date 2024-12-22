@@ -74,21 +74,10 @@ function App() {
 
     return (
         <div className="App">
-            {loading || isAuthorized ? (
+            {loading || isAuthorized || true ? (
                 <div className='VideoLoaderWrapper'>
                     <div className='VideoWrapper'>
-                        <video
-                            className="LoaderVideo"
-                            src="/static/loading.mp4" // Укажите путь к вашему видео
-                            autoPlay
-                            loop
-                            muted
-                            playsinline
-                            playsInline
-                            type="video/mp4"
-                            position="block"
-
-                        />
+                        <img className="LoaderGif" src="/1.gif" alt="я джифка"></img>
                     </div>
                     <span>СОБИРАЕМ ДЕТАЛИ...</span>
                 </div>

@@ -100,7 +100,7 @@ def history_sell(sell_id):
     data["date"] = sell.sell_from_shop_date
     data["price"] = sell.price
     data["name"] = sell.seller
-    data["who_added"] = sell.who_added
+    data["who_added"] = sell.user_who_added.name
 
     # Отправляем обновленные данные обратно на фронт
     return Response(

@@ -59,6 +59,7 @@ function History() {
             if (isReturnModalOpen) {
                 toggleReturnModal();
             }
+            loadData();
             toast.success(successMessage);
         } catch (e) {
             // Обработка ошибок

@@ -62,7 +62,7 @@ function Receipt() {
                 <Input label="Количество" hint="000" isLong={false} parentText={count} setParentText={setCount} type="number" isDynamic={true} maxlength={10} isNeedText={isNeedText} />
                 <Input label="Дата поступления" hint="hint" isLong={false} parentText={date} setParentText={setDate} type="date" isDynamic={true} maxlength={10} isNeedText={isNeedText} />
                 <Input label="Цена" hint="00 000.00 ₽" isLong={false} parentText={price} setParentText={setPrice} type="number" isDynamic={true} maxlength={15} isNeedText={isNeedText} />
-                <Input label="Название" hint="Рычаг" isLong={true} parentText={seller} setParentText={setSeller} type="text" isDynamic={true} maxlength={40} isNeedText={isNeedText} />
+                <Input label="Название запчасти" hint="Рычаг" isLong={true} parentText={seller} setParentText={setSeller} type="text" isDynamic={true} maxlength={40} isNeedText={isNeedText} />
             </div>
             <IssuanceButton onClick={submitButtonClick} label="Оформить поступление" />
             {/* <Toaster toastOptions={{

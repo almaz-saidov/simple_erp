@@ -84,6 +84,7 @@ function App() {
                             loop
                             muted
                             playsinline
+                            playsInline
                             type="video/mp4"
                             position="block"
 

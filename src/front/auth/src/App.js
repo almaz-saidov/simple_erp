@@ -18,7 +18,7 @@ function App() {
         const timeout = setTimeout(() => {
             setTimeoutReached(true);
             setLoading(false);
-        }, 3000); // Задержка на 3 секунды
+        }, 10000); // Задержка на 3 секунды
 
         try {
             const csrfToken = "almaz-ymeet-delat-graz";
@@ -64,17 +64,15 @@ function App() {
     }, []);
 
     useEffect(() => {
-        if (!loading && timeoutReached) {
+        if (!loading) {
             setLoading(false);
             console.log('end of loading')
-        } else {
-            setLoading(true);
         }
     }, [timeoutReached, loading]);
 
     return (
         <div className="App">
-            {loading ? (
+            {loading && !timeoutReached ? (
                 // <div className='LoaderWrapper'>
                 //     <SyncLoader color="#A7A7A7" />
                 // </div>

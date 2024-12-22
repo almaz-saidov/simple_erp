@@ -10,10 +10,15 @@ import "./styles/LoaderWrapper.css";
 
 function App() {
     const [loading, setLoading] = useState(true);
+    const [timeoutReached, setTimeoutReached] = useState(false);
 
     const navigate = useNavigate();
 
     useEffect(() => {
+        const timeout = setTimeout(() => {
+            setTimeoutReached(true);
+            setLoading(false);
+        }, 3000); // Задержка на 3 секунды
 
         try {
             const csrfToken = "almaz-ymeet-delat-graz";
@@ -35,7 +40,6 @@ function App() {
                         ),
                     });
 
-
                     if (!response.ok) {
                         throw new Error('Network response was not ok');
                     }
@@ -56,23 +60,44 @@ function App() {
             console.log("Error", e.message);
         }
 
-
-
+        return () => clearTimeout(timeout); // Очистка таймера при размонтировании
     }, []);
+
+    useEffect(() => {
+        if (!loading && timeoutReached) {
+            setLoading(false);
+            console.log('end of loading')
+        } else {
+            setLoading(true);
+        }
+    }, [timeoutReached, loading]);
 
     return (
         <div className="App">
             {loading ? (
-                <div className='LoaderWrapper'>
-                    <SyncLoader color="#A7A7A7" />
+                // <div className='LoaderWrapper'>
+                //     <SyncLoader color="#A7A7A7" />
+                // </div>
+                <div className='VideoLoaderWrapper'>
+                    <div className='VideoWrapper'>
+                        <video
+                            className="LoaderVideo"
+                            src="/loading.mp4" // Укажите путь к вашему видео
+                            autoPlay
+                            loop
+                            muted
+                            type="video/mp4"
+                            position="block"
+                        />
+                    </div>
+                    <span>СОБИРАЕМ ДЕТАЛИ...</span>
                 </div>
-            ) :
-                (
-                    <Fragment>
-                        <FailIcon className='FailAuthIcon' />
-                        <h1 className='FailAuthMessage'>Unauthorized Access</h1>
-                    </Fragment>
-                )}
+            ) : (
+                <Fragment>
+                    <FailIcon className='FailAuthIcon' />
+                    <h1 className='FailAuthMessage'>Unauthorized Access</h1>
+                </Fragment>
+            )}
         </div>
     );
 }

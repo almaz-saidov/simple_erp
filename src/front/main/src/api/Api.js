@@ -301,6 +301,7 @@ export const fetchReturnHistoryById = async (returnId, isAir, setLoading) => {
             returnData.sellDate = formatDateToSend(data.return.sell_date);
             returnData.seller = data.return.to_seller;
             returnData.detailNumber = data.return.vin;
+            returnData.whoAdded = data.return.who_added;
             return (returnData); // Устанавливаем данные
         } else {
             return ({}); // Если ответ неудачный, возвращаем пустой массив
@@ -383,6 +384,8 @@ export const fetchPurchaseById = async (itemId, setLoading) => {
                 detailName: data.purchase.detail_name,
                 price: data.purchase.price,
                 detailNumber: data.purchase.vin,
+                whoAdded: data.purchase.who_added,
+
             };
 
             return (purchase); // Устанавливаем данные
@@ -423,6 +426,7 @@ export const fetchSellById = async (itemId, setLoading) => {
                 name: data.sell.name,
                 price: data.sell.price,
                 detailNumber: data.sell.vin,
+                whoAdded: data.sell.who_added,
             };
 
             return (sell); // Устанавливаем данные

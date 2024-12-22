@@ -191,7 +191,7 @@ function History() {
                 </div>
             </div>
             <div className="HistoryVinInput">
-                <Input hint="Номер детали" type="text" isSearch={true} isDynamic={true} setParentText={setVin} iconOnClick={loadData} />
+                <Input hint="Номер запчасти" type="text" isSearch={true} isDynamic={true} setParentText={setVin} iconOnClick={loadData} />
             </div>
             <div className="HistoryNav">
                 <HistoryNavButton label="Выдача" type={0} getCurrentType={getCurrentType} setHistoryType={setHistoryType} />

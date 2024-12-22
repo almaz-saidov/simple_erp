@@ -39,6 +39,7 @@ def get_records_return_air_return(vin_filter, date_from, date_before):
             Return.price,
             Return.comment,
             Return.is_end,
+            Return.who_added,
             literal('return').label('type')  # Указываем тип записи
         ).where(Return.is_end == True)
 
@@ -52,6 +53,7 @@ def get_records_return_air_return(vin_filter, date_from, date_before):
             AirReturn.price,
             AirReturn.comment,
             AirReturn.is_end,
+            AirReturn.who_added,
             literal('airreturn').label('type')  # Указываем тип записи
         ).where(AirReturn.is_end == True)
 
@@ -80,7 +82,7 @@ def get_records_return_air_return(vin_filter, date_from, date_before):
                 "amount": record.amount,
                 "price": record.price,
                 "type":  record.type,
-                "who_added": record.user_who_added.name,
+                "who_added": record.who_added
             }
             for record in records
         ]
@@ -96,6 +98,7 @@ def get_records_purchases(vin_filter, date_from, date_before):
             Purchase.amount,
             Purchase.add_to_shop_date,
             Purchase.price,
+            Purchase.who_added,
             literal('postupleniya').label('type')  # Указываем тип записи
         )
         filters = []
@@ -115,7 +118,7 @@ def get_records_purchases(vin_filter, date_from, date_before):
                 "amount": record.amount,
                 "price": record.price,
                 "type":  record.type,
-                "who_added": record.user_who_added.name,
+                "who_added": record.who_added,
             }
             for record in records
         ]
@@ -131,6 +134,7 @@ def get_records_sales(vin_filter, date_from, date_before):
             Sell.amount,
             Sell.sell_from_shop_date,
             Sell.price,
+            Sell.who_added,
             literal('vidyacha').label('type')  # Указываем тип записи
         )
         filters = []
@@ -141,7 +145,6 @@ def get_records_sales(vin_filter, date_from, date_before):
         if date_before:
             filters.append(Sell.sell_from_shop_date <= date_before)
         records = query.filter(and_(*filters)).all()
-
         result = [
             {
                 "id": record.id,
@@ -150,7 +153,7 @@ def get_records_sales(vin_filter, date_from, date_before):
                 "amount": record.amount,
                 "price": record.price,
                 "type":  record.type,
-                "who_added": record.user_who_added.name,
+                "who_added": record.who_added,
             }
             for record in records
         ]

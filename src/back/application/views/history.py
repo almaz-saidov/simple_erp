@@ -100,6 +100,7 @@ def history_sell(sell_id):
     data["date"] = sell.sell_from_shop_date
     data["price"] = sell.price
     data["name"] = sell.seller
+    data["who_added"] = sell.who_added
 
     # Отправляем обновленные данные обратно на фронт
     return Response(
@@ -161,9 +162,9 @@ def history_purchase(purchase_id):
     data["vin"] = purchase.vin
     data["amount"] = purchase.amount
     data["date"] = purchase.add_to_shop_date
-    print(f'\n\n\n{data["date"]}\n\n\n{purchase.add_to_shop_date}\n\n\n')
     data["price"] = purchase.price
     data["detail_name"] = purchase.name
+    data["who_added"] = purchase.who_added
         
     # Отправляем обновленные данные обратно на фронт
     return Response(
@@ -194,7 +195,7 @@ def history_return(return_id):
             status=HTTPStatus.BAD_REQUEST,
             mimetype="application/json",
         )
-        
+    
     if returned:
         # Получаем данные из базы и заполняем ответ для клиента
         response_data = {
@@ -206,7 +207,9 @@ def history_return(return_id):
             "to_seller": returned.to_seller,
             "comment": returned.comment,
             "is_compleat": returned.is_end,
+            "who_added": returned.who_added,
         }
+        
         # Если это AirReturn, то добавляем поле для другого магазина
         if return_type == "airreturn":
             response_data["another_shop"] = returned.another_shop

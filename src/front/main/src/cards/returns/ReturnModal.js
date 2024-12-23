@@ -91,9 +91,10 @@ const ReturnModal = ({ isOpen, onClose, returnData, isCreating, isAir, isHistory
     const handleClose = (e) => {
         if (e.target.id === 'modal-overlay') {
             setCompleted(false);
+            setIsNeedText(false);
             onClose();
         }
-        setIsNeedText(false);
+        //setIsNeedText(false);
     };
 
     const onSuccess = () => {
@@ -124,14 +125,19 @@ const ReturnModal = ({ isOpen, onClose, returnData, isCreating, isAir, isHistory
     }
 
     const handleOnClick = () => {
+        console.log("ISEMPTyFIRST", isRequiredEmpty());
         if (isRequiredEmpty()) {
             setIsNeedText(true);
+            console.log("ISEMPTy", isNeedText);
             toast.error('Заполниет все обязательные поля');
+           
         } else {
             setIsNeedText(false);
             let returnToSend = getReturn();
             returnToSend.id = returnData.id;
+            console.log("PIZDAISEMPTy", isNeedText);
             handleApiResponse(returnToSend, isCreating, isAir);
+          
         }
     }
 

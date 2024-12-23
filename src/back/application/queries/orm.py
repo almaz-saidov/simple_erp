@@ -599,6 +599,7 @@ class SyncORM:
         """
         Получить записи в зависимости от типа с применением фильтров.
         """
+        vin_filter = reformat_vin(vin_filter)
         # Преобразуем даты в объекты datetime
         date_from = datetime.strptime(date_from, '%Y-%m-%d') if date_from else None
         date_before = datetime.strptime(date_before, '%Y-%m-%d') if date_before else None

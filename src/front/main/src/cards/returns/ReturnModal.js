@@ -13,7 +13,7 @@ import toast, { Toaster } from 'react-hot-toast';
 import '../../styles/Cards/Returns.css';
 import '../../styles/LoaderWrapper.css'
 
-const ReturnModal = ({ isOpen, onClose, returnData, isCreating, isAir, isHistory, loadReturns, handleApiResponse }) => {
+const ReturnModal = ({ isOpen, onClose, returnData, isCreating, isAir, isHistory, loadReturns, handleApiResponse, onfocus }) => {
     const [isCompleted, setCompleted] = useState(isHistory);
     const [loading, setLoading] = useState(false);
     const [vin, setVin] = useState('');
@@ -26,6 +26,7 @@ const ReturnModal = ({ isOpen, onClose, returnData, isCreating, isAir, isHistory
     const [store, setStore] = useState('');
     const [isNeedText, setIsNeedText] = useState(false);
     const [whoAdded, setWhoAdded] = useState('');
+    const [isFocused, setIsFocused] = useState(false);
 
     const initTmpReturn = (returnObj) => {
 
@@ -130,14 +131,14 @@ const ReturnModal = ({ isOpen, onClose, returnData, isCreating, isAir, isHistory
             setIsNeedText(true);
             console.log("ISEMPTy", isNeedText);
             toast.error('Заполниет все обязательные поля');
-           
+
         } else {
             setIsNeedText(false);
             let returnToSend = getReturn();
             returnToSend.id = returnData.id;
             console.log("PIZDAISEMPTy", isNeedText);
             handleApiResponse(returnToSend, isCreating, isAir);
-          
+
         }
     }
 
@@ -156,7 +157,7 @@ const ReturnModal = ({ isOpen, onClose, returnData, isCreating, isAir, isHistory
 
     return (
         <div className="modal-overlay" id="modal-overlay" onClick={handleClose}>
-            <div className="ModalContent">
+            <div className="ModalContent" >
                 <div className='ModalMain'>
                     <header className='ModalHeader'>
                         {isAir
@@ -173,20 +174,22 @@ const ReturnModal = ({ isOpen, onClose, returnData, isCreating, isAir, isHistory
                             <div className='EditReturn'>
                                 {isHistory ?
                                     <TextField textDescription="Номер запчасти" text={vin} />
-                                    : < Input label="Номер запчасти" hint="A22222222" value={vin} parentText={vin} setParentText={setVin} isDynamic={true} maxlength={11} isNeedText={isNeedText} />
+                                    : < Input onfocus={setIsFocused} label="Номер запчасти" hint="A22222222" value={vin} parentText={vin} setParentText={setVin} isDynamic={true} maxlength={11} isNeedText={isNeedText} />
                                 }
-                                <Input label="Количество" hint="000" value={amount} type="number" parentText={amount} setParentText={setAmount} isDynamic={true} maxlength={10} isNeedText={isNeedText} />
-                                <Input label="Дата продажи" hint="дд.мм.гггг" value={sellDate} type="date" parentText={sellDate} setParentText={setSellDate} isDynamic={true} maxlength={10} isNeedText={isNeedText} />
-                                <Input label="Дата возврата" hint="дд.мм.гггг" value={returnDate} type="date" parentText={returnDate} setParentText={setReturnDate} isDynamic={true} maxlength={10} isNeedText={isNeedText} />
-                                <Input label="Продавец" hint="Женя" value={seller} type="text" parentText={seller} setParentText={setSeller} isDynamic={true} maxlength={40} isNeedText={isNeedText} />
-                                <Input label="Цена" hint="00 000.00 ₽" value={price} type="number" parentText={price} setParentText={setPrice} isDynamic={true} maxlength={15} isNeedText={isNeedText} />
-                                {isAir ? <Input label="Магазин посредник" isLong={true} hint="Avto Parts" parentText={store} setParentText={setStore} value={store} type="text" isDynamic={true} maxlength={40} isNeedText={isNeedText} /> : <></>}
-                                <Input label="Комментарий" isLong={true} hint="Коментарий" value={comment} parentText={comment} setParentText={setComment} type="text" isDynamic={true} maxlength={255} isNeedText={isNeedText} />
+                                <Input onfocus={setIsFocused} label="Количество" hint="000" value={amount} type="number" parentText={amount} setParentText={setAmount} isDynamic={true} maxlength={10} isNeedText={isNeedText} />
+                                <Input onfocus={setIsFocused} label="Дата продажи" hint="дд.мм.гггг" value={sellDate} type="date" parentText={sellDate} setParentText={setSellDate} isDynamic={true} maxlength={10} isNeedText={isNeedText} />
+                                <Input onfocus={setIsFocused} label="Дата возврата" hint="дд.мм.гггг" value={returnDate} type="date" parentText={returnDate} setParentText={setReturnDate} isDynamic={true} maxlength={10} isNeedText={isNeedText} />
+                                <Input onfocus={setIsFocused} label="Продавец" hint="Женя" value={seller} type="text" parentText={seller} setParentText={setSeller} isDynamic={true} maxlength={40} isNeedText={isNeedText} />
+                                <Input onfocus={setIsFocused} label="Цена" hint="00 000.00 ₽" value={price} type="number" parentText={price} setParentText={setPrice} isDynamic={true} maxlength={15} isNeedText={isNeedText} />
+                                {isAir ? <Input onfocus={setIsFocused} label="Магазин посредник" isLong={true} hint="Avto Parts" parentText={store} setParentText={setStore} value={store} type="text" isDynamic={true} maxlength={40} isNeedText={isNeedText} /> : <></>}
+                                <Input onfocus={setIsFocused} label="Комментарий" isLong={true} hint="Коментарий" value={comment} parentText={comment} setParentText={setComment} type="text" isDynamic={true} maxlength={255} isNeedText={isNeedText} />
                                 {isHistory ? <TextField textDescription="User" text={whoAdded} isLong={true} />
                                     : <></>}
 
+
                             </div>
                             < Checkbox label="Возврат завершён" onChange={setCompleted} checkedDefault={isHistory} />
+                            <div className={isFocused ? "Space" : ""} ></div>
                         </>
                     }
                 </div>
@@ -197,13 +200,6 @@ const ReturnModal = ({ isOpen, onClose, returnData, isCreating, isAir, isHistory
                     </button>
                 }
             </div>
-            {/* <Toaster toastOptions={{
-                duration: 1000,
-                style: {
-                    backgroundColor: '#131313',
-                    color: '#DBDBDB',
-                }
-            }} /> */}
         </div >
     );
 };

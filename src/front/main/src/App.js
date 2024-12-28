@@ -2,8 +2,8 @@ import './styles/App.css';
 import { useEffect, useState } from 'react';
 import Nav from './components/Nav';
 import History from './cards/history/History';
-import Issuance from './cards/issuance/Issuance';
-import Receipt from './cards/receipt/Receipt';
+import Sells from './cards/sells/Sells';
+import Purchases from './cards/purchases/Purchases';
 import Returns from './cards/returns/Returns';
 import Search from './cards/search/Search';
 import { Fragment } from 'react';
@@ -77,7 +77,7 @@ function App() {
     };
   }, []);
 
-  const cards = [<Search />, <Issuance />, <Receipt />, <Returns />, <History />];
+  const cards = [<Search />, <Sells />, <Purchases />, <Returns />, <History />];
 
   const renderComponent = () => {
     return cards[currentCardId];

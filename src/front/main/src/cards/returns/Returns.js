@@ -4,7 +4,7 @@ import Return from './Return';
 import { SyncLoader } from 'react-spinners'
 import ReturnModal from './ReturnModal';
 import { fetchReturns, fetchReturnsAll } from '../../api/Api'
-import { postData, fetchReturnById, updateReturnById } from '../../api/Api';
+import { createReturn, updateReturnById } from '../../api/Api';
 import toast, { Toaster } from 'react-hot-toast';
 
 import '../../styles/Card.css';
@@ -33,7 +33,7 @@ function Returns() {
 
 
     const toggleModal = () => {
-        setIsModalOpen(!isModalOpen); // Переключаем состояние модального окна
+        setIsModalOpen(!isModalOpen);
     };
 
     const loadReturns = () => {
@@ -50,12 +50,9 @@ function Returns() {
         const successMessage = isNew ? 'Возврат создан' : 'Возврат изменён';
         try {
             if (isNew) {
-                // Создание нового возврата
-                const endpoint = isAir ? "returns/create_air_return" : "returns/create_return";
-                await postData(editedReturn, endpoint);
+                await createReturn(editedReturn, isAir);
             } else {
-                // Обновление существующего возврата
-                await updateReturnById(editedReturn.id, editedReturn, isAir, setLoading);
+                await updateReturnById(editedReturn, isAir);
             }
 
             // Успешное завершение
@@ -139,13 +136,6 @@ function Returns() {
                 loadReturns={loadReturns}
                 handleApiResponse={handleApiResponse}
             />
-            {/* <Toaster toastOptions={{
-                duration: 1000,
-                style: {
-                    backgroundColor: '#131313',
-                    color: '#DBDBDB',
-                }
-            }} /> */}
         </>
     );
 }

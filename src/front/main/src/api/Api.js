@@ -4,24 +4,20 @@ export const API_URL = 'https://asm3ceps.ru/api'
 //export const API_URL = 'http://127.0.0.1:5000/api'
 
 export function formatDateToSend(inputDate) {
-    const date = new Date(inputDate); // Создаем объект Date
+    const date = new Date(inputDate);
 
-    // Проверяем, является ли дата валидной
     if (isNaN(date)) {
         return "";
     }
-
-    // Получаем год, месяц и день
     const year = date.getFullYear();
-    const month = String(date.getMonth() + 1).padStart(2, '0'); // Месяцы с 0
-    const day = String(date.getDate()).padStart(2, '0'); // День с ведущим нулем
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, '0');
 
-    // Форматируем в нужный вид
     return `${year}-${month}-${day}`;
 }
 
 export function formatDateToDisplay(inputDate) {
-    const date = new Date(inputDate); // Создаем объект Date
+    const date = new Date(inputDate);
 
     // Проверяем, является ли дата валидной
     if (isNaN(date)) {
@@ -39,50 +35,7 @@ export function formatDateToDisplay(inputDate) {
 
 
 
-// export const fetchReturns = async (filters, setData, setLoading) => {
-//     setLoading(true); // Начинаем загрузку
-//     await new Promise(resolve => setTimeout(resolve, 2000)); // Задержка 2 секунды
-//     const returnData = [
-//         { detailNumber: 525252, date: "2020-12-12", isAir: false, count: 100, sellDate: "2012-12-12", seller: "Волтер Уайт", price: 1000, store: "", comment: "Ю гот дем райт" },
-//         { detailNumber: 525252, date: "2020-12-12", isAir: true, count: 100, sellDate: "2012-12-12", seller: "Волтер Уайт", price: 1000, store: "Пивоман", comment: "Ю гот дем райт" },
-//         // Добавьте больше данных по необходимости
-//     ];
-//     setData(returnData);
-//     setLoading(false); // Завершение загрузки
-// }
-
-// export const fetchPurchase = async (filters, setData, setLoading) => {
-//     setLoading(true); // Начинаем загрузку
-//     await new Promise(resolve => setTimeout(resolve, 2000)); // Задержка 2 секунды
-//     let returnData = [];
-//     if (filters.vin == "12345" || filters.vin.length == 0) {
-//         returnData.push
-//             ({
-//                 detailNumber: 525252,
-//                 name: "Detail",
-//                 count: 10,
-//                 price: 1000,
-//                 sellDate: "2012-12-12",
-//                 purchaseDate: "2012-12-12",
-//             });
-//         // Добавьте больше данных по необходимости
-//     };
-//     setData(returnData);
-//     setLoading(false); // Завершение загрузки
-// }
-
-// export const fetchSells = async (filters, setData, setLoading) => {
-//     setLoading(true); // Начинаем загрузку
-//     await new Promise(resolve => setTimeout(resolve, 2000)); // Задержка 2 секунды
-//     const returnData = [
-//         { detailNumber: 525252, name: "Detail", count: 10, price: 1000, sellDate: "2012-12-12", purchaseDate: "2012-12-12" },
-//         // Добавьте больше данных по необходимости
-//     ];
-//     setData(returnData);
-//     setLoading(false); // Завершение загрузки
-// }
-
-export const fetchPurchaseReal = async (filters, setData, setLoading) => {
+export const fetchPurchases = async (filters, setData, setLoading) => {
     setLoading(true); // Устанавливаем загрузку в true перед запросом
 
     try {
@@ -122,7 +75,7 @@ export const fetchPurchaseReal = async (filters, setData, setLoading) => {
     }
 };
 
-export const fetchSellsReal = async (filters, setData, setLoading) => {
+export const fetchSells = async (filters, setData, setLoading) => {
     setLoading(true); // Устанавливаем загрузку в true перед запросом
 
     try {
@@ -162,7 +115,7 @@ export const fetchSellsReal = async (filters, setData, setLoading) => {
     }
 };
 
-export const fetchReturnsReal = async (filters, setData, setLoading) => {
+export const fetchReturns = async (filters, setData, setLoading) => {
     setLoading(true); // Устанавливаем загрузку в true перед запросом
 
     try {
@@ -202,72 +155,33 @@ export const fetchReturnsReal = async (filters, setData, setLoading) => {
     }
 };
 
-
-export const updateReturnById = async (returnId, updatedReturn, isAir, setLoading) => {
-    setLoading(true); // Устанавливаем загрузку в true перед запросом
+export const updateReturnById = async (updatedReturn, isAir) => {
     const type = isAir ? "airreturn" : "return";
-    updateReturnById.sell_date = formatDateToSend(updateReturnById.sell_date);
-    updateReturnById.return_date = formatDateToSend(updateReturnById.return_date);
-    try {
-        const response = await fetch(`${API_URL}/returns/${returnId}?type=${type}`, {
-            method: 'POST', // Метод запроса,
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(updatedReturn),
+    updatedReturn.sell_date = formatDateToSend(updatedReturn.sell_date);
+    updatedReturn.return_date = formatDateToSend(updatedReturn.return_date);
+    await postData(updatedReturn, `${API_URL}/returns/${updatedReturn.id}?type=${type}`);
 
-
-        });
-
-        // Проверяем, успешен ли ответ
-        if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
-        }
-
-        const data = await response.json();
-        return (data);
-
-    } catch (error) {
-        console.error("Ошибка при получении данных:", error);
-        return ({}); // Обрабатываем ошибку, возвращая пустой массив
-    } finally {
-        setLoading(false); // Всегда отключаем загрузку после выполнения
-    }
-    return ({});
 };
 
-export const updateReturnHistoryById = async (returnId, updatedReturn, isAir, setLoading) => {
-    setLoading(true); // Устанавливаем загрузку в true перед запросом
+export const updateReturnHistoryById = async (updatedReturn, isAir) => {
     const type = isAir ? "airreturn" : "return";
-    updateReturnById.sell_date = formatDateToSend(updateReturnById.sell_date);
-    updateReturnById.return_date = formatDateToSend(updateReturnById.return_date);
-    try {
-        const response = await fetch(`${API_URL}/history/returns/${returnId}?type=${type}`, {
-            method: 'POST', // Метод запроса,
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(updatedReturn),
+    updatedReturn.sell_date = formatDateToSend(updatedReturn.sell_date);
+    updatedReturn.return_date = formatDateToSend(updatedReturn.return_date);
+    await postData(updatedReturn, `${API_URL}/history/returns/${updatedReturn.id}?type=${type}`);
+}
 
+export const createReturn = async (newReturn, isAir) => {
+    const url = `${API_URL}/${(isAir ? "returns/create_air_return" : "returns/create_return")}`;
+    await postData(newReturn, url);
+}
 
-        });
+export const createPurchase = async (newPurchase) => {
+    await postData(newPurchase, `${API_URL}/purchases`);
+}
 
-        // Проверяем, успешен ли ответ
-        if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
-        }
-
-        const data = await response.json();
-        return (data);
-
-    } catch (error) {
-        console.error("Ошибка при получении данных:", error);
-        return ({}); // Обрабатываем ошибку, возвращая пустой массив
-    } finally {
-        setLoading(false); // Всегда отключаем загрузку после выполнения
-    }
-    return ({});
-};
+export const createSell = async (newSell) => {
+    await postData(newSell, `${API_URL}/sales`);
+}
 
 export const fetchReturnHistoryById = async (returnId, isAir, setLoading) => {
     setLoading(true); // Устанавливаем загрузку в true перед запросом
@@ -316,18 +230,17 @@ export const fetchReturnHistoryById = async (returnId, isAir, setLoading) => {
 };
 
 export const fetchReturnById = async (returnId, isAir, setLoading) => {
-    setLoading(true); // Устанавливаем загрузку в true перед запросом
+    setLoading(true);
     const type = isAir ? "airreturn" : "return";
     try {
         const response = await fetch(`${API_URL}/returns/${returnId}?type=${type}`, {
-            method: 'GET', // Метод запроса,
+            method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
             },
 
         });
 
-        // Проверяем, успешен ли ответ
         if (!response.ok) {
             throw new Error(`HTTP error! status: ${response.status}`);
         }
@@ -360,7 +273,7 @@ export const fetchReturnById = async (returnId, isAir, setLoading) => {
     return ({});
 };
 
-export const fetchPurchaseById = async (itemId, setLoading) => {
+export const fetchPurchasesById = async (itemId, setLoading) => {
     setLoading(true); // Устанавливаем загрузку в true перед запросом
     try {
         const response = await fetch(`${API_URL}/history/purchase/${itemId}`, {
@@ -502,94 +415,68 @@ export const fetchDetails = async (vin, setData, setLoading) => {
             const returnData = data.details.map(detail => ({
                 detailNumber: detail.vin,
                 name: detail.name,
-                count: detail.amount || 0, // Обеспечиваем, что count не буде undefined
+                count: detail.amount || 0,
             }));
-            setData(returnData); // Устанавливаем данные
+            setData(returnData);
         } else {
-            setData([]); // Если ответ неудачный, возвращаем пустой массив
+            setData([]);
         }
     } catch (error) {
         console.error("Ошибка при получении данных:", error);
-        setData([]); // Обрабатываем ошибку, возвращая пустой массив
+        setData([]);
     } finally {
-        setLoading(false); // Всегда отключаем загрузку после выполнения
+        setLoading(false);
     }
 };
 
+// export const fetchData = async (url) => {
+//     const response = await fetch(`${API_URL}/search?vin=${vin || ""}`, {
+//         method: 'GET',
+//         headers: {
+//             'Content-Type': 'application/json',
+//         },
 
+//     });
 
+//     if (!response.ok) {
+//         throw new Error(`HTTP error! status: ${response.status}`);
+//     }
 
-export const submitData = async (submitData, url) => {
-    try {
-        const response = {
-            ok: true,
-            status: 200,
-            json: async () => ({
-                id: 1,
-                ...submitData,
-            }),
-        };
+//     const data = await response.json();
+//     if (data.success && Array.isArray(data.details)) {
+//         const returnData = data.details.map(detail => ({
+//             detailNumber: detail.vin,
+//             name: detail.name,
+//             count: detail.amount || 0,
+//         }));
+//         setData(returnData);
+//     }
+// }
 
-        if (!response.ok) {
-            throw new Error(response.status);
-        }
-
-        const data = await response.json();
-
-        if (response.status !== 200) {
-            throw new Error(response.status);
-        }
-
-        return {
-            status: response.status,
-            message: "Данные обновлены!",
-            data: data,
-        };
-    } catch (error) {
-        throw new Error(error.message);
-    }
-};
-
-export const postData = async (dataObject, type) => {
+export const postData = async (dataObject, url) => {
     let response;
     try {
-        // Формируем URL запроса
-        const url = `${API_URL}/${type}`;
-
-        // Отправляем POST-запрос с данными
         response = await fetch(url, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
-                // Добавьте заголовок Authorization, если нужен
-                // 'Authorization': 'Bearer ваш-токен',
             },
-            body: JSON.stringify(dataObject), // Преобразуем объект в JSON-строку
+            body: JSON.stringify(dataObject),
         });
 
-        // Проверяем статус ответа
         if (!response.ok) {
-            const errorText = await response.text(); // Получаем текст ошибки
+            const errorText = await response.text();
             throw new Error(`HTTP ошибка! Статус: ${response.status}, текст: ${errorText}`);
         }
 
-        // Парсим JSON-ответ
         const data = await response.json();
-        return data; // Возвращаем полученные данные
+        return data;
 
     } catch (error) {
         console.error("Ошибка при отправке данных:", error);
-        throw error; // Бросаем ошибку дальше, чтобы обработать её в вызывающей функции
+        throw error;
     }
+
 };
 
 
-
-
-export const auth = () => {
-    return new Promise((resolve) => {
-        setTimeout(() => {
-            resolve(true);
-        }, 2000);
-    });
-};

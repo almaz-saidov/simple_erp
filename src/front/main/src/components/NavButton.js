@@ -6,8 +6,6 @@ function NavButton(props) {
 
   const onClick = () => {
     setCurrentCardId(id);
-    // console.log(id);
-    // (id === getCurrentCardId() ? console.log("NavCurrentButtonIcon") : console.log("NavButtonIcon"));
   }
 
   return (

@@ -36,15 +36,25 @@ function Search() {
         )
     }
 
-    useEffect(() => {
+    const lockForDetails = () => {
         fetchDetails(detailNumber, setData, setLoading)
+    }
 
+    useEffect(() => {
+        lockForDetails();
     }, [detailNumber]);
 
     return (
         <div className="Search">
             <CardHeader label="Поиск" />
-            <Input label="" hint="Номер запчасти" isDynamic={true} isLong={false} setParentText={setDetailNumber} isSearch={true} />
+            <Input label=""
+                hint="Номер запчасти"
+                isDynamic={true}
+                isLong={false}
+                setParentText={setDetailNumber}
+                isSearch={true}
+                iconOnClick={lockForDetails}
+            />
             {loading ?
                 <div className='LoaderWrapper'>
                     <SyncLoader color="#A7A7A7" />

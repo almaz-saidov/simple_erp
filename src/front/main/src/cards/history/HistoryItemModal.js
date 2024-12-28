@@ -5,7 +5,7 @@ import Checkbox from '../../components/CheckBox';
 import { useState, useEffect } from 'react';
 import { ReactComponent as LeftArrow } from '../../assets/left_arrow_icon.svg';
 import { ReactComponent as AirIcon } from '../../assets/air_icon.svg';
-import { fetchPurchaseById, fetchSellById } from '../../api/Api'
+import { fetchPurchasesById, fetchSellById } from '../../api/Api'
 import { SyncLoader } from 'react-spinners';
 
 import '../../styles/Cards/Returns.css';
@@ -17,7 +17,7 @@ const HistoryItemModal = ({ isOpen, isSell, onClose, itemData }) => {
         const fetchItemData = async () => {
             setLoading(true);
             try {
-                const newItem = isSell ? await fetchSellById(itemData.id, setLoading) : await fetchPurchaseById(itemData.id, setLoading);
+                const newItem = isSell ? await fetchSellById(itemData.id, setLoading) : await fetchPurchasesById(itemData.id, setLoading);
                 setItem(newItem);
             } catch (error) {
                 console.error('Ошибка при загрузке данных возврата:', error);

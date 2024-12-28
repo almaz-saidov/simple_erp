@@ -7,8 +7,8 @@ import { ReactComponent as AirIcon } from '../../assets/air_icon.svg';
 import { SyncLoader } from 'react-spinners';
 import TextField from '../../components/TextField';
 
-import { postData, fetchReturnById, fetchReturnHistoryById, updateReturnById } from '../../api/Api';
-import toast, { Toaster } from 'react-hot-toast';
+import { fetchReturnById, fetchReturnHistoryById } from '../../api/Api';
+import toast from 'react-hot-toast';
 
 import '../../styles/Cards/Returns.css';
 import '../../styles/LoaderWrapper.css'
@@ -24,10 +24,10 @@ const ReturnModal = ({ isOpen, onClose, returnData, isCreating, isAir, isHistory
     const [seller, setSeller] = useState('');
     const [comment, setComment] = useState('');
     const [store, setStore] = useState('');
-    const [isNeedText, setIsNeedText] = useState(false);
+    const [isBadInput, setIsBadInput] = useState(false);
     const [whoAdded, setWhoAdded] = useState('');
 
-    const initTmpReturn = (returnObj) => {
+    const setDisplayedReturn = (returnObj) => {
 
         setVin(returnObj.detailNumber || '');
         setAmount(returnObj.count || '');
@@ -41,31 +41,31 @@ const ReturnModal = ({ isOpen, onClose, returnData, isCreating, isAir, isHistory
 
     }
 
-    useEffect(() => {
-        const fetchReturnData = async () => {
-            setLoading(true);
-            try {
-                let tmpReturn = {}
-                if (isHistory) {
-                    tmpReturn = returnData.id !== undefined ? await fetchReturnHistoryById(returnData.id, isAir, setLoading) : {};
-                } else {
-                    tmpReturn = returnData.id !== undefined ? await fetchReturnById(returnData.id, isAir, setLoading) : {};
-                }
-                tmpReturn.id = returnData.id;
-
-                initTmpReturn(tmpReturn);
-            } catch (error) {
-                console.error('Ошибка при загрузке данных возврата:', error);
-                toast.error('Не удалось загрузить данные возврата.');
-            } finally {
-                setLoading(false);
+    const fetchReturn = async () => {
+        setLoading(true);
+        try {
+            let tmpReturn = {}
+            if (isHistory) {
+                tmpReturn = returnData.id !== undefined ? await fetchReturnHistoryById(returnData.id, isAir, setLoading) : {};
+            } else {
+                tmpReturn = returnData.id !== undefined ? await fetchReturnById(returnData.id, isAir, setLoading) : {};
             }
-        };
+            tmpReturn.id = returnData.id;
 
+            setDisplayedReturn(tmpReturn);
+        } catch (error) {
+            console.error('Ошибка при загрузке данных возврата:', error);
+            toast.error('Не удалось загрузить данные возврата.');
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    useEffect(() => {
         if (!isCreating) {
-            fetchReturnData();
+            fetchReturn();
         } else {
-            initTmpReturn(returnData);
+            setDisplayedReturn(returnData);
         }
     }, [returnData])
 
@@ -91,26 +91,13 @@ const ReturnModal = ({ isOpen, onClose, returnData, isCreating, isAir, isHistory
     const handleClose = (e) => {
         if (e.target.id === 'modal-overlay') {
             setCompleted(false);
-            setIsNeedText(false);
+            setIsBadInput(false);
             onClose();
         }
-        //setIsNeedText(false);
+        //setIsBadInput(false);
     };
 
-    const onSuccess = () => {
-        setVin('');
-        setAmount('');
-        setSellDate('');
-        setReturnDate('');
-        setPrice('');
-        setSeller('');
-        setComment('');
-        setStore('');
-        loadReturns();
-
-    }
-
-    const isRequiredEmpty = () => {
+    const isOkReturn = () => {
         if (vin === '' ||
             amount === '' ||
             sellDate === '' ||
@@ -124,20 +111,18 @@ const ReturnModal = ({ isOpen, onClose, returnData, isCreating, isAir, isHistory
         return false;
     }
 
+
     const handleOnClick = () => {
-        console.log("ISEMPTyFIRST", isRequiredEmpty());
-        if (isRequiredEmpty()) {
-            setIsNeedText(true);
-            console.log("ISEMPTy", isNeedText);
+        if (isOkReturn()) {
+            setIsBadInput(true);
             toast.error('Заполниет все обязательные поля');
-           
+
         } else {
-            setIsNeedText(false);
+            setIsBadInput(false);
             let returnToSend = getReturn();
             returnToSend.id = returnData.id;
-            console.log("PIZDAISEMPTy", isNeedText);
             handleApiResponse(returnToSend, isCreating, isAir);
-          
+
         }
     }
 
@@ -162,7 +147,6 @@ const ReturnModal = ({ isOpen, onClose, returnData, isCreating, isAir, isHistory
                         {isAir
                             ? <h1>Возврат воздух<AirIcon className="AirIcon" /></h1>
                             : <h1>Возврат</h1>}
-                        {/* <h1>{returnData.isAir ? "Возврат воздух" < i ></i> : "Возврат"}</h1> */}
                         <button className="backButton" onClick={() => { handleClose({ target: { id: 'modal-overlay' } }) }}><LeftArrow /> Назад</button>
                     </header>
                     {loading ?
@@ -173,20 +157,101 @@ const ReturnModal = ({ isOpen, onClose, returnData, isCreating, isAir, isHistory
                             <div className='EditReturn'>
                                 {isHistory ?
                                     <TextField textDescription="Номер запчасти" text={vin} />
-                                    : < Input label="Номер запчасти" hint="A22222222" value={vin} parentText={vin} setParentText={setVin} isDynamic={true} maxlength={11} isNeedText={isNeedText} />
+                                    : < Input label="Номер запчасти" hint="A22222222" value={vin} parentText={vin} setParentText={setVin} isDynamic={true} maxLength={11} isBadInput={isBadInput} />
                                 }
-                                <Input label="Количество" hint="000" value={amount} type="number" parentText={amount} setParentText={setAmount} isDynamic={true} maxlength={10} isNeedText={isNeedText} />
-                                <Input label="Дата продажи" hint="дд.мм.гггг" value={sellDate} type="date" parentText={sellDate} setParentText={setSellDate} isDynamic={true} maxlength={10} isNeedText={isNeedText} />
-                                <Input label="Дата возврата" hint="дд.мм.гггг" value={returnDate} type="date" parentText={returnDate} setParentText={setReturnDate} isDynamic={true} maxlength={10} isNeedText={isNeedText} />
-                                <Input label="Продавец" hint="Женя" value={seller} type="text" parentText={seller} setParentText={setSeller} isDynamic={true} maxlength={40} isNeedText={isNeedText} />
-                                <Input label="Цена" hint="00 000.00 ₽" value={price} type="number" parentText={price} setParentText={setPrice} isDynamic={true} maxlength={15} isNeedText={isNeedText} />
-                                {isAir ? <Input label="Магазин посредник" isLong={true} hint="Avto Parts" parentText={store} setParentText={setStore} value={store} type="text" isDynamic={true} maxlength={40} isNeedText={isNeedText} /> : <></>}
-                                <Input label="Комментарий" isLong={true} hint="Коментарий" value={comment} parentText={comment} setParentText={setComment} type="text" isDynamic={true} maxlength={255} isNeedText={isNeedText} />
-                                {isHistory ? <TextField textDescription="User" text={whoAdded} isLong={true} />
+                                <Input
+                                    label="Количество"
+                                    hint="000"
+                                    value={amount}
+                                    type="number"
+                                    parentText={amount}
+                                    setParentText={setAmount}
+                                    isDynamic={true}
+                                    maxLength={10}
+                                    isBadInput={isBadInput}
+                                />
+                                <Input
+                                    label="Дата продажи"
+                                    hint="дд.мм.гггг"
+                                    value={sellDate}
+                                    type="date"
+                                    parentText={sellDate}
+                                    setParentText={setSellDate}
+                                    isDynamic={true}
+                                    maxLength={10}
+                                    isBadInput={isBadInput}
+                                />
+                                <Input
+                                    label="Дата возврата"
+                                    hint="дд.мм.гггг"
+                                    value={returnDate}
+                                    type="date"
+                                    parentText={returnDate}
+                                    setParentText={setReturnDate}
+                                    isDynamic={true}
+                                    maxLength={10}
+                                    isBadInput={isBadInput}
+                                />
+                                <Input
+                                    label="Продавец"
+                                    hint="Женя"
+                                    value={seller}
+                                    type="text"
+                                    parentText={seller}
+                                    setParentText={setSeller}
+                                    isDynamic={true}
+                                    maxLength={40}
+                                    isBadInput={isBadInput}
+                                />
+                                <Input
+                                    label="Цена"
+                                    hint="00 000.00 ₽"
+                                    value={price}
+                                    type="number"
+                                    parentText={price}
+                                    setParentText={setPrice}
+                                    isDynamic={true}
+                                    maxLength={15}
+                                    isBadInput={isBadInput} />
+                                {isAir ?
+                                    <Input
+                                        label="Магазин посредник"
+                                        isLong={true}
+                                        hint="Avto Parts"
+                                        parentText={store}
+                                        setParentText={setStore}
+                                        value={store}
+                                        type="text"
+                                        isDynamic={true}
+                                        maxLength={40}
+                                        isBadInput={isBadInput}
+                                    />
+                                    : <></>}
+                                <Input
+                                    label="Комментарий"
+                                    isLong={true}
+                                    hint="Коментарий"
+                                    value={comment}
+                                    parentText={comment}
+                                    setParentText={setComment}
+                                    type="text"
+                                    isDynamic={true}
+                                    maxLength={255}
+                                    isBadInput={isBadInput}
+                                />
+                                {isHistory ?
+                                    <TextField
+                                        textDescription="User"
+                                        text={whoAdded}
+                                        isLong={true} />
                                     : <></>}
 
                             </div>
-                            < Checkbox label="Возврат завершён" onChange={setCompleted} checkedDefault={isHistory} />
+                            < Checkbox
+                                label="Возврат завершён"
+                                onChange={setCompleted}
+                                checkedDefault={isHistory}
+                            />
                         </>
                     }
                 </div>
@@ -197,13 +262,7 @@ const ReturnModal = ({ isOpen, onClose, returnData, isCreating, isAir, isHistory
                     </button>
                 }
             </div>
-            {/* <Toaster toastOptions={{
-                duration: 1000,
-                style: {
-                    backgroundColor: '#131313',
-                    color: '#DBDBDB',
-                }
-            }} /> */}
+
         </div >
     );
 };

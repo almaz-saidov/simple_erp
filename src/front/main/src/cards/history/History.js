@@ -2,14 +2,14 @@ import CardHeader from "../../components/CardHeader";
 import React, { useEffect, useState } from 'react';
 import Input from '../../components/Input';
 import HistoryNavButton from "./HistoryNavButton";
-import { fetchReturns, fetchReturnsReal, fetchPurchaseReal, fetchPurchase, fetchSellsReal, fetchSells } from "../../api/Api";
+import { fetchReturns, fetchPurchases, fetchSells } from "../../api/Api";
 import Return from '../returns/Return';
 import { SyncLoader } from 'react-spinners';
 import ReturnModal from '../returns/ReturnModal';
 import HistoryItemModal from "./HistoryItemModal";
 import HistoryItem from "./HistoryItem";
-import toast, { Toaster } from 'react-hot-toast';
-import { postData, updateReturnHistoryById } from '../../api/Api';
+import toast from 'react-hot-toast';
+import { createReturn, updateReturnHistoryById } from '../../api/Api';
 import '../../styles/Card.css';
 import '../../styles/Cards/History.css';
 import '../../styles/Components.css';
@@ -47,12 +47,10 @@ function History() {
         const successMessage = isNew ? 'Возврат создан' : 'Возврат изменён';
         try {
             if (isNew) {
-                // Создание нового возврата
-                const endpoint = isAir ? "returns/create_air_return" : "returns/create_return";
-                await postData(editedReturn, endpoint);
+                await createReturn(editedReturn,isAir);
             } else {
-                // Обновление существующего возврата
-                await updateReturnHistoryById(editedReturn.id, editedReturn, isAir, setLoading);
+                
+                await updateReturnHistoryById(editedReturn,isAir);
             }
 
             // Успешное завершение
@@ -76,15 +74,15 @@ function History() {
             switch (historyType) {
                 case 0:
                     // Выдача
-                    await fetchSellsReal(getFilter(), setSells, setLoading);
+                    await fetchSells(getFilter(), setSells, setLoading);
                     break;
                 case 1:
                     // Поступления
-                    await fetchPurchaseReal(getFilter(), setPurchases, setLoading);
+                    await fetchPurchases(getFilter(), setPurchases, setLoading);
                     break;
                 case 2:
                     // Возвраты
-                    await fetchReturnsReal(getFilter(), setReturns, setLoading);
+                    await fetchReturns(getFilter(), setReturns, setLoading);
                     break;
                 default:
                     break;

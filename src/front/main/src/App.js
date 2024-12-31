@@ -10,6 +10,7 @@ import { Fragment } from 'react';
 import { SyncLoader } from 'react-spinners';
 import { ReactComponent as FailIcon } from './assets/auth_fail_icon.svg'
 import { Toaster } from 'react-hot-toast';
+import { ToasterWithMax } from './components/ToasterWithMax'
 function App() {
   const [currentCardId, setCurrentCardId] = useState(0);
   const [authorized, setAuthorized] = useState(true);
@@ -24,17 +25,17 @@ function App() {
 
   return (
     <div className="App">
-      {loading ? (  // Show the loader while loading
+      {loading ? (
         <div className='LoaderWrapper'>
           <SyncLoader color="#A7A7A7" />
         </div>
-      ) : authorized ? (  // Show the main content if authorized
+      ) : authorized ? (
         <Fragment>
           <div className='Card'>
             {renderComponent()}
           </div>
           <Nav getCurrentCardId={() => currentCardId} setCurrentCardId={setCurrentCardId} />
-          <Toaster toastOptions={{
+          <ToasterWithMax toastOptions={{
             duration: 1000,
             style: {
               backgroundColor: '#131313',

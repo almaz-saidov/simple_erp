@@ -3,7 +3,7 @@ import Input from '../../components/Input'
 import Detail from "../../components/Detail";
 import { SyncLoader } from 'react-spinners'
 import { useEffect, useState } from 'react';
-import { fetchDetails } from "../../api/Api";
+import { fetchDetailsNew } from "../../api/Api";
 
 import '../../styles/Card.css'
 import '../../styles/Cards/Search.css'
@@ -37,7 +37,7 @@ function Search() {
     }
 
     const lookForDetails = () => {
-        fetchDetails(detailNumber, setData, setLoading)
+        fetchDetailsNew(detailNumber, setData, setLoading)
     }
 
     useEffect(() => {

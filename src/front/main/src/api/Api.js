@@ -356,83 +356,82 @@ export const fetchSellById = async (itemId, setLoading) => {
 };
 
 
-export const fetchReturnsAll = async (setData, setLoading) => {
-    setLoading(true); // Устанавливаем загрузку в true перед запросом
+// export const fetchReturnsAll = async (setData, setLoading) => {
+//     setLoading(true); // Устанавливаем загрузку в true перед запросом
 
-    try {
-        const response = await fetch(`${API_URL}/returns`, {
-            method: 'GET', // Метод запроса,
-            headers: {
-                'Content-Type': 'application/json',
-            },
+//     try {
+//         const response = await fetch(`${API_URL}/returns`, {
+//             method: 'GET', // Метод запроса,
+//             headers: {
+//                 'Content-Type': 'application/json',
+//             },
 
-        });
+//         });
 
-        // Проверяем, успешен ли ответ
-        if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
-        }
+//         // Проверяем, успешен ли ответ
+//         if (!response.ok) {
+//             throw new Error(`HTTP error! status: ${response.status}`);
+//         }
 
-        const data = await response.json();
+//         const data = await response.json();
+//         if (data.success && Array.isArray(data.sorted_return_list)) {
+//             const returnData = data.sorted_return_list.map(returnData => ({
+//                 id: returnData.id,
+//                 returnDate: formatDateToDisplay(returnData.return_date),
+//                 isAir: returnData.type == "airreturn",
+//                 detailNumber: returnData.vin,
+//             }));
+//             setData(returnData); // Устанавливаем данные
+//         } else {
+//             setData([]); // Если ответ неудачный, возвращаем пустой массив
+//         }
+//     } catch (error) {
+//         console.error("Ошибка при получении данных:", error);
+//         setData([]); // Обрабатываем ошибку, возвращая пустой массив
+//     } finally {
+//         setLoading(false); // Всегда отключаем загрузку после выполнения
+//     }
+// };
+
+export const fetchReturnsAll = async (vin, setData) => {
+    const parseData = (data) => {
         if (data.success && Array.isArray(data.sorted_return_list)) {
-            const returnData = data.sorted_return_list.map(returnData => ({
+            return data.sorted_return_list.map(returnData => ({
                 id: returnData.id,
                 returnDate: formatDateToDisplay(returnData.return_date),
                 isAir: returnData.type == "airreturn",
                 detailNumber: returnData.vin,
             }));
-            setData(returnData); // Устанавливаем данные
-        } else {
-            setData([]); // Если ответ неудачный, возвращаем пустой массив
         }
-    } catch (error) {
-        console.error("Ошибка при получении данных:", error);
-        setData([]); // Обрабатываем ошибку, возвращая пустой массив
-    } finally {
-        setLoading(false); // Всегда отключаем загрузку после выполнения
-    }
+        return null;
+    };
+
+    const url = `${API_URL}/returns`;
+    await getData(url, setData, parseData);
 };
 
-export const fetchDetails = async (vin, setData, setLoading) => {
-    setLoading(true); // Устанавливаем загрузку в true перед запросом
 
-    try {
-        const response = await fetch(`${API_URL}/search?vin=${vin || ""}`, {
-            method: 'GET', // Метод запроса,
-            headers: {
-                'Content-Type': 'application/json',
-            },
-
-        });
-
-        // Проверяем, успешен ли ответ
-        if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
-        }
-
-        const data = await response.json();
+export const fetchDetailsNew = async (vin, setData) => {
+    const parseDetailsData = (data) => {
         if (data.success && Array.isArray(data.details)) {
-            const returnData = data.details.map(detail => ({
+            return data.details.map(detail => ({
                 detailNumber: detail.vin,
                 name: detail.name,
                 count: detail.amount || 0,
             }));
-            setData(returnData);
-        } else {
-            setData([]);
         }
-    } catch (error) {
-        console.error("Ошибка при получении данных:", error);
-        setData([]);
-    } finally {
-        setLoading(false);
-    }
+        return null;
+    };
+
+    const url = `${API_URL}/search?vin=${vin || ""}`;
+    await getData(url, setData, parseDetailsData);
 };
 
+
 export const postData = async (dataObject, url) => {
-    let response;
+    //let response;
     try {
-        response = await fetch(url, {
+        const response = await fetch(url, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -441,8 +440,7 @@ export const postData = async (dataObject, url) => {
         });
 
         if (!response.ok) {
-            const errorText = await response.text();
-            throw new Error(`HTTP ошибка! Статус: ${response.status}, текст: ${errorText}`);
+            throw new Error(`HTTP ошибка! Статус: ${response.status}, text: ${response.text()}`);
         }
 
         const data = await response.json();
@@ -454,5 +452,36 @@ export const postData = async (dataObject, url) => {
     }
 
 };
+
+export const getData = async (url, setData, parseData) => {
+    try {
+        const response = await fetch(url, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        });
+
+        // Check if the response is successful
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        const data = await response.json();
+
+        // Parse the data using the provided parser function
+        const parsedData = parseData(data);
+
+        if (parsedData) {
+            setData(parsedData);
+        } else {
+            setData([]); // Set an empty array if parsing fails
+        }
+    } catch (error) {
+        console.error("Ошибка при получении данных:", error);
+        setData([]); // Set an empty array on error
+    }
+};
+
 
 

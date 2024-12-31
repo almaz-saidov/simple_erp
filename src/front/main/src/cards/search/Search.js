@@ -36,12 +36,12 @@ function Search() {
         )
     }
 
-    const lockForDetails = () => {
+    const lookForDetails = () => {
         fetchDetails(detailNumber, setData, setLoading)
     }
 
     useEffect(() => {
-        lockForDetails();
+        lookForDetails();
     }, [detailNumber]);
 
     return (
@@ -53,7 +53,7 @@ function Search() {
                 isLong={false}
                 setParentText={setDetailNumber}
                 isSearch={true}
-                iconOnClick={lockForDetails}
+                iconOnClick={lookForDetails}
             />
             {loading ?
                 <div className='LoaderWrapper'>

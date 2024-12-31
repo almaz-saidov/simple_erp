@@ -1,12 +1,11 @@
 import CardHeader from "../../components/CardHeader";
 import Input from '../../components/Input';
 import IssuanceButton from '../../components/SubmitButton';
-import toast, { Toaster } from 'react-hot-toast';
-import { useEffect, useState } from 'react';
+import toast from 'react-hot-toast';
+import { useState } from 'react';
 import '../../styles/Card.css';
 import '../../styles/Cards/Issuance.css';
 import { createPurchase } from '../../api/Api'
-import CoolDatePicker from '../../components/CoolDatePicker'
 
 function Purchases() {
     const [isNeedText, setIsNeedText] = useState(false);

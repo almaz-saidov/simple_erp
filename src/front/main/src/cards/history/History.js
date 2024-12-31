@@ -10,6 +10,7 @@ import HistoryItemModal from "./HistoryItemModal";
 import HistoryItem from "./HistoryItem";
 import toast from 'react-hot-toast';
 import { createReturn, updateReturnHistoryById } from '../../api/Api';
+import { isFirstEarlier } from "../../common/common"
 import '../../styles/Card.css';
 import '../../styles/Cards/History.css';
 import '../../styles/Components.css';
@@ -47,10 +48,10 @@ function History() {
         const successMessage = isNew ? 'Возврат создан' : 'Возврат изменён';
         try {
             if (isNew) {
-                await createReturn(editedReturn,isAir);
+                await createReturn(editedReturn, isAir);
             } else {
-                
-                await updateReturnHistoryById(editedReturn,isAir);
+
+                await updateReturnHistoryById(editedReturn, isAir);
             }
 
             // Успешное завершение
@@ -99,6 +100,17 @@ function History() {
 
         loadData();
     }, [historyType, vin]);
+
+    useEffect(() => {
+
+        if (startDate.length !== 0 && endDate.length !== 0) {
+            if (isFirstEarlier(endDate, startDate)) {
+                toast.error('Конечная дата не может быть раньше стартовой даты');
+                setEndDate(startDate);
+            }
+        }
+
+    }, [startDate, endDate]);
 
     const makeContent = () => {
         switch (historyType) {
@@ -185,7 +197,7 @@ function History() {
                 </div>
                 <div className="DateInputWrapper">
                     <label htmlFor="date_to" className="form-label">До</label>
-                    <Input id="date_to" label="" isDynamic={true} parentText={endDate} setParentText={setEndDate} hint="дд.мм.гггг" type="date" />
+                    <Input id="date_to" isDynamic={true} parentText={endDate} setParentText={setEndDate} label="" hint="дд.мм.гггг" type="date" />
                 </div>
             </div>
             <div className="HistoryVinInput">

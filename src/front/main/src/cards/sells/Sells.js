@@ -2,7 +2,7 @@ import CardHeader from "../../components/CardHeader";
 import Input from '../../components/Input';
 import IssuanceButton from '../../components/SubmitButton';
 import toast from 'react-hot-toast';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import '../../styles/Card.css';
 import '../../styles/Cards/Issuance.css';
 import { createSell } from '../../api/Api';
@@ -28,7 +28,11 @@ function Sells() {
     const notify = () => toast.error('Заполниет все обязательные поля');
 
     const isBadSell = () => {
-        return partNumber.length === 0 || count.length === 0 || date.length === 0 || seller.length === 0 || price.length === 0;
+        return partNumber.length === 0 ||
+            count.length === 0 ||
+            date.length === 0 ||
+            seller.length === 0 ||
+            price.length === 0;
     }
 
     const resetSellInput = () => {

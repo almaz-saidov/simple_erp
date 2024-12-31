@@ -1,7 +1,7 @@
 import { id } from "date-fns/locale";
 
-export const API_URL = 'https://asm3ceps.ru/api'
-//export const API_URL = 'http://127.0.0.1:5000/api'
+//export const API_URL = 'https://asm3ceps.ru/api'
+export const API_URL = 'http://127.0.0.1:5000/api'
 
 export function formatDateToSend(inputDate) {
     const date = new Date(inputDate);
@@ -63,15 +63,15 @@ export const fetchPurchases = async (filters, setData, setLoading) => {
                 detailNumber: sell.vin,
 
             }));
-            setData(returnData); // Устанавливаем данные
+            setData(returnData);
         } else {
-            setData([]); // Если ответ неудачный, возвращаем пустой массив
+            setData([]);
         }
     } catch (error) {
         console.error("Ошибка при получении данных:", error);
-        setData([]); // Обрабатываем ошибку, возвращая пустой массив
+        setData([]);
     } finally {
-        setLoading(false); // Всегда отключаем загрузку после выполнения
+        setLoading(false);
     }
 };
 
@@ -428,30 +428,6 @@ export const fetchDetails = async (vin, setData, setLoading) => {
         setLoading(false);
     }
 };
-
-// export const fetchData = async (url) => {
-//     const response = await fetch(`${API_URL}/search?vin=${vin || ""}`, {
-//         method: 'GET',
-//         headers: {
-//             'Content-Type': 'application/json',
-//         },
-
-//     });
-
-//     if (!response.ok) {
-//         throw new Error(`HTTP error! status: ${response.status}`);
-//     }
-
-//     const data = await response.json();
-//     if (data.success && Array.isArray(data.details)) {
-//         const returnData = data.details.map(detail => ({
-//             detailNumber: detail.vin,
-//             name: detail.name,
-//             count: detail.amount || 0,
-//         }));
-//         setData(returnData);
-//     }
-// }
 
 export const postData = async (dataObject, url) => {
     let response;

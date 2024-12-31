@@ -1,6 +1,7 @@
-export function compareDates(date1, date2) {
-    const d1 = dayjs(date1, 'DD.MM.YYYY'); // Парсим первую дату
-    const d2 = dayjs(date2, 'DD.MM.YYYY'); // Парсим вторую дату
-
-    return d1.isBefore(d2); // Возвращает true, если d1 раньше d2
+export function isFirstEarlier(date1, date2) {
+    console.log(date1, date2);
+    const d1 = new Date(date1);
+    const d2 = new Date(date2);
+    console.log(`${d1} < ${d2} = ${d1 <= d2}`)
+    return d1 < d2;
 }

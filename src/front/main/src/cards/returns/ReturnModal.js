@@ -9,7 +9,7 @@ import TextField from '../../components/TextField';
 
 import { fetchReturnById, fetchReturnHistoryById } from '../../api/Api';
 import toast from 'react-hot-toast';
-
+import { isFirstEarlier } from '../../common/common';
 import '../../styles/Cards/Returns.css';
 import '../../styles/LoaderWrapper.css'
 
@@ -97,7 +97,7 @@ const ReturnModal = ({ isOpen, onClose, returnData, isCreating, isAir, isHistory
         //setIsBadInput(false);
     };
 
-    const isOkReturn = () => {
+    const isFilledReturn = () => {
         if (vin === '' ||
             amount === '' ||
             sellDate === '' ||
@@ -105,17 +105,30 @@ const ReturnModal = ({ isOpen, onClose, returnData, isCreating, isAir, isHistory
             price === '' ||
             seller === '' ||
             comment === ''
+            || (isAir == true && store === "")
         ) {
-            return isAir ? store === '' : true;
+            return false;
         }
-        return false;
+        return true;
     }
 
+    const checkWithToastIsBadReturn = () => {
+        let status = true;
+        if (!isFilledReturn()) {
+            toast.error('Заполниет все обязательные поля');
+            status = false;
+        }
+        if (isFirstEarlier(returnDate, sellDate)) {
+            toast.error('Конечная дата не может быть раньше стартовой даты');
+            status = false;
+        }
+        return status;
+    }
 
     const handleOnClick = () => {
-        if (isOkReturn()) {
+        if (!checkWithToastIsBadReturn()) {
             setIsBadInput(true);
-            toast.error('Заполниет все обязательные поля');
+            //toast.error('Заполниет все обязательные поля');
 
         } else {
             setIsBadInput(false);
@@ -157,7 +170,16 @@ const ReturnModal = ({ isOpen, onClose, returnData, isCreating, isAir, isHistory
                             <div className='EditReturn'>
                                 {isHistory ?
                                     <TextField textDescription="Номер запчасти" text={vin} />
-                                    : < Input label="Номер запчасти" hint="A22222222" value={vin} parentText={vin} setParentText={setVin} isDynamic={true} maxLength={11} isBadInput={isBadInput} />
+                                    : < Input
+                                        label="Номер запчасти"
+                                        hint="A22222222"
+                                        value={vin}
+                                        parentText={vin}
+                                        setParentText={setVin}
+                                        isDynamic={true}
+                                        maxLength={11}
+                                        isNeedText={isBadInput}
+                                    />
                                 }
                                 <Input
                                     label="Количество"
@@ -168,7 +190,7 @@ const ReturnModal = ({ isOpen, onClose, returnData, isCreating, isAir, isHistory
                                     setParentText={setAmount}
                                     isDynamic={true}
                                     maxLength={10}
-                                    isBadInput={isBadInput}
+                                    isNeedText={isBadInput}
                                 />
                                 <Input
                                     label="Дата продажи"
@@ -179,7 +201,7 @@ const ReturnModal = ({ isOpen, onClose, returnData, isCreating, isAir, isHistory
                                     setParentText={setSellDate}
                                     isDynamic={true}
                                     maxLength={10}
-                                    isBadInput={isBadInput}
+                                    isNeedText={isBadInput}
                                 />
                                 <Input
                                     label="Дата возврата"
@@ -190,7 +212,7 @@ const ReturnModal = ({ isOpen, onClose, returnData, isCreating, isAir, isHistory
                                     setParentText={setReturnDate}
                                     isDynamic={true}
                                     maxLength={10}
-                                    isBadInput={isBadInput}
+                                    isNeedText={isBadInput}
                                 />
                                 <Input
                                     label="Продавец"
@@ -201,7 +223,7 @@ const ReturnModal = ({ isOpen, onClose, returnData, isCreating, isAir, isHistory
                                     setParentText={setSeller}
                                     isDynamic={true}
                                     maxLength={40}
-                                    isBadInput={isBadInput}
+                                    isNeedText={isBadInput}
                                 />
                                 <Input
                                     label="Цена"
@@ -212,7 +234,7 @@ const ReturnModal = ({ isOpen, onClose, returnData, isCreating, isAir, isHistory
                                     setParentText={setPrice}
                                     isDynamic={true}
                                     maxLength={15}
-                                    isBadInput={isBadInput} />
+                                    isNeedText={isBadInput} />
                                 {isAir ?
                                     <Input
                                         label="Магазин посредник"
@@ -224,7 +246,7 @@ const ReturnModal = ({ isOpen, onClose, returnData, isCreating, isAir, isHistory
                                         type="text"
                                         isDynamic={true}
                                         maxLength={40}
-                                        isBadInput={isBadInput}
+                                        isNeedText={isBadInput}
                                     />
                                     : <></>}
                                 <Input
@@ -237,7 +259,7 @@ const ReturnModal = ({ isOpen, onClose, returnData, isCreating, isAir, isHistory
                                     type="text"
                                     isDynamic={true}
                                     maxLength={255}
-                                    isBadInput={isBadInput}
+                                    isNeedText={isBadInput}
                                 />
                                 {isHistory ?
                                     <TextField

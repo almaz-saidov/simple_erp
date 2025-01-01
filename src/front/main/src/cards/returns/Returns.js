@@ -37,7 +37,9 @@ function Returns() {
     };
 
     const loadReturns = () => {
-        fetchReturnsAll(setReturns, setLoading);
+        setLoading(true);
+        fetchReturnsAll(setReturns);
+        setLoading(false);
     }
 
     useEffect(() => {

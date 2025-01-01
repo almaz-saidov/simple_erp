@@ -1,7 +1,7 @@
 import { id } from "date-fns/locale";
 
-//export const API_URL = 'https://asm3ceps.ru/api'
-export const API_URL = 'http://127.0.0.1:5000/api'
+export const API_URL = 'https://asm3ceps.ru/api'
+//export const API_URL = 'http://127.0.0.1:5000/api'
 
 export function formatDateToSend(inputDate) {
     const date = new Date(inputDate);
@@ -33,127 +33,60 @@ export function formatDateToDisplay(inputDate) {
     return `${day}.${month}.${year}`;
 }
 
-
-
-export const fetchPurchases = async (filters, setData, setLoading) => {
-    setLoading(true); // Устанавливаем загрузку в true перед запросом
-
+export const postData = async (dataObject, url) => {
+    //let response;
     try {
-        const response = await fetch(`${API_URL}/history?type=postupleniya&like=${filters.vin || ""}&date_from=${filters.date_from}&date_before=${filters.date_before}`, {
-            method: 'GET', // Метод запроса,
+        const response = await fetch(url, {
+            method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
             },
-
+            body: JSON.stringify(dataObject),
         });
 
-        // Проверяем, успешен ли ответ
+        if (!response.ok) {
+            throw new Error(`HTTP ошибка! Статус: ${response.status}, text: ${response.text()}`);
+        }
+
+        const data = await response.json();
+        return data;
+
+    } catch (error) {
+        console.error("Ошибка при отправке данных:", error);
+        throw error;
+    }
+
+};
+
+export const getData = async (url, parseData) => {
+    try {
+        const response = await fetch(url, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        });
+
         if (!response.ok) {
             throw new Error(`HTTP error! status: ${response.status}`);
         }
 
         const data = await response.json();
-        if (data.success && Array.isArray(data.records)) {
-            const returnData = data.records.map(sell => ({
-                count: sell.amount || 0,
-                date: formatDateToDisplay(sell.date),
-                id: sell.id,
-                price: sell.price,
-                type: sell.type,
-                detailNumber: sell.vin,
 
-            }));
-            setData(returnData);
+        const parsedData = parseData(data);
+
+        if (parsedData) {
+            return parsedData;
         } else {
-            setData([]);
+            return null;
         }
     } catch (error) {
         console.error("Ошибка при получении данных:", error);
-        setData([]);
-    } finally {
-        setLoading(false);
+        return null;
     }
 };
 
-export const fetchSells = async (filters, setData, setLoading) => {
-    setLoading(true); // Устанавливаем загрузку в true перед запросом
 
-    try {
-        const response = await fetch(`${API_URL}/history?type=vidyacha&like=${filters.vin || ""}&date_from=${filters.date_from}&date_before=${filters.date_before}`, {
-            method: 'GET', // Метод запроса,
-            headers: {
-                'Content-Type': 'application/json',
-            },
-
-        });
-
-        // Проверяем, успешен ли ответ
-        if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
-        }
-
-        const data = await response.json();
-        if (data.success && Array.isArray(data.records)) {
-            const returnData = data.records.map(sell => ({
-                count: sell.amount || 0,
-                date: formatDateToDisplay(sell.date),
-                id: sell.id,
-                price: sell.price,
-                type: sell.type,
-                detailNumber: sell.vin,
-
-            }));
-            setData(returnData); // Устанавливаем данные
-        } else {
-            setData([]); // Если ответ неудачный, возвращаем пустой массив
-        }
-    } catch (error) {
-        console.error("Ошибка при получении данных:", error);
-        setData([]); // Обрабатываем ошибку, возвращая пустой массив
-    } finally {
-        setLoading(false); // Всегда отключаем загрузку после выполнения
-    }
-};
-
-export const fetchReturns = async (filters, setData, setLoading) => {
-    setLoading(true); // Устанавливаем загрузку в true перед запросом
-
-    try {
-        const response = await fetch(`${API_URL}/history?type=vozvraty&like=${filters.vin || ""}&date_from=${filters.date_from}&date_before=${filters.date_before}`, {
-            method: 'GET', // Метод запроса,
-            headers: {
-                'Content-Type': 'application/json',
-            },
-
-        });
-
-        // Проверяем, успешен ли ответ
-        if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
-        }
-
-        const data = await response.json();
-        if (data.success && Array.isArray(data.records)) {
-            const returnData = data.records.map(returnData => ({
-                count: returnData.amount || 0,
-                returnDate: formatDateToDisplay(returnData.date),
-                id: returnData.id,
-                price: returnData.price,
-                isAir: returnData.type === "airreturn",
-                detailNumber: returnData.vin,
-
-            }));
-            setData(returnData); // Устанавливаем данные
-        } else {
-            setData([]); // Если ответ неудачный, возвращаем пустой массив
-        }
-    } catch (error) {
-        console.error("Ошибка при получении данных:", error);
-        setData([]); // Обрабатываем ошибку, возвращая пустой массив
-    } finally {
-        setLoading(false); // Всегда отключаем загрузку после выполнения
-    }
-};
 
 export const updateReturnById = async (updatedReturn, isAir) => {
     const type = isAir ? "airreturn" : "return";
@@ -183,217 +116,152 @@ export const createSell = async (newSell) => {
     await postData(newSell, `${API_URL}/sales`);
 }
 
-export const fetchReturnHistoryById = async (returnId, isAir, setLoading) => {
-    setLoading(true); // Устанавливаем загрузку в true перед запросом
+export const fetchReturnHistoryById = async (itemId, isAir) => {
     const type = isAir ? "airreturn" : "return";
-    try {
-        const response = await fetch(`${API_URL}/history/returns/${returnId}?type=${type}`, {
-            method: 'GET', // Метод запроса,
-            headers: {
-                'Content-Type': 'application/json',
-            },
-
-        });
-
-        // Проверяем, успешен ли ответ
-        if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
+    const parseData = (data) => {
+        const returnData = {
+        };
+        returnData.count = data.return.amount;
+        if (isAir) {
+            returnData.store = data.return.another_shop;
         }
-
-        const data = await response.json();
-        if (data.success) {
-            const returnData = {
-            };
-            returnData.count = data.return.amount;
-            if (isAir) {
-                returnData.store = data.return.another_shop;
-            }
-            returnData.comment = data.return.comment;
-            returnData.isCompleat = data.return.is_compleat;
-            returnData.price = data.return.price;
-            returnData.date = formatDateToSend(data.return.return_date);
-            returnData.sellDate = formatDateToSend(data.return.sell_date);
-            returnData.seller = data.return.to_seller;
-            returnData.detailNumber = data.return.vin;
-            returnData.whoAdded = data.return.who_added;
-            return (returnData); // Устанавливаем данные
-        } else {
-            return ({}); // Если ответ неудачный, возвращаем пустой массив
-        }
-    } catch (error) {
-        console.error("Ошибка при получении данных:", error);
-        return ({}); // Обрабатываем ошибку, возвращая пустой массив
-    } finally {
-        setLoading(false); // Всегда отключаем загрузку после выполнения
+        returnData.comment = data.return.comment;
+        returnData.isCompleat = data.return.is_compleat;
+        returnData.price = data.return.price;
+        returnData.date = formatDateToSend(data.return.return_date);
+        returnData.sellDate = formatDateToSend(data.return.sell_date);
+        returnData.seller = data.return.to_seller;
+        returnData.detailNumber = data.return.vin;
+        returnData.whoAdded = data.return.who_added;
+        return (returnData);
     }
-    return ({});
+
+    const url = `${API_URL}/history/returns/${itemId}?type=${type}`;
+    let result = await getData(url, parseData);
+    return result;
 };
 
-export const fetchReturnById = async (returnId, isAir, setLoading) => {
-    setLoading(true);
+
+export const fetchReturnById = async (itemId, isAir) => {
     const type = isAir ? "airreturn" : "return";
-    try {
-        const response = await fetch(`${API_URL}/returns/${returnId}?type=${type}`, {
-            method: 'GET',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-
-        });
-
-        if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
+    const parseData = (data) => {
+        const returnData = {
+        };
+        returnData.count = data.return.amount;
+        if (isAir) {
+            returnData.store = data.return.another_shop;
         }
-
-        const data = await response.json();
-        if (data.success) {
-            const returnData = {
-            };
-            returnData.count = data.return.amount;
-            if (isAir) {
-                returnData.store = data.return.another_shop;
-            }
-            returnData.comment = data.return.comment;
-            returnData.isCompleat = data.return.is_compleat;
-            returnData.price = data.return.price;
-            returnData.date = formatDateToSend(data.return.return_date);
-            returnData.sellDate = formatDateToSend(data.return.sell_date);
-            returnData.seller = data.return.to_seller;
-            returnData.detailNumber = data.return.vin;
-            return (returnData); // Устанавливаем данные
-        } else {
-            return ({}); // Если ответ неудачный, возвращаем пустой массив
-        }
-    } catch (error) {
-        console.error("Ошибка при получении данных:", error);
-        return ({}); // Обрабатываем ошибку, возвращая пустой массив
-    } finally {
-        setLoading(false); // Всегда отключаем загрузку после выполнения
+        returnData.comment = data.return.comment;
+        returnData.isCompleat = data.return.is_compleat;
+        returnData.price = data.return.price;
+        returnData.date = formatDateToSend(data.return.return_date);
+        returnData.sellDate = formatDateToSend(data.return.sell_date);
+        returnData.seller = data.return.to_seller;
+        returnData.detailNumber = data.return.vin;
+        return (returnData);
     }
-    return ({});
-};
 
-export const fetchPurchasesById = async (itemId, setLoading) => {
-    setLoading(true); // Устанавливаем загрузку в true перед запросом
-    try {
-        const response = await fetch(`${API_URL}/history/purchase/${itemId}`, {
-            method: 'GET', // Метод запроса,
-            headers: {
-                'Content-Type': 'application/json',
-            },
-
-        });
-
-        // Проверяем, успешен ли ответ
-        if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
-        }
-
-        const data = await response.json();
-        if (data.success) {
-            const purchase = {
-                count: data.purchase.amount,
-                date: formatDateToDisplay(data.purchase.date),
-                detailName: data.purchase.detail_name,
-                price: data.purchase.price,
-                detailNumber: data.purchase.vin,
-                whoAdded: data.purchase.who_added,
-
-            };
-
-            return (purchase); // Устанавливаем данные
-        } else {
-            return ({}); // Если ответ неудачный, возвращаем пустой массив
-        }
-    } catch (error) {
-        console.error("Ошибка при получении данных:", error);
-        return ({}); // Обрабатываем ошибку, возвращая пустой массив
-    } finally {
-        setLoading(false); // Всегда отключаем загрузку после выполнения
-    }
-    return ({});
+    const url = `${API_URL}/returns/${itemId}?type=${type}`;
+    let result = await getData(url, parseData);
+    return result;
 };
 
 
-export const fetchSellById = async (itemId, setLoading) => {
-    setLoading(true); // Устанавливаем загрузку в true перед запросом
-    try {
-        const response = await fetch(`${API_URL}/history/sell/${itemId}`, {
-            method: 'GET', // Метод запроса,
-            headers: {
-                'Content-Type': 'application/json',
-            },
+export const fetchPurchasesById = async (itemId) => {
 
-        });
-
-        // Проверяем, успешен ли ответ
-        if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
-        }
-
-        const data = await response.json();
-        if (data.success) {
-            const sell = {
-                count: data.sell.amount,
-                date: formatDateToDisplay(data.sell.date),
-                name: data.sell.name,
-                price: data.sell.price,
-                detailNumber: data.sell.vin,
-                whoAdded: data.sell.who_added,
-            };
-
-            return (sell); // Устанавливаем данные
-        } else {
-            return ({}); // Если ответ неудачный, возвращаем пустой массив
-        }
-    } catch (error) {
-        console.error("Ошибка при получении данных:", error);
-        return ({}); // Обрабатываем ошибку, возвращая пустой массив
-    } finally {
-        setLoading(false); // Всегда отключаем загрузку после выполнения
+    const parseData = (data) => {
+        return {
+            count: data.purchase.amount,
+            date: formatDateToDisplay(data.purchase.date),
+            detailName: data.purchase.detail_name,
+            price: data.purchase.price,
+            detailNumber: data.purchase.vin,
+            whoAdded: data.purchase.who_added,
+        };
     }
-    return ({});
+    const url = `${API_URL}/history/purchase/${itemId}`;
+    let result = await getData(url, parseData);
+    return result;
+};
+
+export const fetchSellById = async (itemId) => {
+
+    const parseData = (data) => {
+        return {
+            count: data.sell.amount,
+            date: formatDateToDisplay(data.sell.date),
+            name: data.sell.name,
+            price: data.sell.price,
+            detailNumber: data.sell.vin,
+            whoAdded: data.sell.who_added,
+        };
+    }
+    const url = `${API_URL}/history/sell/${itemId}`;
+    let result = await getData(url, parseData);
+    return result;
 };
 
 
-// export const fetchReturnsAll = async (setData, setLoading) => {
-//     setLoading(true); // Устанавливаем загрузку в true перед запросом
+export const fetchPurchases = async (filters, setData) => {
 
-//     try {
-//         const response = await fetch(`${API_URL}/returns`, {
-//             method: 'GET', // Метод запроса,
-//             headers: {
-//                 'Content-Type': 'application/json',
-//             },
+    const parseData = (data) => {
+        return data.records.map(sell => ({
+            count: sell.amount || 0,
+            date: formatDateToDisplay(sell.date),
+            id: sell.id,
+            price: sell.price,
+            type: sell.type,
+            detailNumber: sell.vin,
 
-//         });
+        }));
+    }
 
-//         // Проверяем, успешен ли ответ
-//         if (!response.ok) {
-//             throw new Error(`HTTP error! status: ${response.status}`);
-//         }
+    const url = `${API_URL}/history?type=postupleniya&like=${filters.vin || ""}&date_from=${filters.date_from}&date_before=${filters.date_before}`;
+    let result = await getData(url, parseData);
+    setData(result);
+}
 
-//         const data = await response.json();
-//         if (data.success && Array.isArray(data.sorted_return_list)) {
-//             const returnData = data.sorted_return_list.map(returnData => ({
-//                 id: returnData.id,
-//                 returnDate: formatDateToDisplay(returnData.return_date),
-//                 isAir: returnData.type == "airreturn",
-//                 detailNumber: returnData.vin,
-//             }));
-//             setData(returnData); // Устанавливаем данные
-//         } else {
-//             setData([]); // Если ответ неудачный, возвращаем пустой массив
-//         }
-//     } catch (error) {
-//         console.error("Ошибка при получении данных:", error);
-//         setData([]); // Обрабатываем ошибку, возвращая пустой массив
-//     } finally {
-//         setLoading(false); // Всегда отключаем загрузку после выполнения
-//     }
-// };
 
-export const fetchReturnsAll = async (vin, setData) => {
+export const fetchSells = async (filters, setData) => {
+    const parseData = (data) => {
+        return data.records.map(sell => ({
+            count: sell.amount || 0,
+            date: formatDateToDisplay(sell.date),
+            id: sell.id,
+            price: sell.price,
+            type: sell.type,
+            detailNumber: sell.vin,
+
+        }));
+    };
+
+    const url = `${API_URL}/history?type=vidyacha&like=${filters.vin || ""}&date_from=${filters.date_from}&date_before=${filters.date_before}`;
+    let result = await getData(url, parseData);
+    setData(result);
+
+};
+
+export const fetchReturns = async (filters, setData) => {
+    const parseData = (data) => {
+        if (data.success && Array.isArray(data.records)) {
+            return data.records.map(returnData => ({
+                count: returnData.amount || 0,
+                returnDate: formatDateToDisplay(returnData.date),
+                id: returnData.id,
+                price: returnData.price,
+                isAir: returnData.type === "airreturn",
+                detailNumber: returnData.vin,
+
+            }));
+        }
+    }
+
+    const url = `${API_URL}/history?type=vozvraty&like=${filters.vin || ""}&date_from=${filters.date_from}&date_before=${filters.date_before}`;
+    let result = await getData(url, parseData);
+    setData(result);
+};
+
+export const fetchReturnsAll = async (setData) => {
     const parseData = (data) => {
         if (data.success && Array.isArray(data.sorted_return_list)) {
             return data.sorted_return_list.map(returnData => ({
@@ -407,7 +275,8 @@ export const fetchReturnsAll = async (vin, setData) => {
     };
 
     const url = `${API_URL}/returns`;
-    await getData(url, setData, parseData);
+    let result = await getData(url, parseData);
+    setData(result);
 };
 
 
@@ -424,64 +293,10 @@ export const fetchDetailsNew = async (vin, setData) => {
     };
 
     const url = `${API_URL}/search?vin=${vin || ""}`;
-    await getData(url, setData, parseDetailsData);
+    const result = await getData(url, parseDetailsData);
+    setData(result);
 };
 
-
-export const postData = async (dataObject, url) => {
-    //let response;
-    try {
-        const response = await fetch(url, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(dataObject),
-        });
-
-        if (!response.ok) {
-            throw new Error(`HTTP ошибка! Статус: ${response.status}, text: ${response.text()}`);
-        }
-
-        const data = await response.json();
-        return data;
-
-    } catch (error) {
-        console.error("Ошибка при отправке данных:", error);
-        throw error;
-    }
-
-};
-
-export const getData = async (url, setData, parseData) => {
-    try {
-        const response = await fetch(url, {
-            method: 'GET',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-        });
-
-        // Check if the response is successful
-        if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
-        }
-
-        const data = await response.json();
-
-        // Parse the data using the provided parser function
-        const parsedData = parseData(data);
-
-        if (parsedData) {
-            setData(parsedData);
-        } else {
-            setData([]); // Set an empty array if parsing fails
-        }
-    } catch (error) {
-        console.error("Ошибка при получении данных:", error);
-        setData([]); // Set an empty array on error
-    }
-};
 
 
 

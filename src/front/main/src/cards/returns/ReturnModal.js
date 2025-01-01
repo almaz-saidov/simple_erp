@@ -45,11 +45,13 @@ const ReturnModal = ({ isOpen, onClose, returnData, isCreating, isAir, isHistory
         setLoading(true);
         try {
             let tmpReturn = {}
+
             if (isHistory) {
-                tmpReturn = returnData.id !== undefined ? await fetchReturnHistoryById(returnData.id, isAir, setLoading) : {};
+                tmpReturn = returnData.id !== undefined ? await fetchReturnHistoryById(returnData.id, isAir) : {};
             } else {
-                tmpReturn = returnData.id !== undefined ? await fetchReturnById(returnData.id, isAir, setLoading) : {};
+                tmpReturn = returnData.id !== undefined ? await fetchReturnById(returnData.id, isAir) : {};
             }
+
             tmpReturn.id = returnData.id;
 
             setDisplayedReturn(tmpReturn);

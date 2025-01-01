@@ -138,6 +138,7 @@ export const fetchReturnHistoryById = async (itemId, isAir) => {
 
     const url = `${API_URL}/history/returns/${itemId}?type=${type}`;
     let result = await getData(url, parseData);
+    if (result == null) { return {}; }
     return result;
 };
 
@@ -163,6 +164,7 @@ export const fetchReturnById = async (itemId, isAir) => {
 
     const url = `${API_URL}/returns/${itemId}?type=${type}`;
     let result = await getData(url, parseData);
+    if (result == null) { return {}; }
     return result;
 };
 
@@ -181,6 +183,7 @@ export const fetchPurchasesById = async (itemId) => {
     }
     const url = `${API_URL}/history/purchase/${itemId}`;
     let result = await getData(url, parseData);
+    if (result == null) { return {}; }
     return result;
 };
 
@@ -198,6 +201,7 @@ export const fetchSellById = async (itemId) => {
     }
     const url = `${API_URL}/history/sell/${itemId}`;
     let result = await getData(url, parseData);
+    if (result == null) { return {}; }
     return result;
 };
 
@@ -218,7 +222,10 @@ export const fetchPurchases = async (filters, setData) => {
 
     const url = `${API_URL}/history?type=postupleniya&like=${filters.vin || ""}&date_from=${filters.date_from}&date_before=${filters.date_before}`;
     let result = await getData(url, parseData);
-    setData(result);
+    if (result == null) { setData([]); }
+    else {
+        setData(result);
+    }
 }
 
 
@@ -237,7 +244,10 @@ export const fetchSells = async (filters, setData) => {
 
     const url = `${API_URL}/history?type=vidyacha&like=${filters.vin || ""}&date_from=${filters.date_from}&date_before=${filters.date_before}`;
     let result = await getData(url, parseData);
-    setData(result);
+    if (result == null) { setData([]); }
+    else {
+        setData(result);
+    }
 
 };
 
@@ -258,7 +268,10 @@ export const fetchReturns = async (filters, setData) => {
 
     const url = `${API_URL}/history?type=vozvraty&like=${filters.vin || ""}&date_from=${filters.date_from}&date_before=${filters.date_before}`;
     let result = await getData(url, parseData);
-    setData(result);
+    if (result == null) { setData([]); }
+    else {
+        setData(result);
+    }
 };
 
 export const fetchReturnsAll = async (setData) => {
@@ -276,7 +289,10 @@ export const fetchReturnsAll = async (setData) => {
 
     const url = `${API_URL}/returns`;
     let result = await getData(url, parseData);
-    setData(result);
+    if (result == null) { setData([]); }
+    else {
+        setData(result);
+    }
 };
 
 
@@ -294,9 +310,8 @@ export const fetchDetailsNew = async (vin, setData) => {
 
     const url = `${API_URL}/search?vin=${vin || ""}`;
     const result = await getData(url, parseDetailsData);
-    setData(result);
+    if (result == null) { setData([]); }
+    else {
+        setData(result);
+    }
 };
-
-
-
-

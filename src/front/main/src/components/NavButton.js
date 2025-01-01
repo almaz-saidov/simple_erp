@@ -12,7 +12,7 @@ function NavButton(props) {
     <div className="NavButtonWrapper">
       <button className="NavButton" onClick={onClick}>
         <Icon className={id === getCurrentCardId() ? "NavCurrentButtonIcon" : "NavButtonIcon"} />
-        <span>
+        <span className={id === getCurrentCardId() ? "NavCurrentLabel" : "NavDefaultLabel"}>
           {label}
         </span>
       </button>

@@ -16,6 +16,7 @@ def search_detail():
     vin = request.args.get("vin", "")
     page = request.args.get("page", 1, type=int)
     per_page = request.args.get("per_page", 25, type=int)
+    market_id = int(request.args.get('market_id'))
 
     if not vin:
         vin = ''
@@ -35,7 +36,7 @@ def search_detail():
     offset = (page - 1) * per_page
 
     # Получаем детали по VIN с учетом пагинации
-    details = SyncORM.get_detail_by_vin(vin, offset=offset, limit=per_page)
+    details = SyncORM.get_detail_by_vin(vin, market_id, offset=offset, limit=per_page)
 
     if not details:
         return Response(

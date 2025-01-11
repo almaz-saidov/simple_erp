@@ -1,7 +1,7 @@
 from flask import jsonify, make_response, request
 
-from application.utils import initial_init_data_checker
 from application import app
+from application.utils import initial_init_data_checker
 
 
 @app.route('/api/auth', methods=['GET', 'POST'])

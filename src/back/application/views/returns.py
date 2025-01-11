@@ -12,8 +12,9 @@ from application.utils.init_data import TelegramInitData
 @app.get('/api/returns')
 @init_data_checker
 def returns():
-    air_ret = SyncORM.get_active_airret_items()
-    default_ret = SyncORM.get_active_ret_items()
+    market_id = int(request.args.get('market_id'))
+    air_ret = SyncORM.get_active_airret_items(market_id)
+    default_ret = SyncORM.get_active_ret_items(market_id)
 
     return_list = []
     for ret in air_ret:
@@ -97,6 +98,7 @@ def create_return():
     telegram_data = TelegramInitData(request.cookies.get('initData'))
     user_data = telegram_data.to_dict().get('user')
     who_added = user_data.get('id')
+    market_id = int(request.args.get('market_id'))
 
     # Проверяем корректность VIN
     if not SyncORM.is_valid_vin(vin):
@@ -108,7 +110,7 @@ def create_return():
 
     try:
         # Создаем возврат через SyncORM
-        purchase = SyncORM.create_return(vin, amount, sell_date, return_date, to_seller, price, comment, is_compleat, who_added)
+        purchase = SyncORM.create_return(vin, amount, sell_date, return_date, to_seller, price, comment, is_compleat, who_added, market_id)
         
         return Response(
             json.dumps({
@@ -133,10 +135,8 @@ def create_air_return():
     """
     Ручка для создания возврата через JSON.
     """
-
     # Получаем данные из JSON-запроса
     data = request.get_json()
-
 
     # # Проверяем наличие всех обязательных параметров
     # required_fields = ['vin', 'amount', 'sell_date', 'return_date', 'to_seller', 'price', 'another_shop', 'comment', 'is_compleat']
@@ -188,6 +188,7 @@ def create_air_return():
     telegram_data = TelegramInitData(request.cookies.get('initData'))
     user_data = telegram_data.to_dict().get('user')
     who_added = user_data.get('id')
+    market_id = int(request.args.get('market_id'))
 
     # Проверяем корректность VIN
     if not SyncORM.is_valid_vin(vin):
@@ -199,7 +200,7 @@ def create_air_return():
 
     try:
         # Создаем возврат через SyncORM
-        purchase = SyncORM.create_air_return(vin, amount, sell_date, return_date, to_seller, price, another_shop, comment, is_compleat, who_added)
+        purchase = SyncORM.create_air_return(vin, amount, sell_date, return_date, to_seller, price, another_shop, comment, is_compleat, who_added, market_id)
         
         return Response(
             json.dumps({

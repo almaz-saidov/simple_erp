@@ -658,7 +658,7 @@ class SyncORM:
                 address=address
             )
             session.add(new_market)
-            session.flush()
+            session.commit()
             
             new_mapper = MarketUserMapper(
                 user_id=user_id,

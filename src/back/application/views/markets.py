@@ -22,11 +22,12 @@ def markets():
 def create_market():
     if not request.is_json:
         return jsonify({'error': 'Request body must be JSON'}), 400
-    
+    telegram_data = TelegramInitData(request.cookies.get('initData'))
+    user_data = telegram_data.to_dict().get('user')
     try:
         name = request.json.get('name')
         address = request.json.get('address')
-        SyncORM.cerate_market(name, address)
+        SyncORM.cerate_market(user_data.get('id'), name, address)
     except Exception as e:
         return jsonify({'error': f'{e}'}), 400
 

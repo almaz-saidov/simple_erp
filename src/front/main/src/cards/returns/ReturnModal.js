@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 
 import Input from '../../components/Input';
 import Checkbox from '../../components/CheckBox';
@@ -10,6 +10,9 @@ import TextField from '../../components/TextField';
 import { fetchReturnById, fetchReturnHistoryById } from '../../api/Api';
 import toast from 'react-hot-toast';
 import { isFirstEarlier } from '../../common/common';
+import { MarketContext } from '../../markets/MarketContext'
+
+
 import '../../styles/Cards/Returns.css';
 import '../../styles/LoaderWrapper.css'
 
@@ -26,6 +29,8 @@ const ReturnModal = ({ isOpen, onClose, returnData, isCreating, isAir, isHistory
     const [store, setStore] = useState('');
     const [isBadInput, setIsBadInput] = useState(false);
     const [whoAdded, setWhoAdded] = useState('');
+    const { value, setValue } = useContext(MarketContext);
+
 
     const setDisplayedReturn = (returnObj) => {
 
@@ -47,9 +52,9 @@ const ReturnModal = ({ isOpen, onClose, returnData, isCreating, isAir, isHistory
             let tmpReturn = {}
 
             if (isHistory) {
-                tmpReturn = returnData.id !== undefined ? await fetchReturnHistoryById(returnData.id, isAir) : {};
+                tmpReturn = returnData.id !== undefined ? await fetchReturnHistoryById(returnData.id, isAir, value.id) : {};
             } else {
-                tmpReturn = returnData.id !== undefined ? await fetchReturnById(returnData.id, isAir) : {};
+                tmpReturn = returnData.id !== undefined ? await fetchReturnById(returnData.id, isAir, value.id) : {};
             }
 
             tmpReturn.id = returnData.id;

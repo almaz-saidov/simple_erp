@@ -2,10 +2,12 @@ import CardHeader from "../../components/CardHeader";
 import Input from '../../components/Input';
 import IssuanceButton from '../../components/SubmitButton';
 import toast from 'react-hot-toast';
-import { useState } from 'react';
+import { useState, useContext } from 'react';
 import '../../styles/Card.css';
 import '../../styles/Cards/Issuance.css';
 import { createPurchase } from '../../api/Api'
+import { MarketContext } from '../../markets/MarketContext'
+
 
 function Purchases() {
     const [isNeedText, setIsNeedText] = useState(false);
@@ -14,6 +16,8 @@ function Purchases() {
     const [date, setDate] = useState('');
     const [price, setPrice] = useState('');
     const [seller, setSeller] = useState('');
+    const { value, setValue } = useContext(MarketContext);
+
 
     const getPurchase = () => {
         return {
@@ -38,7 +42,7 @@ function Purchases() {
     }
 
     const addPurchaseWithToast = () => {
-        toast.promise(createPurchase(getPurchase()), {
+        toast.promise(createPurchase(getPurchase(), value.id), {
             loading: 'Создание',
             success: () => {
                 resetPurchaseInput();

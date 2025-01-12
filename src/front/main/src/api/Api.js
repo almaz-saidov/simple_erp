@@ -88,35 +88,35 @@ export const getData = async (url, parseData) => {
 
 
 
-export const updateReturnById = async (updatedReturn, isAir) => {
+export const updateReturnById = async (updatedReturn, isAir, market_id) => {
     const type = isAir ? "airreturn" : "return";
     updatedReturn.sell_date = formatDateToSend(updatedReturn.sell_date);
     updatedReturn.return_date = formatDateToSend(updatedReturn.return_date);
-    await postData(updatedReturn, `${API_URL}/returns/${updatedReturn.id}?type=${type}`);
+    await postData(updatedReturn, `${API_URL}/returns/${updatedReturn.id}?type=${type}&market_id=${market_id}`);
 
 };
 
-export const updateReturnHistoryById = async (updatedReturn, isAir) => {
+export const updateReturnHistoryById = async (updatedReturn, isAir, market_id) => {
     const type = isAir ? "airreturn" : "return";
     updatedReturn.sell_date = formatDateToSend(updatedReturn.sell_date);
     updatedReturn.return_date = formatDateToSend(updatedReturn.return_date);
-    await postData(updatedReturn, `${API_URL}/history/returns/${updatedReturn.id}?type=${type}`);
+    await postData(updatedReturn, `${API_URL}/history/returns/${updatedReturn.id}?type=${type}&market_id=${market_id}`);
 }
 
-export const createReturn = async (newReturn, isAir) => {
-    const url = `${API_URL}/${(isAir ? "returns/create_air_return" : "returns/create_return")}`;
+export const createReturn = async (newReturn, isAir, market_id) => {
+    const url = `${API_URL}/${(isAir ? "returns/create_air_return" : "returns/create_return")}?market_id=${market_id}`;
     await postData(newReturn, url);
 }
 
-export const createPurchase = async (newPurchase) => {
-    await postData(newPurchase, `${API_URL}/purchases`);
+export const createPurchase = async (newPurchase, market_id) => {
+    await postData(newPurchase, `${API_URL}/purchases?market_id=${market_id}`);
 }
 
-export const createSell = async (newSell) => {
-    await postData(newSell, `${API_URL}/sales`);
+export const createSell = async (newSell, market_id) => {
+    await postData(newSell, `${API_URL}/sales?market_id=${market_id}`);
 }
 
-export const fetchReturnHistoryById = async (itemId, isAir) => {
+export const fetchReturnHistoryById = async (itemId, isAir, market_id) => {
     const type = isAir ? "airreturn" : "return";
     const parseData = (data) => {
         const returnData = {
@@ -136,14 +136,14 @@ export const fetchReturnHistoryById = async (itemId, isAir) => {
         return (returnData);
     }
 
-    const url = `${API_URL}/history/returns/${itemId}?type=${type}`;
+    const url = `${API_URL}/history/returns/${itemId}?type=${type}&market_id=${market_id}`;
     let result = await getData(url, parseData);
     if (result == null) { return {}; }
     return result;
 };
 
 
-export const fetchReturnById = async (itemId, isAir) => {
+export const fetchReturnById = async (itemId, isAir, market_id) => {
     const type = isAir ? "airreturn" : "return";
     const parseData = (data) => {
         const returnData = {
@@ -162,14 +162,14 @@ export const fetchReturnById = async (itemId, isAir) => {
         return (returnData);
     }
 
-    const url = `${API_URL}/returns/${itemId}?type=${type}`;
+    const url = `${API_URL}/returns/${itemId}?type=${type}&market_id=${market_id}`;
     let result = await getData(url, parseData);
     if (result == null) { return {}; }
     return result;
 };
 
 
-export const fetchPurchasesById = async (itemId) => {
+export const fetchPurchasesById = async (itemId, market_id) => {
 
     const parseData = (data) => {
         return {
@@ -181,13 +181,13 @@ export const fetchPurchasesById = async (itemId) => {
             whoAdded: data.purchase.who_added,
         };
     }
-    const url = `${API_URL}/history/purchase/${itemId}`;
+    const url = `${API_URL}/history/purchase/${itemId}?market_id=${market_id}`;
     let result = await getData(url, parseData);
     if (result == null) { return {}; }
     return result;
 };
 
-export const fetchSellById = async (itemId) => {
+export const fetchSellById = async (itemId, market_id) => {
 
     const parseData = (data) => {
         return {
@@ -199,14 +199,14 @@ export const fetchSellById = async (itemId) => {
             whoAdded: data.sell.who_added,
         };
     }
-    const url = `${API_URL}/history/sell/${itemId}`;
+    const url = `${API_URL}/history/sell/${itemId}?market_id=${market_id}`;
     let result = await getData(url, parseData);
     if (result == null) { return {}; }
     return result;
 };
 
 
-export const fetchPurchases = async (filters, setData) => {
+export const fetchPurchases = async (filters, setData, market_id) => {
 
     const parseData = (data) => {
         return data.records.map(sell => ({
@@ -220,7 +220,7 @@ export const fetchPurchases = async (filters, setData) => {
         }));
     }
 
-    const url = `${API_URL}/history?type=postupleniya&like=${filters.vin || ""}&date_from=${filters.date_from}&date_before=${filters.date_before}`;
+    const url = `${API_URL}/history?type=postupleniya&like=${filters.vin || ""}&date_from=${filters.date_from}&date_before=${filters.date_before}&market_id=${market_id}`;
     let result = await getData(url, parseData);
     if (result == null) { setData([]); }
     else {
@@ -229,7 +229,7 @@ export const fetchPurchases = async (filters, setData) => {
 }
 
 
-export const fetchSells = async (filters, setData) => {
+export const fetchSells = async (filters, setData, market_id) => {
     const parseData = (data) => {
         return data.records.map(sell => ({
             count: sell.amount || 0,
@@ -242,7 +242,7 @@ export const fetchSells = async (filters, setData) => {
         }));
     };
 
-    const url = `${API_URL}/history?type=vidyacha&like=${filters.vin || ""}&date_from=${filters.date_from}&date_before=${filters.date_before}`;
+    const url = `${API_URL}/history?type=vidyacha&like=${filters.vin || ""}&date_from=${filters.date_from}&date_before=${filters.date_before}&market_id=${market_id}`;
     let result = await getData(url, parseData);
     if (result == null) { setData([]); }
     else {
@@ -251,7 +251,7 @@ export const fetchSells = async (filters, setData) => {
 
 };
 
-export const fetchReturns = async (filters, setData) => {
+export const fetchReturns = async (filters, setData, market_id) => {
     const parseData = (data) => {
         if (data.success && Array.isArray(data.records)) {
             return data.records.map(returnData => ({
@@ -266,7 +266,7 @@ export const fetchReturns = async (filters, setData) => {
         }
     }
 
-    const url = `${API_URL}/history?type=vozvraty&like=${filters.vin || ""}&date_from=${filters.date_from}&date_before=${filters.date_before}`;
+    const url = `${API_URL}/history?type=vozvraty&like=${filters.vin || ""}&date_from=${filters.date_from}&date_before=${filters.date_before}&market_id=${market_id}`;
     let result = await getData(url, parseData);
     if (result == null) { setData([]); }
     else {
@@ -274,7 +274,7 @@ export const fetchReturns = async (filters, setData) => {
     }
 };
 
-export const fetchReturnsAll = async (setData) => {
+export const fetchReturnsAll = async (setData, market_id) => {
     const parseData = (data) => {
         if (data.success && Array.isArray(data.sorted_return_list)) {
             return data.sorted_return_list.map(returnData => ({
@@ -287,7 +287,7 @@ export const fetchReturnsAll = async (setData) => {
         return null;
     };
 
-    const url = `${API_URL}/returns`;
+    const url = `${API_URL}/returns?market_id=${market_id}`;
     let result = await getData(url, parseData);
     if (result == null) { setData([]); }
     else {
@@ -296,7 +296,7 @@ export const fetchReturnsAll = async (setData) => {
 };
 
 
-export const fetchDetailsNew = async (vin, setData) => {
+export const fetchDetailsNew = async (vin, setData, market_id) => {
     const parseDetailsData = (data) => {
         if (data.success && Array.isArray(data.details)) {
             return data.details.map(detail => ({
@@ -308,10 +308,13 @@ export const fetchDetailsNew = async (vin, setData) => {
         return null;
     };
 
-    const url = `${API_URL}/search?vin=${vin || ""}`;
+    const url = `${API_URL}/search?vin=${vin || ""}&market_id=${market_id}`;
     const result = await getData(url, parseDetailsData);
     if (result == null) { setData([]); }
     else {
         setData(result);
     }
 };
+
+
+

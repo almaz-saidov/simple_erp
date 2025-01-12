@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import CardHeader from '../../components/CardHeader';
 import Return from './Return';
 import { SyncLoader } from 'react-spinners'
@@ -6,6 +6,7 @@ import ReturnModal from './ReturnModal';
 import { fetchReturns, fetchReturnsAll } from '../../api/Api'
 import { createReturn, updateReturnById } from '../../api/Api';
 import toast, { Toaster } from 'react-hot-toast';
+import { MarketContext } from '../../markets/MarketContext'
 
 import '../../styles/Card.css';
 import '../../styles/Card.css'
@@ -30,6 +31,7 @@ function Returns() {
         comment: "",
         is_compleat: "",
     });
+    const { value, setValue } = useContext(MarketContext);
 
 
     const toggleModal = () => {
@@ -38,7 +40,7 @@ function Returns() {
 
     const loadReturns = () => {
         setLoading(true);
-        fetchReturnsAll(setReturns);
+        fetchReturnsAll(setReturns, value.id);
         setLoading(false);
     }
 
@@ -52,9 +54,9 @@ function Returns() {
         const successMessage = isNew ? 'Возврат создан' : 'Возврат изменён';
         try {
             if (isNew) {
-                await createReturn(editedReturn, isAir);
+                await createReturn(editedReturn, isAir, value.id);
             } else {
-                await updateReturnById(editedReturn, isAir);
+                await updateReturnById(editedReturn, isAir, value.id);
             }
 
             // Успешное завершение

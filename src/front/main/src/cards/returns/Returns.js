@@ -1,11 +1,12 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import CardHeader from '../../components/CardHeader';
 import Return from './Return';
 import { SyncLoader } from 'react-spinners'
 import ReturnModal from './ReturnModal';
 import { fetchReturns, fetchReturnsAll } from '../../api/Api'
-import { postData, fetchReturnById, updateReturnById } from '../../api/Api';
+import { createReturn, updateReturnById } from '../../api/Api';
 import toast, { Toaster } from 'react-hot-toast';
+import { MarketContext } from '../../markets/MarketContext'
 
 import '../../styles/Card.css';
 import '../../styles/Card.css'
@@ -30,14 +31,17 @@ function Returns() {
         comment: "",
         is_compleat: "",
     });
+    const { value, setValue } = useContext(MarketContext);
 
 
     const toggleModal = () => {
-        setIsModalOpen(!isModalOpen); // Переключаем состояние модального окна
+        setIsModalOpen(!isModalOpen);
     };
 
     const loadReturns = () => {
-        fetchReturnsAll(setReturns, setLoading);
+        setLoading(true);
+        fetchReturnsAll(setReturns, value.id);
+        setLoading(false);
     }
 
     useEffect(() => {
@@ -50,12 +54,9 @@ function Returns() {
         const successMessage = isNew ? 'Возврат создан' : 'Возврат изменён';
         try {
             if (isNew) {
-                // Создание нового возврата
-                const endpoint = isAir ? "returns/create_air_return" : "returns/create_return";
-                await postData(editedReturn, endpoint);
+                await createReturn(editedReturn, isAir, value.id);
             } else {
-                // Обновление существующего возврата
-                await updateReturnById(editedReturn.id, editedReturn, isAir, setLoading);
+                await updateReturnById(editedReturn, isAir, value.id);
             }
 
             // Успешное завершение
@@ -139,13 +140,6 @@ function Returns() {
                 loadReturns={loadReturns}
                 handleApiResponse={handleApiResponse}
             />
-            {/* <Toaster toastOptions={{
-                duration: 1000,
-                style: {
-                    backgroundColor: '#131313',
-                    color: '#DBDBDB',
-                }
-            }} /> */}
         </>
     );
 }

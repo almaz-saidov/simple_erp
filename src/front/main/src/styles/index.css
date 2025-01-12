@@ -11,6 +11,9 @@
     --color-selected-border: #DBDBDB;
     --color-control-elements: #017AFE;
     --color-cool-background: #27272780;
+    --gradient-dark-border: linear-gradient(124.51deg, #212121 0%, #2F2F2F 47%, #262626 100%);
+
+
 }
 
 @import url('https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap');

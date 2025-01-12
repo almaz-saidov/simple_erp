@@ -5,7 +5,7 @@ from typing import Optional
 from sqlalchemy import and_, literal, select
 
 from application.database import Base, engine, session_factory # движок, сессии, базовый класс
-from application.models import Detail, Purchase, Sell, Return, User, AirReturn
+from application.models import Detail, Purchase, Sell, Return, User, AirReturn, MarketUserMapper, Market
 
 
 def reformat_vin(vin: str):
@@ -27,7 +27,7 @@ def reformat_vin(vin: str):
     return ''.join(replaces.get(char, char) for char in vin)
 
 
-def get_records_return_air_return(vin_filter, date_from, date_before):
+def get_records_return_air_return(vin_filter, date_from, date_before, market_id):
     with session_factory() as session:
         return_query = session.query(
             Return.id,
@@ -41,7 +41,7 @@ def get_records_return_air_return(vin_filter, date_from, date_before):
             Return.is_end,
             Return.who_added,
             literal('return').label('type')  # Указываем тип записи
-        ).where(Return.is_end == True)
+        ).where(Return.is_end == True, Return.market_id == market_id)
 
         air_return_query = session.query(
             AirReturn.id,
@@ -55,7 +55,7 @@ def get_records_return_air_return(vin_filter, date_from, date_before):
             AirReturn.is_end,
             AirReturn.who_added,
             literal('airreturn').label('type')  # Указываем тип записи
-        ).where(AirReturn.is_end == True)
+        ).where(AirReturn.is_end == True, AirReturn.market_id == market_id)
 
         # Применяем фильтры, если они заданы
         if vin_filter:
@@ -82,7 +82,8 @@ def get_records_return_air_return(vin_filter, date_from, date_before):
                 "amount": record.amount,
                 "price": record.price,
                 "type":  record.type,
-                "who_added": record.who_added
+                "who_added": record.who_added,
+                "market_id": record.market_id,
             }
             for record in records
         ]
@@ -90,7 +91,7 @@ def get_records_return_air_return(vin_filter, date_from, date_before):
         return result
 
 
-def get_records_purchases(vin_filter, date_from, date_before):
+def get_records_purchases(vin_filter, date_from, date_before, market_id):
     with session_factory() as session:
         query = session.query(
             Purchase.id,
@@ -100,7 +101,7 @@ def get_records_purchases(vin_filter, date_from, date_before):
             Purchase.price,
             Purchase.who_added,
             literal('postupleniya').label('type')  # Указываем тип записи
-        )
+        ).where(Purchase.market_id == market_id)
         filters = []
         if vin_filter:
             filters.append(Purchase.vin.ilike(f"%{vin_filter}%"))
@@ -119,6 +120,7 @@ def get_records_purchases(vin_filter, date_from, date_before):
                 "price": record.price,
                 "type":  record.type,
                 "who_added": record.who_added,
+                "market_id": record.market_id,
             }
             for record in records
         ]
@@ -126,7 +128,7 @@ def get_records_purchases(vin_filter, date_from, date_before):
         return result
 
 
-def get_records_sales(vin_filter, date_from, date_before):
+def get_records_sales(vin_filter, date_from, date_before, market_id):
     with session_factory() as session:
         query = session.query(
             Sell.id,
@@ -136,7 +138,7 @@ def get_records_sales(vin_filter, date_from, date_before):
             Sell.price,
             Sell.who_added,
             literal('vidyacha').label('type')  # Указываем тип записи
-        )
+        ).where(Sell.market_id == market_id)
         filters = []
         if vin_filter:
             filters.append(Sell.vin.ilike(f"%{vin_filter}%"))
@@ -154,6 +156,7 @@ def get_records_sales(vin_filter, date_from, date_before):
                 "price": record.price,
                 "type":  record.type,
                 "who_added": record.who_added,
+                "market_id": record.market_id,
             }
             for record in records
         ]
@@ -195,16 +198,16 @@ class SyncORM:
     # ----------------------Detail Methods -------------------
 
     @staticmethod
-    def get_detail_by_vin(vin: str, offset: int = 0, limit: int = 25):
+    def get_detail_by_vin(vin: str, market_id: int, offset: int = 0, limit: int = 25):
         """Получить детали по VIN"""
         with session_factory() as session:
             vin = reformat_vin(vin)
             query = session.query(Detail)
 
             if vin == '':
-                details = query.offset(offset).limit(limit).all()
+                details = query.offset(offset).limit(limit).where(Detail.market_id == market_id)
             else:
-                details = query.filter(Detail.vin.ilike(f'%{vin}%')).offset(offset).limit(limit).all()
+                details = query.filter(Detail.vin.ilike(f'%{vin}%')).offset(offset).limit(limit).where(Detail.market_id == market_id)
             
             # Преобразуем ORM-объекты в словари
             serialized_details = [
@@ -257,7 +260,7 @@ class SyncORM:
     # ----------------------Purchase Methods -------------------
 
     @staticmethod
-    def add_purchase(vin: str, amount: int, date: datetime, price: int, detail_name: str, who_added: int):
+    def add_purchase(vin: str, amount: int, date: datetime, price: int, detail_name: str, who_added: int, market_id: int):
         """
         Добавить приход товара на склад.
 
@@ -292,7 +295,8 @@ class SyncORM:
                     amount=amount,
                     name=detail_name,
                     add_to_shop_date=date,
-                    who_added=who_added
+                    who_added=who_added,
+                    market_id=market_id
                 )
                 session.add(purchase)
 
@@ -344,7 +348,7 @@ class SyncORM:
     # ----------------------Sell Methods -------------------
 
     @staticmethod
-    def add_sell(vin: str, amount: int, date: datetime, price: int, name: str, who_added: int):
+    def add_sell(vin: str, amount: int, date: datetime, price: int, name: str, who_added: int, market_id: int):
         """
         Выдать (продать) товар со склада.
 
@@ -376,7 +380,8 @@ class SyncORM:
                 sell_from_shop_date=date,
                 price=price,
                 seller=name,
-                who_added=who_added
+                who_added=who_added,
+                market_id=market_id
             )
             session.add(sell)
             session.commit()
@@ -392,7 +397,7 @@ class SyncORM:
     # ----------------------Returns Methods -------------------
 
     @staticmethod
-    def create_return(vin: str, amount: int, sell_date: datetime, return_date: datetime, to_seller: str, price: int, comment: str, is_compleat: bool, who_added: int):
+    def create_return(vin: str, amount: int, sell_date: datetime, return_date: datetime, to_seller: str, price: int, comment: str, is_compleat: bool, who_added: int, market_id: int):
         """
         Оформить возврат товара на склада.
         :param vin: VIN детали
@@ -424,7 +429,8 @@ class SyncORM:
                 price=price,
                 comment=comment,
                 is_end=is_compleat,
-                who_added=who_added
+                who_added=who_added,
+                market_id=market_id
             )
             session.add(returned)
             session.commit()
@@ -478,23 +484,20 @@ class SyncORM:
         
 
     @staticmethod
-    def get_active_ret_items():
+    def get_active_ret_items(market_id):
         """
         Получить все элементы из таблицы, где is_end == False.
         
         :return: Список объектов, где is_end == False.
         """
         with session_factory() as session:
-            query = select(Return).where(Return.is_end == False)
+            query = select(Return).where(Return.is_end == False, Return.market_id == market_id)
             result = session.scalars(query).all()  # scalars() для работы с объектами
             return result
 
-
-
     # ----------------------AirReturns Methods -------------------
-
     @staticmethod
-    def create_air_return(vin: str, amount: int, sell_date: datetime, return_date: datetime, to_seller: str, price: int, another_shop: str, comment: str, is_compleat: bool, who_added: int):
+    def create_air_return(vin: str, amount: int, sell_date: datetime, return_date: datetime, to_seller: str, price: int, another_shop: str, comment: str, is_compleat: bool, who_added: int, market_id: int):
         """
         Оформить возврат товара на склада.
         :param vin: VIN детали
@@ -523,7 +526,8 @@ class SyncORM:
                 another_shop=another_shop,
                 comment=comment,
                 is_end=is_compleat,
-                who_added=who_added
+                who_added=who_added,
+                market_id=market_id
             )
             session.add(air_returned)
             session.commit()
@@ -535,8 +539,6 @@ class SyncORM:
         with session_factory() as session:
             purchase = session.query(AirReturn).filter_by(id=airreturn_id).first()
             return purchase
-
-        
 
     @staticmethod
     def update_airreturn(return_id: int, vin: str, amount: int, sell_date: datetime, return_date: datetime, to_seller: str, price: int, another_shop: str, comment: str, is_compleat: bool, who_added: int):
@@ -571,31 +573,26 @@ class SyncORM:
             air_returned.comment = comment
             air_returned.is_end = is_compleat
             air_returned.who_added=who_added
-            # air_returned.who_added=session.get('user_id')
             
             # Сохраняем изменения в базе данных
             session.commit()
             return air_returned
 
     @staticmethod
-    def get_active_airret_items():
+    def get_active_airret_items(market_id):
         """
         Получить все элементы из таблицы, где is_end == False.
         
         :return: Список объектов, где is_end == False.
         """
         with session_factory() as session:
-            query = select(AirReturn).where(AirReturn.is_end == False)
+            query = select(AirReturn).where(AirReturn.is_end == False, AirReturn.market_id == market_id)
             result = session.scalars(query).all()  # scalars() для работы с объектами
             return result
-        
-
 
 # -------------------------- History -------------------------
-
-    
     @staticmethod
-    def get_records(record_type: str, vin_filter: str, date_from: str, date_before: str):
+    def get_records(record_type: str, vin_filter: str, date_from: str, date_before: str, market_id: int):
         """
         Получить записи в зависимости от типа с применением фильтров.
         """
@@ -605,19 +602,16 @@ class SyncORM:
         date_before = datetime.strptime(date_before, '%Y-%m-%d') if date_before else None
 
         if record_type == 'vozvraty':
-            result = get_records_return_air_return(vin_filter, date_from, date_before)
+            result = get_records_return_air_return(vin_filter, date_from, date_before, market_id)
         elif record_type == 'postupleniya':
-            result = get_records_purchases(vin_filter, date_from, date_before)
+            result = get_records_purchases(vin_filter, date_from, date_before, market_id)
         elif record_type == 'vidyacha':
-            result = get_records_sales(vin_filter, date_from, date_before)
+            result = get_records_sales(vin_filter, date_from, date_before, market_id)
         else:
             raise ValueError("Invalid type parameter")
 
         return result
-
-
     
-
 # ------------------------API---------------------------
     @staticmethod
     def to_dict(obj):
@@ -633,4 +627,26 @@ class SyncORM:
             column.name: getattr(obj, column.name)
             for column in obj.__table__.columns
         }
+    
+# ------------------------MARKETS---------------------------
+    @staticmethod
+    def get_all_markets(user_id):
+        '''
+        Получение всех магазинов пльзователя с user_id, к которым он имеет доступ
+        '''
+        with session_factory() as session:
+            markets = session.query(MarketUserMapper).filter(MarketUserMapper.user_id == user_id)
+            return markets
 
+    @staticmethod
+    def cerate_market(name: str, address: str = 'no address'):
+        '''
+        Создание нового магазина
+        '''
+        with session_factory() as session:
+            new_market = Market(
+                name=name,
+                address=address
+            )
+            session.add(new_market)
+            session.commit()

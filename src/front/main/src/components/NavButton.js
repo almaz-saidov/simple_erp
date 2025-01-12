@@ -6,15 +6,13 @@ function NavButton(props) {
 
   const onClick = () => {
     setCurrentCardId(id);
-    // console.log(id);
-    // (id === getCurrentCardId() ? console.log("NavCurrentButtonIcon") : console.log("NavButtonIcon"));
   }
 
   return (
     <div className="NavButtonWrapper">
       <button className="NavButton" onClick={onClick}>
         <Icon className={id === getCurrentCardId() ? "NavCurrentButtonIcon" : "NavButtonIcon"} />
-        <span>
+        <span className={id === getCurrentCardId() ? "NavCurrentLabel" : "NavDefaultLabel"}>
           {label}
         </span>
       </button>

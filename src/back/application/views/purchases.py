@@ -45,6 +45,7 @@ def purchases():
     telegram_data = TelegramInitData(request.cookies.get('initData'))
     user_data = telegram_data.to_dict().get('user')
     who_added = user_data.get('id')
+    market_id = int(request.args.get('market_id'))
 
     # Проверяем корректность VIN
     if not SyncORM.is_valid_vin(vin):
@@ -59,7 +60,7 @@ def purchases():
 
     # Пытаемся добавить покупку
     try:
-        purchase = SyncORM.add_purchase(vin, amount, date, price, detail_name, who_added)
+        purchase = SyncORM.add_purchase(vin, amount, date, price, detail_name, who_added, market_id)
         return Response(
             json.dumps({
                 "success": True,

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 
 import Input from '../../components/Input';
 import Checkbox from '../../components/CheckBox';
@@ -7,8 +7,11 @@ import { ReactComponent as AirIcon } from '../../assets/air_icon.svg';
 import { SyncLoader } from 'react-spinners';
 import TextField from '../../components/TextField';
 
-import { postData, fetchReturnById, fetchReturnHistoryById, updateReturnById } from '../../api/Api';
-import toast, { Toaster } from 'react-hot-toast';
+import { fetchReturnById, fetchReturnHistoryById } from '../../api/Api';
+import toast from 'react-hot-toast';
+import { isFirstEarlier } from '../../common/common';
+import { MarketContext } from '../../markets/MarketContext'
+
 
 import '../../styles/Cards/Returns.css';
 import '../../styles/LoaderWrapper.css'
@@ -24,11 +27,13 @@ const ReturnModal = ({ isOpen, onClose, returnData, isCreating, isAir, isHistory
     const [seller, setSeller] = useState('');
     const [comment, setComment] = useState('');
     const [store, setStore] = useState('');
-    const [isNeedText, setIsNeedText] = useState(false);
+    const [isBadInput, setIsBadInput] = useState(false);
     const [whoAdded, setWhoAdded] = useState('');
     const [isFocused, setIsFocused] = useState(false);
+    const { value, setValue } = useContext(MarketContext);
 
-    const initTmpReturn = (returnObj) => {
+
+    const setDisplayedReturn = (returnObj) => {
 
         setVin(returnObj.detailNumber || '');
         setAmount(returnObj.count || '');
@@ -42,31 +47,33 @@ const ReturnModal = ({ isOpen, onClose, returnData, isCreating, isAir, isHistory
 
     }
 
-    useEffect(() => {
-        const fetchReturnData = async () => {
-            setLoading(true);
-            try {
-                let tmpReturn = {}
-                if (isHistory) {
-                    tmpReturn = returnData.id !== undefined ? await fetchReturnHistoryById(returnData.id, isAir, setLoading) : {};
-                } else {
-                    tmpReturn = returnData.id !== undefined ? await fetchReturnById(returnData.id, isAir, setLoading) : {};
-                }
-                tmpReturn.id = returnData.id;
+    const fetchReturn = async () => {
+        setLoading(true);
+        try {
+            let tmpReturn = {}
 
-                initTmpReturn(tmpReturn);
-            } catch (error) {
-                console.error('Ошибка при загрузке данных возврата:', error);
-                toast.error('Не удалось загрузить данные возврата.');
-            } finally {
-                setLoading(false);
+            if (isHistory) {
+                tmpReturn = returnData.id !== undefined ? await fetchReturnHistoryById(returnData.id, isAir, value.id) : {};
+            } else {
+                tmpReturn = returnData.id !== undefined ? await fetchReturnById(returnData.id, isAir, value.id) : {};
             }
-        };
 
+            tmpReturn.id = returnData.id;
+
+            setDisplayedReturn(tmpReturn);
+        } catch (error) {
+            console.error('Ошибка при загрузке данных возврата:', error);
+            toast.error('Не удалось загрузить данные возврата.');
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    useEffect(() => {
         if (!isCreating) {
-            fetchReturnData();
+            fetchReturn();
         } else {
-            initTmpReturn(returnData);
+            setDisplayedReturn(returnData);
         }
     }, [returnData])
 
@@ -92,26 +99,13 @@ const ReturnModal = ({ isOpen, onClose, returnData, isCreating, isAir, isHistory
     const handleClose = (e) => {
         if (e.target.id === 'modal-overlay') {
             setCompleted(false);
-            setIsNeedText(false);
+            setIsBadInput(false);
             onClose();
         }
-        //setIsNeedText(false);
+        //setIsBadInput(false);
     };
 
-    const onSuccess = () => {
-        setVin('');
-        setAmount('');
-        setSellDate('');
-        setReturnDate('');
-        setPrice('');
-        setSeller('');
-        setComment('');
-        setStore('');
-        loadReturns();
-
-    }
-
-    const isRequiredEmpty = () => {
+    const isFilledReturn = () => {
         if (vin === '' ||
             amount === '' ||
             sellDate === '' ||
@@ -119,24 +113,35 @@ const ReturnModal = ({ isOpen, onClose, returnData, isCreating, isAir, isHistory
             price === '' ||
             seller === '' ||
             comment === ''
+            || (isAir == true && store === "")
         ) {
-            return isAir ? store === '' : true;
+            return false;
         }
-        return false;
+        return true;
+    }
+
+    const checkWithToastIsBadReturn = () => {
+        let status = true;
+        if (!isFilledReturn()) {
+            toast.error('Заполниет все обязательные поля');
+            status = false;
+        }
+        if (isFirstEarlier(returnDate, sellDate)) {
+            toast.error('Конечная дата не может быть раньше стартовой даты');
+            status = false;
+        }
+        return status;
     }
 
     const handleOnClick = () => {
-        console.log("ISEMPTyFIRST", isRequiredEmpty());
-        if (isRequiredEmpty()) {
-            setIsNeedText(true);
-            console.log("ISEMPTy", isNeedText);
-            toast.error('Заполниет все обязательные поля');
+        if (!checkWithToastIsBadReturn()) {
+            setIsBadInput(true);
+            //toast.error('Заполниет все обязательные поля');
 
         } else {
-            setIsNeedText(false);
+            setIsBadInput(false);
             let returnToSend = getReturn();
             returnToSend.id = returnData.id;
-            console.log("PIZDAISEMPTy", isNeedText);
             handleApiResponse(returnToSend, isCreating, isAir);
 
         }
@@ -163,7 +168,6 @@ const ReturnModal = ({ isOpen, onClose, returnData, isCreating, isAir, isHistory
                         {isAir
                             ? <h1>Возврат воздух<AirIcon className="AirIcon" /></h1>
                             : <h1>Возврат</h1>}
-                        {/* <h1>{returnData.isAir ? "Возврат воздух" < i ></i> : "Возврат"}</h1> */}
                         <button className="backButton" onClick={() => { handleClose({ target: { id: 'modal-overlay' } }) }}><LeftArrow /> Назад</button>
                     </header>
                     {loading ?
@@ -174,22 +178,111 @@ const ReturnModal = ({ isOpen, onClose, returnData, isCreating, isAir, isHistory
                             <div className='EditReturn'>
                                 {isHistory ?
                                     <TextField textDescription="Номер запчасти" text={vin} />
-                                    : < Input onfocus={setIsFocused} label="Номер запчасти" hint="A22222222" value={vin} parentText={vin} setParentText={setVin} isDynamic={true} maxlength={11} isNeedText={isNeedText} />
+                                    : < Input
+                                        label="Номер запчасти"
+                                        hint="A22222222"
+                                        value={vin}
+                                        parentText={vin}
+                                        setParentText={setVin}
+                                        isDynamic={true}
+                                        maxLength={11}
+                                        isNeedText={isBadInput}
+                                    />
                                 }
-                                <Input onfocus={setIsFocused} label="Количество" hint="000" value={amount} type="number" parentText={amount} setParentText={setAmount} isDynamic={true} maxlength={10} isNeedText={isNeedText} />
-                                <Input onfocus={setIsFocused} label="Дата продажи" hint="дд.мм.гггг" value={sellDate} type="date" parentText={sellDate} setParentText={setSellDate} isDynamic={true} maxlength={10} isNeedText={isNeedText} />
-                                <Input onfocus={setIsFocused} label="Дата возврата" hint="дд.мм.гггг" value={returnDate} type="date" parentText={returnDate} setParentText={setReturnDate} isDynamic={true} maxlength={10} isNeedText={isNeedText} />
-                                <Input onfocus={setIsFocused} label="Продавец" hint="Женя" value={seller} type="text" parentText={seller} setParentText={setSeller} isDynamic={true} maxlength={40} isNeedText={isNeedText} />
-                                <Input onfocus={setIsFocused} label="Цена" hint="00 000.00 ₽" value={price} type="number" parentText={price} setParentText={setPrice} isDynamic={true} maxlength={15} isNeedText={isNeedText} />
-                                {isAir ? <Input onfocus={setIsFocused} label="Магазин посредник" isLong={true} hint="Avto Parts" parentText={store} setParentText={setStore} value={store} type="text" isDynamic={true} maxlength={40} isNeedText={isNeedText} /> : <></>}
-                                <Input onfocus={setIsFocused} label="Комментарий" isLong={true} hint="Коментарий" value={comment} parentText={comment} setParentText={setComment} type="text" isDynamic={true} maxlength={255} isNeedText={isNeedText} />
-                                {isHistory ? <TextField textDescription="User" text={whoAdded} isLong={true} />
+                                <Input
+                                    label="Количество"
+                                    hint="000"
+                                    value={amount}
+                                    type="number"
+                                    parentText={amount}
+                                    setParentText={setAmount}
+                                    isDynamic={true}
+                                    maxLength={10}
+                                    isNeedText={isBadInput}
+                                />
+                                <Input
+                                    label="Дата продажи"
+                                    hint="дд.мм.гггг"
+                                    value={sellDate}
+                                    type="date"
+                                    parentText={sellDate}
+                                    setParentText={setSellDate}
+                                    isDynamic={true}
+                                    maxLength={10}
+                                    isNeedText={isBadInput}
+                                />
+                                <Input
+                                    label="Дата возврата"
+                                    hint="дд.мм.гггг"
+                                    value={returnDate}
+                                    type="date"
+                                    parentText={returnDate}
+                                    setParentText={setReturnDate}
+                                    isDynamic={true}
+                                    maxLength={10}
+                                    isNeedText={isBadInput}
+                                />
+                                <Input
+                                    label="Продавец"
+                                    hint="Женя"
+                                    value={seller}
+                                    type="text"
+                                    parentText={seller}
+                                    setParentText={setSeller}
+                                    isDynamic={true}
+                                    maxLength={40}
+                                    isNeedText={isBadInput}
+                                />
+                                <Input
+                                    label="Цена"
+                                    hint="00 000.00 ₽"
+                                    value={price}
+                                    type="number"
+                                    parentText={price}
+                                    setParentText={setPrice}
+                                    isDynamic={true}
+                                    maxLength={15}
+                                    isNeedText={isBadInput} />
+                                {isAir ?
+                                    <Input
+                                        label="Магазин посредник"
+                                        isLong={true}
+                                        hint="Avto Parts"
+                                        parentText={store}
+                                        setParentText={setStore}
+                                        value={store}
+                                        type="text"
+                                        isDynamic={true}
+                                        maxLength={40}
+                                        isNeedText={isBadInput}
+                                    />
+                                    : <></>}
+                                <Input
+                                    label="Комментарий"
+                                    isLong={true}
+                                    hint="Коментарий"
+                                    value={comment}
+                                    parentText={comment}
+                                    setParentText={setComment}
+                                    type="text"
+                                    isDynamic={true}
+                                    maxLength={255}
+                                    isNeedText={isBadInput}
+                                />
+                                {isHistory ?
+                                    <TextField
+                                        textDescription="User"
+                                        text={whoAdded}
+                                        isLong={true} />
                                     : <></>}
 
 
                             </div>
-                            < Checkbox label="Возврат завершён" onChange={setCompleted} checkedDefault={isHistory} />
-                            <div className={isFocused ? "Space" : ""} ></div>
+                            < Checkbox
+                                label="Возврат завершён"
+                                onChange={setCompleted}
+                                checkedDefault={isHistory}
+                            />
                         </>
                     }
                 </div>

@@ -20,10 +20,11 @@ def history():
     vin_filter = request.args.get('like', default='', type=str)
     date_from = request.args.get('date_from', type=str)
     date_before = request.args.get('date_before', type=str)
+    market_id = int(request.args.get('market_id'))
 
     try:
         # Получаем записи по заданным параметрам
-        records = SyncORM.get_records(record_type, vin_filter, date_from, date_before)
+        records = SyncORM.get_records(record_type, vin_filter, date_from, date_before, market_id)
     except ValueError:
         return Response(
             json.dumps({"success": False, "error_message": "Invalid type parameter"}),
@@ -38,7 +39,8 @@ def history():
             "type": record_type,
             "vin_filter": vin_filter,
             "date_from": date_from,
-            "date_before": date_before
+            "date_before": date_before, 
+            "market_id": market_id,
         },
         "records": records  # Должен быть сериализуемым в JSON
     }
@@ -56,6 +58,7 @@ def history_sell(sell_id):
     if request.method == "POST":
         # Получаем данные из JSON запроса
         data = request.get_json()
+        market_id = int(request.args.get('market_id'))
         if not data:
             return Response(
                 json.dumps({
@@ -80,7 +83,6 @@ def history_sell(sell_id):
     else:
         # Для GET запроса создаем пустой объект данных
         data = {}
-
     # Находим продажу по ID в базе данных
     sell = SyncORM.get_sell_by_id(sell_id)
 

@@ -11,6 +11,7 @@ from application import app
 def front():
     return render_template('/build/index.html')
 
+
 @app.route('/static-front/<path:path>')
 @init_data_checker
 def static_index_build(path):

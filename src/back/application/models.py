@@ -13,8 +13,6 @@ intpk = Annotated[int, mapped_column(primary_key=True)]
 class StatusObject(enum.Enum):
 	worker = "worker"
 	admin = "admin"
-	owner = "owner"
-	anon_user = "anon_user"
 	seller = "seller" # avito future
 
 
@@ -22,23 +20,35 @@ class Market(Base):
     __tablename__ = "Market"
     id: Mapped[intpk]
     name: Mapped[str] = mapped_column(nullable=False)
-
-
-class Detail(Base):
-	__tablename__ = "Detail"
-	# id: Mapped[intpk]
-	vin: Mapped[str] = mapped_column(String(25), primary_key=True) 
-	name: Mapped[str] = mapped_column(String, nullable=False)
-	amount: Mapped[int] = mapped_column(Integer, nullable=False, default=0)
+    address: Mapped[str] = mapped_column(String)
 
 
 class User(Base):
-	"""Пользователи с tg"""
-	__tablename__ = "User"
-	id: Mapped[BigInteger] = mapped_column(BigInteger, primary_key=True)
-	name: Mapped[str] = mapped_column(String, nullable=False)
-	surname: Mapped[Optional[str]] = mapped_column(String, nullable=True)
-	status: Mapped[StatusObject] = mapped_column(Enum(StatusObject), default=StatusObject.worker)
+    """Пользователи с tg"""
+    __tablename__ = "User"
+    id: Mapped[BigInteger] = mapped_column(BigInteger, primary_key=True)
+    name: Mapped[str] = mapped_column(String, nullable=False)
+    surname: Mapped[Optional[str]] = mapped_column(String, nullable=True)
+    status: Mapped[StatusObject] = mapped_column(Enum(StatusObject), default=StatusObject.worker)
+
+
+class MarketUserMapper(Base):
+    __tablename__ = "MarketUserMapper"
+    id: Mapped[intpk]
+    user_id: Mapped[BigInteger] = mapped_column(BigInteger, ForeignKey('User.id'), nullable=False)
+    market_id: Mapped[Integer] = mapped_column(Integer, ForeignKey('Market.id'), nullable=False)
+    user = relationship('User', backref='MarketUserMapper', lazy='joined')
+    market = relationship('Market', backref='MarketUserMapper', lazy='join')
+
+
+class Detail(Base):
+    __tablename__ = "Detail"
+    # id: Mapped[intpk]
+    vin: Mapped[str] = mapped_column(String(25), primary_key=True) 
+    name: Mapped[str] = mapped_column(String, nullable=False)
+    amount: Mapped[int] = mapped_column(Integer, nullable=False, default=0)
+    market_id: Mapped[int] = mapped_column(Integer, ForeignKey('Market.id'), nullable=False)
+    market = relationship("Market", backref="detail", lazy="joined", uselist=False)
     
 
 class Purchase(Base):
@@ -55,6 +65,8 @@ class Purchase(Base):
     # supplier: Mapped[str] = mapped_column(String, nullable=True) # ? на будущее поставщик кто поставил запчасть
     detail = relationship("Detail", backref="purchase", lazy="joined", uselist=False) # !  автоматически создаем обратное отношение в другой таблице без явного указания relationship там.
     user_who_added = relationship("User", backref="purchase", lazy="joined", uselist=False) # !  автоматически создаем обратное отношение в другой таблице без явного указания relationship там.
+    market_id: Mapped[int] = mapped_column(Integer, ForeignKey('Market.id'), nullable=False)
+    market = relationship("Market", backref="purchase", lazy="joined", uselist=False)
 
 
 class Sell(Base):
@@ -70,6 +82,8 @@ class Sell(Base):
     # client: Mapped[str] = mapped_column(String, nullable=True) # ? на будущее кому продали
     details = relationship("Detail", backref="sell", lazy="joined", uselist=False) # !  автоматически создаем обратное отношение в другой таблице без явного указания relationship там.
     user_who_added = relationship("User", backref="sell", lazy="joined", uselist=False) # !  автоматически создаем обратное отношение в другой таблице без явного указания relationship там.
+    market_id: Mapped[int] = mapped_column(Integer, ForeignKey('Market.id'), nullable=False)
+    market = relationship("Market", backref="sell", lazy="joined", uselist=False)
 
 
 class Return(Base):
@@ -88,12 +102,14 @@ class Return(Base):
     who_added: Mapped[BigInteger] = mapped_column(BigInteger, ForeignKey("User.id"), nullable=False)
     # another_shop: Mapped[str | None] = mapped_column(String, nullable=True)
     user_who_added = relationship("User", backref="return", lazy="joined", uselist=False) # !  автоматически создаем обратное отношение в другой таблице без явного указания relationship там.
+    market_id: Mapped[int] = mapped_column(Integer, ForeignKey('Market.id'), nullable=False)
+    market = relationship("Market", backref="return", lazy="joined", uselist=False)
 
 
 class AirReturn(Base):
     """Возвраты в Магазин"""
     __tablename__ = "AirReturn"
-	# сделать поле с пометкой осуществлен ли возврат  
+    # сделать поле с пометкой осуществлен ли возврат  
     id: Mapped[intpk]
     vin: Mapped[str] = mapped_column(String(25), nullable=False)
     amount: Mapped[int] = mapped_column(Integer, nullable=False, default=1)
@@ -107,3 +123,5 @@ class AirReturn(Base):
     is_end: Mapped[bool] = mapped_column(Boolean, nullable=False, default=False)
     who_added: Mapped[BigInteger] = mapped_column(BigInteger, ForeignKey("User.id"), nullable=False)
     user_who_added = relationship("User", backref="airreturn", lazy="joined", uselist=False) # !  автоматически создаем обратное отношение в другой таблице без явного указания relationship там.
+    market_id: Mapped[int] = mapped_column(Integer, ForeignKey('Market.id'), nullable=False)
+    market = relationship("Market", backref="air_return", lazy="joined", uselist=False)

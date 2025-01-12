@@ -1,15 +1,19 @@
 import CardHeader from "../../components/CardHeader";
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import Input from '../../components/Input';
 import HistoryNavButton from "./HistoryNavButton";
-import { fetchReturns, fetchReturnsReal, fetchPurchaseReal, fetchPurchase, fetchSellsReal, fetchSells } from "../../api/Api";
+import { fetchReturns, fetchPurchases, fetchSells } from "../../api/Api";
 import Return from '../returns/Return';
 import { SyncLoader } from 'react-spinners';
 import ReturnModal from '../returns/ReturnModal';
 import HistoryItemModal from "./HistoryItemModal";
 import HistoryItem from "./HistoryItem";
-import toast, { Toaster } from 'react-hot-toast';
-import { postData, updateReturnHistoryById } from '../../api/Api';
+import toast from 'react-hot-toast';
+import { createReturn, updateReturnHistoryById } from '../../api/Api';
+import { isFirstEarlier } from "../../common/common"
+import { MarketContext } from '../../markets/MarketContext'
+
+
 import '../../styles/Card.css';
 import '../../styles/Cards/History.css';
 import '../../styles/Components.css';
@@ -30,6 +34,7 @@ function History() {
     const [startDate, setStartDate] = useState("");
     const [endDate, setEndDate] = useState("");
     const [isAir, setIsAir] = useState(false);
+    const { value, setValue } = useContext(MarketContext);
 
     const toggleReturnModal = () => setIsReturnModalOpen(!isReturnModalOpen);
     const toggleSellModal = () => setIsSellModalOpen(!isSellModalOpen);
@@ -47,12 +52,10 @@ function History() {
         const successMessage = isNew ? 'Возврат создан' : 'Возврат изменён';
         try {
             if (isNew) {
-                // Создание нового возврата
-                const endpoint = isAir ? "returns/create_air_return" : "returns/create_return";
-                await postData(editedReturn, endpoint);
+                await createReturn(editedReturn, isAir, value.id);
             } else {
-                // Обновление существующего возврата
-                await updateReturnHistoryById(editedReturn.id, editedReturn, isAir, setLoading);
+
+                await updateReturnHistoryById(editedReturn, isAir, value.id);
             }
 
             // Успешное завершение
@@ -76,15 +79,15 @@ function History() {
             switch (historyType) {
                 case 0:
                     // Выдача
-                    await fetchSellsReal(getFilter(), setSells, setLoading);
+                    await fetchSells(getFilter(), setSells, value.id);
                     break;
                 case 1:
                     // Поступления
-                    await fetchPurchaseReal(getFilter(), setPurchases, setLoading);
+                    await fetchPurchases(getFilter(), setPurchases, value.id);
                     break;
                 case 2:
                     // Возвраты
-                    await fetchReturnsReal(getFilter(), setReturns, setLoading);
+                    await fetchReturns(getFilter(), setReturns, value.id);
                     break;
                 default:
                     break;
@@ -101,6 +104,17 @@ function History() {
 
         loadData();
     }, [historyType, vin]);
+
+    useEffect(() => {
+
+        if (startDate.length !== 0 && endDate.length !== 0) {
+            if (isFirstEarlier(endDate, startDate)) {
+                toast.error('Конечная дата не может быть раньше стартовой даты');
+                setEndDate(startDate);
+            }
+        }
+
+    }, [startDate, endDate]);
 
     const makeContent = () => {
         switch (historyType) {
@@ -187,7 +201,7 @@ function History() {
                 </div>
                 <div className="DateInputWrapper">
                     <label htmlFor="date_to" className="form-label">До</label>
-                    <Input id="date_to" label="" isDynamic={true} parentText={endDate} setParentText={setEndDate} hint="дд.мм.гггг" type="date" />
+                    <Input id="date_to" isDynamic={true} parentText={endDate} setParentText={setEndDate} label="" hint="дд.мм.гггг" type="date" />
                 </div>
             </div>
             <div className="HistoryVinInput">

@@ -16,7 +16,7 @@ import { MarketContext } from '../../markets/MarketContext'
 import '../../styles/Cards/Returns.css';
 import '../../styles/LoaderWrapper.css'
 
-const ReturnModal = ({ isOpen, onClose, returnData, isCreating, isAir, isHistory, loadReturns, handleApiResponse, onfocus }) => {
+const ReturnModal = ({ isOpen, onClose, returnData, isCreating, isAir, isHistory, loadReturns, handleApiResponse }) => {
     const [isCompleted, setCompleted] = useState(isHistory);
     const [loading, setLoading] = useState(false);
     const [vin, setVin] = useState('');
@@ -29,7 +29,6 @@ const ReturnModal = ({ isOpen, onClose, returnData, isCreating, isAir, isHistory
     const [store, setStore] = useState('');
     const [isBadInput, setIsBadInput] = useState(false);
     const [whoAdded, setWhoAdded] = useState('');
-    const [isFocused, setIsFocused] = useState(false);
     const { value, setValue } = useContext(MarketContext);
 
 
@@ -162,7 +161,7 @@ const ReturnModal = ({ isOpen, onClose, returnData, isCreating, isAir, isHistory
 
     return (
         <div className="modal-overlay" id="modal-overlay" onClick={handleClose}>
-            <div className="ModalContent" >
+            <div className="ModalContent">
                 <div className='ModalMain'>
                     <header className='ModalHeader'>
                         {isAir
@@ -276,7 +275,6 @@ const ReturnModal = ({ isOpen, onClose, returnData, isCreating, isAir, isHistory
                                         isLong={true} />
                                     : <></>}
 
-
                             </div>
                             < Checkbox
                                 label="Возврат завершён"
@@ -293,6 +291,7 @@ const ReturnModal = ({ isOpen, onClose, returnData, isCreating, isAir, isHistory
                     </button>
                 }
             </div>
+
         </div >
     );
 };

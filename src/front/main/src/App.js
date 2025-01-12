@@ -35,6 +35,7 @@ function App() {
       <MarketProvider>
         <BrowserRouter>
           <Routes>
+            <Route path="/" element={<Navigate to="/markets" />} />
             <Route path="markets/:market_id" element={<Market />} />
             <Route path="markets" element={<MarketSelector />} />
             <Route path="markets/create" element={<CreateMarket />} />

@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { ReactComponent as SearchIcon } from '../assets/search_icon.svg';
 import CoolDatePicker from './CoolDatePicker'
 import '../styles/Components.css';
@@ -39,7 +39,6 @@ function Input(props) {
 
 
     const [text, setText] = useState(value || '');
-    const inputRef = useRef(null);
 
     const handleChange = (event) => {
         const newText = event.target.value;
@@ -48,21 +47,6 @@ function Input(props) {
             setParentText && setParentText(newText);
         }
     };
-    const handleFocus = () => {
-        onfocus(true);
-        setTimeout(() => {
-
-            if (inputRef.current) {
-
-                inputRef.current.scrollIntoView({ behavior: 'smooth', block: 'center' });
-
-            }
-
-        }, 10); // Подберите время ожидания для вашей ситуации
-
-    };
-
-
 
     const handleDatePickerChange = (newTextDayjs) => {
         setParentText(newTextDayjs.format('YYYY-MM-DD'));
@@ -102,13 +86,10 @@ function Input(props) {
                             value={parentText}
                         />
                         : <input
-                            ref={inputRef}
                             type={type}
                             placeholder={hint}
                             onChange={handleChange}
                             onKeyDown={handleKeyDown}
-                            onFocus={handleFocus}
-                            onBlur={() => { onfocus(false) }}
                             value={text}
                             maxLength={maxLength ? maxLength : 255}
                             required

@@ -2,22 +2,26 @@ import React, { use } from 'react';
 
 import TextField from '../../components/TextField';
 import Checkbox from '../../components/CheckBox';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useContext } from 'react';
 import { ReactComponent as LeftArrow } from '../../assets/left_arrow_icon.svg';
 import { ReactComponent as AirIcon } from '../../assets/air_icon.svg';
 import { fetchPurchasesById, fetchSellById } from '../../api/Api'
 import { SyncLoader } from 'react-spinners';
+import { MarketContext } from '../../markets/MarketContext'
+
 
 import '../../styles/Cards/Returns.css';
 
 const HistoryItemModal = ({ isOpen, isSell, onClose, itemData }) => {
     const [loading, setLoading] = useState(false);
     const [item, setItem] = useState({});
+    const { value, setValue } = useContext(MarketContext);
+
     useEffect(() => {
         const fetchItemData = async () => {
             setLoading(true);
             try {
-                const newItem = isSell ? await fetchSellById(itemData.id, setLoading) : await fetchPurchasesById(itemData.id, setLoading);
+                const newItem = isSell ? await fetchSellById(itemData.id, value.id) : await fetchPurchasesById(itemData.id, value.id);
                 setItem(newItem);
             } catch (error) {
                 console.error('Ошибка при загрузке данных возврата:', error);

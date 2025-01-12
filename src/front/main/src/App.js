@@ -15,6 +15,7 @@ import { Toaster } from 'react-hot-toast';
 import { ToasterWithMax } from './components/ToasterWithMax';
 import Market from './markets/Market';
 import MarketSelector from './markets/MarketSelector';
+import CreateMarket from './markets/CreateMarket';
 import { MarketProvider } from './markets/MarketContext'
 
 function App() {
@@ -36,6 +37,7 @@ function App() {
           <Routes>
             <Route path="markets/:market_id" element={<Market />} />
             <Route path="markets" element={<MarketSelector />} />
+            <Route path="markets/create" element={<CreateMarket />} />
           </Routes>
         </BrowserRouter>
       </MarketProvider>

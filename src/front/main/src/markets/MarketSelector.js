@@ -1,21 +1,14 @@
 import '../styles/App.css';
 import '../styles/Markets.css'
-import Box from '@mui/material/Box';
-import InputLabel from '@mui/material/InputLabel';
-import MenuItem from '@mui/material/MenuItem';
-import FormControl from '@mui/material/FormControl';
-import Select from '@mui/material/Select';
+
 import { Fragment, useEffect, useState } from 'react';
-import Nav from '../components/Nav';
-import NativeSelect from '@mui/material/NativeSelect';
-import InputBase from '@mui/material/InputBase';
-import { styled } from '@mui/material/styles';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
-import CssBaseline from '@mui/material/CssBaseline';
-import SubmitButton from '../components/SubmitButton';
 import { useNavigate } from 'react-router-dom';
 import { MarketContext } from './MarketContext';
 import React, { useContext } from 'react';
+import { fetchMarkets } from '../api/MarketsApi';
+import { SyncLoader } from 'react-spinners';
+import MarketItem from './MarketItem';
 
 
 
@@ -27,81 +20,80 @@ const darkTheme = createTheme({
 
 
 function MarketSelector() {
+    const [loading, setLoading] = useState(true);
     const [selected_market_id, setSelectedMarketId] = React.useState('');
     const [markets, setMarkets] = React.useState([]);
     const { value, setValue } = useContext(MarketContext);
 
+    const navigate = useNavigate();
     useEffect(() => {
-        setMarkets([
-            { id: 1, name: 'Татмак' },
-            { id: 2, name: 'Рыболовный' },
-            { id: 3, name: 'Добрая столовая' },
-            { id: 4, name: 'Пятёрочка' },
-        ]);
+        const fetchMarketsWrapper = async () => {
+            try {
+                fetchMarkets(setMarkets);
+            } catch (error) {
+                console.error("Ошибка при загрузке рынков:", error);
+            } finally {
+                setLoading(false);
+            }
+        };
+        fetchMarketsWrapper();
+        // setLoading(false);
+        // setMarkets([
+        //     { id: "123", name: "tatmak", address: "Kazan" },
+        //     { id: "123", name: "tatmak", address: "Kazan" },
+        //     { id: "123", name: "tatmak", address: "Kazan" },
+        //     { id: "123", name: "tatmak", address: "Kazan" },
+        //     { id: "123", name: "tatmak", address: "Kazan" },
+        //     { id: "123", name: "tatmak", address: "Kazan" },
+        //     { id: "123", name: "tatmak", address: "Kazan" },
+        //     { id: "123", name: "tatmak", address: "Kazan" },
+        //     { id: "123", name: "tatmak", address: "Kazan" },
+        //     { id: "123", name: "tatmak", address: "Kazan" },
+        //     { id: "123", name: "tatmak", address: "Kazan" },
+        // ]);
+
     }, []);
 
+    const onMarketClick = (market) => {
+        setValue(market);
+        navigate(`/markets/${market.id}`);
+    }
+
+    const onCreateMarketButtonClick = () => {
+        navigate(`/markets/create`);
+    }
 
     const displayMarketsList = () => {
         return markets.map((el) => (
-            <MenuItem key={el.id} value={el.id}>
-                {el.name}
-            </MenuItem>
+            <MarketItem market={el} onClick={onMarketClick} />
+
+
         ));
     };
 
 
-    const handleChange = (event) => {
-        const selectedId = event.target.value;
-        const selectedMarket = markets.find(market => market.id === selectedId);
-
-        if (selectedMarket) {
-            setSelectedMarketId(selectedId);
-            console.log("selectedMarket", selectedMarket);
-            setValue(selectedMarket);
-        } else {
-            console.error('Market not found');
-        }
-    };
-
-    const navigate = useNavigate();
-
-    function onClickHandler() {
-        if (selected_market_id)
-            navigate(`/markets/${selected_market_id}`);
-    }
-
     return (
         <div className="MarketSelector">
-            <h1>Выберите магазин</h1>
-            <ThemeProvider theme={darkTheme}>
-                <CssBaseline />
-
-                <Box sx={{ minWidth: 120 }}>
-                    <FormControl fullWidth>
-                        <InputLabel id="demo-simple-select-label" ></InputLabel>
-                        <Select
-                            labelId="demo-simple-select-label"
-                            id="demo-simple-select"
-                            value={selected_market_id}
-                            // label="Age"
-                            onChange={handleChange}
-                            sx={{
-                                color: 'white',
-                                backgroundColor: '#2B2B2B'
-                            }}
-
-                        >
+            {loading ?
+                <div className='LoaderWrapper'>
+                    <SyncLoader color="#A7A7A7" />
+                </div>
+                : <>
+                    <h1>Выберите магазин</h1>
+                    <div className='MarketsList'>
+                        <div className='MarketListScroll'>
                             {displayMarketsList()}
-                        </Select>
-                    </FormControl>
-                </Box>
-            </ThemeProvider>
+                        </div>
+                    </div>
+                    <footer>
+                        <button className="CreateMarketButton" onClick={onCreateMarketButtonClick} >
+                            <div className='CrossHorizontal' />
+                            <div className='CrossVertical' />
+                        </button >
+                    </footer>
 
-            <SubmitButton
-                label="продолжить"
-                onClick={onClickHandler}
-            />
-
+                </>
+            }
         </div >
     );
 }

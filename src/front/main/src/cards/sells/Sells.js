@@ -2,10 +2,12 @@ import CardHeader from "../../components/CardHeader";
 import Input from '../../components/Input';
 import IssuanceButton from '../../components/SubmitButton';
 import toast from 'react-hot-toast';
-import { useState } from 'react';
+import { useState, useContext } from 'react';
 import '../../styles/Card.css';
 import '../../styles/Cards/Issuance.css';
 import { createSell } from '../../api/Api';
+import { MarketContext } from '../../markets/MarketContext'
+
 
 function Sells() {
     const [isNeedText, setIsNeedText] = useState(false);
@@ -14,6 +16,8 @@ function Sells() {
     const [date, setDate] = useState('');
     const [price, setPrice] = useState('');
     const [seller, setSeller] = useState('');
+    const { value, setValue } = useContext(MarketContext);
+
 
     const getSell = () => {
         return {
@@ -44,7 +48,7 @@ function Sells() {
     }
 
     const createSellWithToast = () => {
-        toast.promise(createSell(getSell()), {
+        toast.promise(createSell(getSell(), value.id), {
             loading: 'Создание',
             success: () => {
                 resetSellInput();

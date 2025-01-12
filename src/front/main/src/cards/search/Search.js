@@ -2,8 +2,9 @@ import CardHeader from "../../components/CardHeader";
 import Input from '../../components/Input'
 import Detail from "../../components/Detail";
 import { SyncLoader } from 'react-spinners'
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useContext } from 'react';
 import { fetchDetailsNew } from "../../api/Api";
+import { MarketContext } from '../../markets/MarketContext'
 
 import '../../styles/Card.css'
 import '../../styles/Cards/Search.css'
@@ -14,6 +15,7 @@ function Search() {
     const [data, setData] = useState([]);
     const [loading, setLoading] = useState(false);
     const [detail, setDetail] = useState(null);
+    const { value, setValue } = useContext(MarketContext);
 
 
     const loadDetails = () => {
@@ -37,7 +39,7 @@ function Search() {
     }
 
     const lookForDetails = () => {
-        fetchDetailsNew(detailNumber, setData, setLoading)
+        fetchDetailsNew(detailNumber, setData, value.id)
     }
 
     useEffect(() => {

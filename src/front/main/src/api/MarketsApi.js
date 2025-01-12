@@ -10,7 +10,7 @@ export const fetchMarkets = async (setData) => {
         }));
     };
 
-    const url = `${API_URL}/`;
+    const url = `${API_URL}/markets`;
     let result = await getData(url, parseData);
     if (result == null) { setData([]); }
     else {

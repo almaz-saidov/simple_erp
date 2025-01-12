@@ -14,7 +14,16 @@ def markets():
 
     markets = SyncORM.get_all_markets(user_data.get('id'))
 
-    return jsonify({'markets': [f'{market.id},{market.name},{market.address}' for market in markets]}), 200
+    markets_list = [
+        {
+            'id': market.id,
+            'name': market.name,
+            'address': market.address
+        }
+        for market in markets
+    ]
+
+    return jsonify({'markets': markets_list}), 200
 
 
 @app.post('/api/markets')

@@ -10,7 +10,7 @@ import Search from './cards/search/Search';
 import { Fragment } from 'react';
 import { SyncLoader } from 'react-spinners';
 import { ReactComponent as FailIcon } from './assets/auth_fail_icon.svg'
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { Toaster } from 'react-hot-toast';
 import { ToasterWithMax } from './components/ToasterWithMax';
 import Market from './markets/Market';

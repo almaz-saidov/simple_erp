@@ -20,6 +20,7 @@ class Market(Base):
     __tablename__ = "Market"
     id: Mapped[intpk]
     name: Mapped[str] = mapped_column(nullable=False)
+    address: Mapped[str] = mapped_column(String)
 
 
 class User(Base):

@@ -5,3 +5,4 @@ from application.views import sales
 from application.views import history
 from application.views import auth
 from application.views import front
+from application.views import markets

@@ -644,7 +644,10 @@ class SyncORM:
         Получение всех магазинов пльзователя с user_id, к которым он имеет доступ
         '''
         with session_factory() as session:
-            markets = session.query(MarketUserMapper).filter(MarketUserMapper.user_id == user_id)
+            mappers = session.query(MarketUserMapper).filter(MarketUserMapper.user_id == user_id)
+            markets = []
+            for mapper in mappers:
+                markets.append(session.query(Market).filter(Market.id == mapper.market_id))
             return markets
 
     @staticmethod

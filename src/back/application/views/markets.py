@@ -28,6 +28,6 @@ def create_market():
         address = request.json.get('address')
         SyncORM.cerate_market(name, address)
     except Exception as e:
-        return jsonify({'error': f'e'}), 400
+        return jsonify({'error': f'{e}'}), 400
 
     return jsonify({'message': 'Success'}), 201

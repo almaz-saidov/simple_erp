@@ -58,7 +58,6 @@ def history_sell(sell_id):
     if request.method == "POST":
         # Получаем данные из JSON запроса
         data = request.get_json()
-        market_id = int(request.args.get('market_id'))
         if not data:
             return Response(
                 json.dumps({

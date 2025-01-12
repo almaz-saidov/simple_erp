@@ -195,6 +195,15 @@ class SyncORM:
             query = select(User)
             result = session.scalars(query).all()  # scalars() для работы с объектами
             return result
+        
+    @staticmethod
+    def get_user_status(user_id):
+        """
+        Получить статус пользователя.
+        """
+        with session_factory() as session:
+            user = session.query(User).filter_by(id=user_id).first()
+            return user.status
     # ----------------------Detail Methods -------------------
 
     @staticmethod

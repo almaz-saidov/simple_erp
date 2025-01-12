@@ -3,7 +3,7 @@ import Input from '../../components/Input'
 import Detail from "../../components/Detail";
 import { SyncLoader } from 'react-spinners'
 import { useEffect, useState } from 'react';
-import { fetchDetails } from "../../api/Api";
+import { fetchDetailsNew } from "../../api/Api";
 
 import '../../styles/Card.css'
 import '../../styles/Cards/Search.css'
@@ -36,15 +36,25 @@ function Search() {
         )
     }
 
-    useEffect(() => {
-        fetchDetails(detailNumber, setData, setLoading)
+    const lookForDetails = () => {
+        fetchDetailsNew(detailNumber, setData, setLoading)
+    }
 
+    useEffect(() => {
+        lookForDetails();
     }, [detailNumber]);
 
     return (
         <div className="Search">
             <CardHeader label="Поиск" />
-            <Input label="" hint="Номер запчасти" isDynamic={true} isLong={false} setParentText={setDetailNumber} isSearch={true} />
+            <Input label=""
+                hint="Номер запчасти"
+                isDynamic={true}
+                isLong={false}
+                setParentText={setDetailNumber}
+                isSearch={true}
+                iconOnClick={lookForDetails}
+            />
             {loading ?
                 <div className='LoaderWrapper'>
                     <SyncLoader color="#A7A7A7" />

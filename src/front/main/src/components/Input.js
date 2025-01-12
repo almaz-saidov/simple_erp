@@ -6,7 +6,38 @@ import dayjs from 'dayjs';
 
 
 function Input(props) {
-    const { label, hint, value, isLong, parentText, setParentText, isDynamic, type, isSearch, maxlength, isNeedText, iconOnClick } = props;
+    const {
+        label,
+        hint,
+        value,
+        isLong,
+        parentText,
+        setParentText,
+        isDynamic,
+        type,
+        isSearch,
+        maxLength,
+        isNeedText,
+        iconOnClick
+    } = props;
+
+    Input.defaultProps = {
+        label: "",
+        hint: "hint",
+        value: "",
+        isLong: false,
+        parentText: undefined,
+        setParentText: undefined,
+        isDynamic: false,
+        type: "text",
+        isSearch: false,
+        maxLength: 100,
+        isNeedText: false,
+        // iconOnClick: undefined,
+
+    }
+
+
     const [text, setText] = useState(value || '');
 
     const handleChange = (event) => {
@@ -35,7 +66,7 @@ function Input(props) {
         handleSearch();
         iconOnClick();
     };
-    
+
     useEffect(() => {
         setText(value); // Обновляйте текст при изменении value
     }, [value]);
@@ -60,7 +91,7 @@ function Input(props) {
                             onChange={handleChange}
                             onKeyDown={handleKeyDown}
                             value={text}
-                            maxLength={maxlength ? maxlength : 255}
+                            maxLength={maxLength ? maxLength : 255}
                             required
                         />}
 

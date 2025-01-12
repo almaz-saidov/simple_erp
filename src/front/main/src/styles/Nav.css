@@ -29,7 +29,7 @@
     height: 70px;
     background-color: transparent;
     border: 0;
-    color: var(--color-secondary-text);
+
 
 }
 
@@ -40,4 +40,12 @@
 .NavCurrentButtonIcon {
     transition: all 300ms ease;
     color: var(--color-control-elements);
+}
+
+.NavCurrentLabel {
+    color: var(--color-primary-text);
+}
+
+.NavDefaultLabel {
+    color: var(--color-secondary-text);
 }

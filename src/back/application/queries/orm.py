@@ -5,7 +5,7 @@ from typing import Optional
 from sqlalchemy import and_, literal, select
 
 from application.database import Base, engine, session_factory # движок, сессии, базовый класс
-from application.models import Detail, Purchase, Sell, Return, User, AirReturn, MarketUserMapper
+from application.models import Detail, Purchase, Sell, Return, User, AirReturn, MarketUserMapper, Market
 
 
 def reformat_vin(vin: str):
@@ -628,12 +628,25 @@ class SyncORM:
             for column in obj.__table__.columns
         }
     
-# ------------------------GET ALL MARKETS---------------------------
+# ------------------------MARKETS---------------------------
     @staticmethod
     def get_all_markets(user_id):
-        """
+        '''
         Получение всех магазинов пльзователя с user_id, к которым он имеет доступ
-        """
+        '''
         with session_factory() as session:
             markets = session.query(MarketUserMapper).filter(MarketUserMapper.user_id == user_id)
             return markets
+
+    @staticmethod
+    def cerate_market(name: str, address: str = 'no address'):
+        '''
+        Создание нового магазина
+        '''
+        with session_factory() as session:
+            new_market = Market(
+                name=name,
+                address=address
+            )
+            session.add(new_market)
+            session.commit()

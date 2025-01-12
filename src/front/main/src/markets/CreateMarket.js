@@ -5,7 +5,7 @@ import toast from 'react-hot-toast';
 import { React, useState, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { createPurchase } from '../api/Api'
-
+import { createMarket } from '../api/MarketsApi'
 
 import '../styles/Card.css';
 import '../styles/Cards/Issuance.css';
@@ -36,7 +36,7 @@ function CreateMarket() {
     }
 
     const addPurchaseWithToast = () => {
-        toast.promise(createPurchase(getMarket()), {
+        toast.promise(createMarket(getMarket()), {
             loading: 'Создание',
             success: () => {
                 resetPurchaseInput();

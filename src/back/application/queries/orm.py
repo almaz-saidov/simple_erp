@@ -648,7 +648,7 @@ class SyncORM:
             return markets
 
     @staticmethod
-    def cerate_market(name: str, address: str = 'no address'):
+    def cerate_market(user_id: int, name: str, address: str = 'no address'):
         '''
         Создание нового магазина
         '''
@@ -659,3 +659,11 @@ class SyncORM:
             )
             session.add(new_market)
             session.commit()
+            
+            new_mapper = MarketUserMapper(
+                user_id=user_id,
+                market_id=new_market.id
+            )
+            session.add(new_mapper)
+            session.commit()
+            

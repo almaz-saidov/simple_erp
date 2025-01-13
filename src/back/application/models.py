@@ -19,8 +19,8 @@ class StatusObject(enum.Enum):
 class Market(Base):
     __tablename__ = "Market"
     id: Mapped[intpk]
-    name: Mapped[str] = mapped_column(nullable=False)
-    address: Mapped[str] = mapped_column(String)
+    name: Mapped[str] = mapped_column(unique=True, nullable=False)
+    address: Mapped[str] = mapped_column(String, unique=True)
 
 
 class User(Base):

@@ -280,6 +280,7 @@ class SyncORM:
         :param user_id: ID пользователя, добавившего запись
         :return: Объект добавленной покупки
         """
+        print(f'\norm method {market_id}\n')
         with session_factory() as session:
             vin = reformat_vin(vin)
             # Проверяем, существует ли запчасть в Detail

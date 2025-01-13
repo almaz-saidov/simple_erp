@@ -46,7 +46,7 @@ def purchases():
     user_data = telegram_data.to_dict().get('user')
     who_added = user_data.get('id')
     market_id = request.args.get('market_id', type=int)
-    print(market_id)
+    print(f'\napi route {market_id}\n')
 
     # Проверяем корректность VIN
     if not SyncORM.is_valid_vin(vin):

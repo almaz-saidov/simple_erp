@@ -9,6 +9,7 @@ class TelegramInitData:
 
     def __init__(self, query_string: str):
         parsed_qs: dict = dict(urllib.parse.parse_qsl(query_string))
+        print(parsed_qs)
         if not parsed_qs:
             raise ValueError('Invalid data: query_string is incorrect')
         

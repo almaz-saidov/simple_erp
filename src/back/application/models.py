@@ -38,7 +38,7 @@ class MarketUserMapper(Base):
     user_id: Mapped[BigInteger] = mapped_column(BigInteger, ForeignKey('User.id'), nullable=False)
     market_id: Mapped[Integer] = mapped_column(Integer, ForeignKey('Market.id'), nullable=False)
     user = relationship('User', backref='MarketUserMapper', lazy='joined')
-    market = relationship('Market', backref='MarketUserMapper', lazy='join')
+    market = relationship('Market', backref='MarketUserMapper', lazy='joined')
 
 
 class Detail(Base):

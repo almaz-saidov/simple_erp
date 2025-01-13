@@ -27,7 +27,7 @@ function CreateMarket() {
     }
 
     const isBadPurchase = () => {
-        return name.length === 0 || address.length === 0;
+        return name.length === 0;
     }
 
     const resetPurchaseInput = () => {
@@ -47,7 +47,7 @@ function CreateMarket() {
         });
     }
 
-    const notify = () => toast.error('Заполниет все обязательные поля');
+    const notify = () => toast.error('Заполните все обязательные поля');
 
     const submitButtonClick = () => {
         if (isBadPurchase()) {
@@ -64,7 +64,7 @@ function CreateMarket() {
             <CardHeader label="Создать Магазин" />
             <div className="CreateMarketContent">
                 <Input label="Название" hint="MG PARTS" parentText={name} setParentText={setName} type="text" isDynamic={true} maxlength={15} isNeedText={isNeedText} />
-                <Input label="Адресс магазина" hint="Москва, Нижняя Красносельская ул., 35, стр. 59, 6 этаж" isLong={true} parentText={address} setParentText={setAddress} type="text" isDynamic={true} maxlength={40} isNeedText={isNeedText} />
+                <Input label="Адресс магазина" hint="Москва, Нижняя Красносельская ул., 35, стр. 59, 6 этаж" isLong={true} parentText={address} setParentText={setAddress} type="text" isDynamic={true} maxlength={40} isNeedText={false} />
             </div>
             <IssuanceButton onClick={submitButtonClick} label="Создать магазин" />
         </div >

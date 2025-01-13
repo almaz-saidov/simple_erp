@@ -1,0 +1,12 @@
+.BackButton {
+    background-color: var(--color-base-fill);
+    color: var(--color-secondary-text);
+    border: 0;
+}
+
+.BackButtonWrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 7px;
+}

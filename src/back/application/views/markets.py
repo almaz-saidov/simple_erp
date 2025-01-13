@@ -21,7 +21,7 @@ from application.utils.init_data import TelegramInitData
 def markets():
     markets = SyncORM.get_all_markets()
 
-    return jsonify({'records': [{'id': market.market_id, 'name': market.name, 'address': market.address} for market in markets]}), 200
+    return jsonify({'records': [{'id': market.id, 'name': market.name, 'address': market.address} for market in markets]}), 200
     # markets_list = [
     #     {
     #         'id': market.id,

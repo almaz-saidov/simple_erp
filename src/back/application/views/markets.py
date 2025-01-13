@@ -19,10 +19,7 @@ from application.utils.init_data import TelegramInitData
 @app.get('/api/markets')
 @init_data_checker
 def markets():
-    telegram_data = TelegramInitData(request.cookies.get('initData'))
-    user_data = telegram_data.to_dict().get('user')
-
-    markets = SyncORM.get_all_markets(user_data.get('id'))
+    markets = SyncORM.get_all_markets()
 
     return jsonify({'markets': [{'id': market.market_id, 'name': market.name, 'address': market.address} for market in markets]}), 200
     # markets_list = [

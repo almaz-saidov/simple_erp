@@ -19,8 +19,8 @@ class StatusObject(enum.Enum):
 class Market(Base):
     __tablename__ = "Market"
     id: Mapped[intpk]
-    name: Mapped[str] = mapped_column(nullable=False)
-    address: Mapped[str] = mapped_column(String)
+    name: Mapped[str] = mapped_column(unique=True, nullable=False)
+    address: Mapped[str] = mapped_column(String, unique=True)
 
 
 class User(Base):
@@ -38,7 +38,7 @@ class MarketUserMapper(Base):
     user_id: Mapped[BigInteger] = mapped_column(BigInteger, ForeignKey('User.id'), nullable=False)
     market_id: Mapped[Integer] = mapped_column(Integer, ForeignKey('Market.id'), nullable=False)
     user = relationship('User', backref='MarketUserMapper', lazy='joined')
-    market = relationship('Market', backref='MarketUserMapper', lazy='join')
+    market = relationship('Market', backref='MarketUserMapper', lazy='joined')
 
 
 class Detail(Base):

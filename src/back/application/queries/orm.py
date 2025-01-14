@@ -95,7 +95,7 @@ def get_records_purchases(vin_filter, date_from, date_before, market_id):
     with session_factory() as session:
         query = session.query(
             Purchase.id,
-            Purchase.vin,
+            Purchase.detail.vin,
             Purchase.amount,
             Purchase.add_to_shop_date,
             Purchase.price,
@@ -104,7 +104,7 @@ def get_records_purchases(vin_filter, date_from, date_before, market_id):
         ).where(Purchase.market_id == market_id)
         filters = []
         if vin_filter:
-            filters.append(Purchase.vin.ilike(f"%{vin_filter}%"))
+            filters.append(Purchase.detail.vin.ilike(f"%{vin_filter}%"))
         if date_from:
             filters.append(Purchase.add_to_shop_date >= date_from)
         if date_before:
@@ -114,7 +114,7 @@ def get_records_purchases(vin_filter, date_from, date_before, market_id):
         result = [
             {
                 "id": record.id,
-                "vin": record.vin,
+                "vin": record.detail.vin,
                 "date": (record.add_to_shop_date).strftime('%Y-%m-%d'),
                 "amount": record.amount,
                 "price": record.price,

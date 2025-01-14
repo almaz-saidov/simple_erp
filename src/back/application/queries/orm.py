@@ -39,6 +39,7 @@ def get_records_return_air_return(vin_filter, date_from, date_before, market_id)
             Return.comment,
             Return.is_end,
             Return.who_added,
+            Return.market_id,
             literal('return').label('type')  # Указываем тип записи
         ).join(Detail, Detail.id == Return.detail_id).filter(Return.is_end == True, Return.market_id == market_id)
 
@@ -53,6 +54,7 @@ def get_records_return_air_return(vin_filter, date_from, date_before, market_id)
             AirReturn.comment,
             AirReturn.is_end,
             AirReturn.who_added,
+            AirReturn.market_id,
             literal('airreturn').label('type')  # Указываем тип записи
         ).filter(AirReturn.is_end == True, AirReturn.market_id == market_id)
 

@@ -160,7 +160,7 @@ def history_purchase(purchase_id):
             mimetype="application/json",
         )
 
-    data["vin"] = purchase.detail.vin
+    data["vin"] = purchase.vin
     data["amount"] = purchase.amount
     data["date"] = purchase.add_to_shop_date
     data["price"] = purchase.price

@@ -95,7 +95,7 @@ def get_records_purchases(vin_filter, date_from, date_before, market_id):
     with session_factory() as session:
         query = session.query(
             Purchase.id,
-            Purchase.detail.vin,
+            Purchase.vin,
             Purchase.amount,
             Purchase.add_to_shop_date,
             Purchase.price,
@@ -104,7 +104,7 @@ def get_records_purchases(vin_filter, date_from, date_before, market_id):
         ).where(Purchase.market_id == market_id)
         filters = []
         if vin_filter:
-            filters.append(Purchase.detail.vin.ilike(f"%{vin_filter}%"))
+            filters.append(Purchase.vin.ilike(f"%{vin_filter}%"))
         if date_from:
             filters.append(Purchase.add_to_shop_date >= date_from)
         if date_before:
@@ -114,7 +114,7 @@ def get_records_purchases(vin_filter, date_from, date_before, market_id):
         result = [
             {
                 "id": record.id,
-                "vin": record.detail.vin,
+                "vin": record.vin,
                 "date": (record.add_to_shop_date).strftime('%Y-%m-%d'),
                 "amount": record.amount,
                 "price": record.price,
@@ -280,13 +280,14 @@ class SyncORM:
         :param user_id: ID пользователя, добавившего запись
         :return: Объект добавленной покупки
         """
+        print(f'\norm method {market_id}\n')
         with session_factory() as session:
             vin = reformat_vin(vin)
             # Проверяем, существует ли запчасть в Detail
             detail = session.query(Detail).filter_by(vin=vin).first()
             if not detail:
                 # Если детали нет, создаем новую запись
-                new_detail = Detail(vin=vin, name=detail_name, amount=amount, market_id=market_id)  # Примерные данные для новой записи в Detail
+                new_detail = Detail(vin=vin, name=detail_name, amount=amount)  # Примерные данные для новой записи в Detail
                 session.add(new_detail)
                 session.commit()  # Зафиксируем изменения в Detail
             else:
@@ -295,30 +296,19 @@ class SyncORM:
                 session.commit()
 
             # Проверяем, существует ли покупка с таким vin
-            # purchase = session.query(Purchase).filter_by(vin=vin).first()
-            # if not purchase:
-            #     # Если покупки с таким VIN нет, создаем новую покупку
-            #     purchase = Purchase(
-            #         vin=vin,
-            #         price=price,
-            #         amount=amount,
-            #         name=detail_name,
-            #         add_to_shop_date=date,
-            #         who_added=who_added,
-            #         market_id=market_id
-            #     )
-            #     session.add(purchase)
-            detail = session.query(Detail).filter_by(vin=vin).first()
-            purchase = Purchase(
-                detail_id=detail.id,
-                price=price,
-                amount=amount,
-                name=detail_name,
-                add_to_shop_date=date,
-                who_added=who_added,
-                market_id=market_id
-            )
-            session.add(purchase)
+            purchase = session.query(Purchase).filter_by(vin=vin).first()
+            if not purchase:
+                # Если покупки с таким VIN нет, создаем новую покупку
+                purchase = Purchase(
+                    vin=vin,
+                    price=price,
+                    amount=amount,
+                    name=detail_name,
+                    add_to_shop_date=date,
+                    who_added=who_added,
+                    market_id=market_id
+                )
+                session.add(purchase)
 
             session.commit()  # Зафиксируем изменения в Purchase
             return purchase

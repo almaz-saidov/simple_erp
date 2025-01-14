@@ -82,7 +82,6 @@ class Sell(Base):
     seller: Mapped[str] = mapped_column(String, nullable=False) # ? какой продавец на авито продал деталь (получил заказ)
     who_added: Mapped[BigInteger] = mapped_column(BigInteger, ForeignKey("User.id"), nullable=False)
     # client: Mapped[str] = mapped_column(String, nullable=True) # ? на будущее кому продали
-    details = relationship("Detail", backref="sell", lazy="joined", uselist=False) # !  автоматически создаем обратное отношение в другой таблице без явного указания relationship там.
     user_who_added = relationship("User", backref="sell", lazy="joined", uselist=False) # !  автоматически создаем обратное отношение в другой таблице без явного указания relationship там.
     market_id: Mapped[int] = mapped_column(Integer, ForeignKey('Market.id'), nullable=False)
 

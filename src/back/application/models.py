@@ -44,12 +44,12 @@ class MarketUserMapper(Base):
 class Detail(Base):
     __tablename__ = "Detail"
     id: Mapped[intpk]
-    vin: Mapped[str] = mapped_column(String(25)) 
+    vin: Mapped[str] = mapped_column(String(25), unique=True)
     name: Mapped[str] = mapped_column(String, nullable=False)
     amount: Mapped[int] = mapped_column(Integer, nullable=False, default=0)
     market_id: Mapped[int] = mapped_column(Integer, ForeignKey('Market.id'), nullable=False)
     market = relationship("Market", backref="detail", lazy="joined", uselist=False)
-    
+
 
 class Purchase(Base):
     """Добавление на склад (покупка)"""
@@ -75,7 +75,7 @@ class Sell(Base):
     id: Mapped[intpk]
     # vin: Mapped[str] = mapped_column(String(25), ForeignKey("Detail.vin"), nullable=False)
     detail_id: Mapped[int] = mapped_column(Integer, ForeignKey("Detail.id"), nullable=False)
-    detail = relationship("Detail", backref="purchase", lazy="joined")
+    detail = relationship("Detail", backref="sell", lazy="joined")
     price: Mapped[int] = mapped_column(Integer, nullable=False)
     amount: Mapped[int] = mapped_column(Integer, nullable=False, default=0)
     sell_from_shop_date: Mapped[datetime.date] = mapped_column(Date,server_default=text("TIMEZONE('utc', now())"))
@@ -93,7 +93,7 @@ class Return(Base):
     id: Mapped[intpk]
     # vin: Mapped[str] = mapped_column(String(25), nullable=False)
     detail_id: Mapped[int] = mapped_column(Integer, ForeignKey("Detail.id"), nullable=False)
-    detail = relationship("Detail", backref="purchase", lazy="joined")
+    detail = relationship("Detail", backref="return", lazy="joined")
     amount: Mapped[int] = mapped_column(Integer, nullable=False, default=1)
     # from_client: Mapped[str | None]
     sell_date: Mapped[datetime.date] = mapped_column(Date, nullable=False)
@@ -115,7 +115,7 @@ class AirReturn(Base):
     id: Mapped[intpk]
     # vin: Mapped[str] = mapped_column(String(25), nullable=False)
     detail_id: Mapped[int] = mapped_column(Integer, ForeignKey("Detail.id"), nullable=False)
-    detail = relationship("Detail", backref="purchase", lazy="joined")
+    detail = relationship("Detail", backref="airreturn", lazy="joined")
     amount: Mapped[int] = mapped_column(Integer, nullable=False, default=1)
     # from_client: Mapped[str | None]
     sell_date: Mapped[datetime.date] = mapped_column(Date, nullable=False)

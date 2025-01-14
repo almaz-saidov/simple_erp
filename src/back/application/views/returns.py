@@ -243,7 +243,7 @@ def check_return(return_id):
     if returned:
         # Заполняем данные для отправки
         response_data = {
-            "vin": returned.vin,
+            "vin": returned.detail.vin if return_type == 'return' else returned.vin,
             "amount": returned.amount,
             "sell_date": returned.sell_date,
             "return_date": returned.return_date,

@@ -287,8 +287,8 @@ class SyncORM:
             detail = session.query(Detail).filter_by(vin=vin).first()
             if not detail:
                 # Если детали нет, создаем новую запись
-                new_detail = Detail(vin=vin, name=detail_name, amount=amount, market_id=market_id)  # Примерные данные для новой записи в Detail
-                session.add(new_detail)
+                detail = Detail(vin=vin, name=detail_name, amount=amount, market_id=market_id)  # Примерные данные для новой записи в Detail
+                session.add(detail)
                 session.commit()  # Зафиксируем изменения в Detail
             else:
                 # Если деталь уже существует, обновляем её количество
@@ -297,7 +297,7 @@ class SyncORM:
 
             # Создаем новую покупку
             purchase = Purchase(
-                vin=vin,
+                detail_id=detail.id,
                 price=price,
                 amount=amount,
                 name=detail_name,

@@ -284,9 +284,8 @@ def check_return(return_id):
                 )
 
             # Обновляем данные из полученного JSON
-            if return_type == 'airreturn':
-                returned.vin = data.get("vin", returned.vin)
-            if not SyncORM.is_valid_vin(returned.vin):
+            vin_from_data = data.get("vin")
+            if not SyncORM.is_valid_vin(vin_from_data):
                 return Response(
                     json.dumps({
                         "success": False,
@@ -296,6 +295,8 @@ def check_return(return_id):
                     mimetype="application/json",
                 )
             
+            if return_type == 'airreturn':
+                returned.vin = vin_from_data
             returned.amount = data.get("amount", returned.amount)
             returned.sell_date = data.get("sell_date", returned.sell_date)
             returned.return_date = data.get("return_date", returned.return_date)

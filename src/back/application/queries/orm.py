@@ -95,13 +95,12 @@ def get_records_purchases(vin_filter, date_from, date_before, market_id):
     with session_factory() as session:
         query = session.query(
             Purchase.id,
-            Purchase.detail.vin,
             Purchase.amount,
             Purchase.add_to_shop_date,
             Purchase.price,
             Purchase.who_added,
             literal('postupleniya').label('type')  # Указываем тип записи
-        ).where(Purchase.market_id == market_id)
+        ).join(Detail, Detail.id == Purchase.detail_id).filter(Purchase.market_id == market_id)
         filters = []
         if vin_filter:
             filters.append(Purchase.detail.vin.ilike(f"%{vin_filter}%"))
@@ -114,7 +113,7 @@ def get_records_purchases(vin_filter, date_from, date_before, market_id):
         result = [
             {
                 "id": record.id,
-                "vin": record.detail.vin,
+                "vin": record.vin,
                 "date": (record.add_to_shop_date).strftime('%Y-%m-%d'),
                 "amount": record.amount,
                 "price": record.price,

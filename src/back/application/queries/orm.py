@@ -104,7 +104,7 @@ def get_records_purchases(vin_filter, date_from, date_before, market_id):
         ).where(Purchase.market_id == market_id)
         filters = []
         if vin_filter:
-            filters.append(Purchase.vin.ilike(f"%{vin_filter}%"))
+            filters.append(Purchase.detail.vin.ilike(f"%{vin_filter}%"))
         if date_from:
             filters.append(Purchase.add_to_shop_date >= date_from)
         if date_before:

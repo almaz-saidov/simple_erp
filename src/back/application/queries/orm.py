@@ -40,6 +40,7 @@ def get_records_return_air_return(vin_filter, date_from, date_before, market_id)
             Return.is_end,
             Return.who_added,
             Return.market_id,
+            Detail.vin,
             literal('return').label('type')  # Указываем тип записи
         ).join(Detail, Detail.id == Return.detail_id).filter(Return.is_end == True, Return.market_id == market_id)
 
@@ -69,38 +70,21 @@ def get_records_return_air_return(vin_filter, date_from, date_before, market_id)
             return_query = return_query.filter(Return.return_date <= date_before)
             air_return_query = air_return_query.filter(AirReturn.return_date <= date_before)
 
+        # Объединяем запросы
+        combined_query = return_query.union(air_return_query)
         # Получаем результаты
-        returns = return_query.all()
-        air_returns = air_return_query.all()
-
+        records = combined_query.all()
         result = [
-            # {
-            #     "id": record.id,
-            #     "vin": record.vin,
-            #     "date": (record.return_date).strftime('%Y-%m-%d'),
-            #     "amount": record.amount,
-            #     "price": record.price,
-            #     "type":  record.type,
-            #     "who_added": record.who_added,
-            #     "market_id": record.market_id,
-            # }
-            # for record in returns
-        ]
-
-        result += [
             {
                 "id": record.id,
                 "vin": record.vin,
                 "date": (record.return_date).strftime('%Y-%m-%d'),
                 "amount": record.amount,
                 "price": record.price,
-                "type":  record.type,
-                "who_added": record.who_added,
-                "market_id": record.market_id,
+                "type":  record.type,  # Используем заранее добавленный тип
             }
-            for record in air_returns
+            for record in records
         ]
-
         return result
 
 
@@ -112,6 +96,7 @@ def get_records_purchases(vin_filter, date_from, date_before, market_id):
             Purchase.add_to_shop_date,
             Purchase.price,
             Purchase.who_added,
+            Detail.vin,
             literal('postupleniya').label('type')  # Указываем тип записи
         ).join(Detail, Detail.id == Purchase.detail_id).filter(Purchase.market_id == market_id)
 
@@ -149,6 +134,7 @@ def get_records_sales(vin_filter, date_from, date_before, market_id):
             Sell.sell_from_shop_date,
             Sell.price,
             Sell.who_added,
+            Detail.vin,
             literal('vidyacha').label('type')  # Указываем тип записи
         ).join(Detail, Detail.id == Sell.detail_id).filter(Sell.market_id == market_id)
         filters = []

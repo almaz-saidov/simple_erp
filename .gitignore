@@ -1,5 +1,5 @@
 .venv
-vnev/
+venv/
 example_server/
 /src/front/build/auth/
 /src/front/build/main/

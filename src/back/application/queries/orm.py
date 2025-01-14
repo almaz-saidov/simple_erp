@@ -287,7 +287,7 @@ class SyncORM:
             detail = session.query(Detail).filter_by(vin=vin).first()
             if not detail:
                 # Если детали нет, создаем новую запись
-                new_detail = Detail(vin=vin, name=detail_name, amount=amount)  # Примерные данные для новой записи в Detail
+                new_detail = Detail(vin=vin, name=detail_name, amount=amount, market_id=market_id)  # Примерные данные для новой записи в Detail
                 session.add(new_detail)
                 session.commit()  # Зафиксируем изменения в Detail
             else:
@@ -295,20 +295,17 @@ class SyncORM:
                 detail.amount += amount
                 session.commit()
 
-            # Проверяем, существует ли покупка с таким vin
-            purchase = session.query(Purchase).filter_by(vin=vin).first()
-            if not purchase:
-                # Если покупки с таким VIN нет, создаем новую покупку
-                purchase = Purchase(
-                    vin=vin,
-                    price=price,
-                    amount=amount,
-                    name=detail_name,
-                    add_to_shop_date=date,
-                    who_added=who_added,
-                    market_id=market_id
-                )
-                session.add(purchase)
+            # Создаем новую покупку
+            purchase = Purchase(
+                vin=vin,
+                price=price,
+                amount=amount,
+                name=detail_name,
+                add_to_shop_date=date,
+                who_added=who_added,
+                market_id=market_id
+            )
+            session.add(purchase)
 
             session.commit()  # Зафиксируем изменения в Purchase
             return purchase

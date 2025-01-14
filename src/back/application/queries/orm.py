@@ -107,11 +107,7 @@ def get_records_return_air_return(vin_filter, date_from, date_before, market_id)
 def get_records_purchases(vin_filter, date_from, date_before, market_id):
     with session_factory() as session:
         query = session.query(
-            Purchase.id,
-            Purchase.amount,
-            Purchase.add_to_shop_date,
-            Purchase.price,
-            Purchase.who_added,
+            Purchase,
             literal('postupleniya').label('type')  # Указываем тип записи
         ).join(Detail, Detail.id == Purchase.detail_id).filter(Purchase.market_id == market_id)
         filters = []
@@ -143,11 +139,7 @@ def get_records_purchases(vin_filter, date_from, date_before, market_id):
 def get_records_sales(vin_filter, date_from, date_before, market_id):
     with session_factory() as session:
         query = session.query(
-            Sell.id,
-            Sell.amount,
-            Sell.sell_from_shop_date,
-            Sell.price,
-            Sell.who_added,
+            Sell,
             literal('vidyacha').label('type')  # Указываем тип записи
         ).join(Detail, Detail.id == Sell.detail_id).filter(Sell.market_id == market_id)
         filters = []

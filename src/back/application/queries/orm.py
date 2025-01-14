@@ -455,7 +455,7 @@ class SyncORM:
             return return_record
 
     @staticmethod
-    def update_return(return_id: int, amount: int, sell_date: datetime, return_date: datetime, to_seller: str, price: int, comment: str, is_compleat: bool, who_added: int):
+    def update_return(return_id: int, vin: str, amount: int, sell_date: datetime, return_date: datetime, to_seller: str, price: int, comment: str, is_compleat: bool, who_added: int):
         """
         Обновить информацию о возврате товара на складе.
         :param return_id: ID возврата, который нужно обновить

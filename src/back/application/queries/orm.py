@@ -214,9 +214,9 @@ class SyncORM:
             query = session.query(Detail)
 
             if vin == '':
-                details = query.offset(offset).limit(limit).where(Detail.market_id == market_id)
+                details = query.filter(Detail.market_id == market_id).offset(offset).limit(limit)
             else:
-                details = query.filter(Detail.vin.ilike(f'%{vin}%')).offset(offset).limit(limit).where(Detail.market_id == market_id)
+                details = query.filter(Detail.vin.ilike(f'%{vin}%'), Detail.market_id == market_id).offset(offset).limit(limit)
             
             # Преобразуем ORM-объекты в словари
             serialized_details = [

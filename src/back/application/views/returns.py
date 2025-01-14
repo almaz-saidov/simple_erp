@@ -284,7 +284,11 @@ def check_return(return_id):
                 )
 
             # Обновляем данные из полученного JSON
-            returned.vin = data.get("vin", returned.vin)
+            if return_type == 'return':
+                returned.vin = data.get("vin", returned.detail.vin)
+            elif return_type == 'airreturn':
+                returned.vin = data.get("vin", returned.vin)
+            
             if not SyncORM.is_valid_vin(returned.vin):
                 return Response(
                     json.dumps({

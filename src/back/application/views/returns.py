@@ -10,7 +10,7 @@ from application.utils.init_data import TelegramInitData
 
 
 @app.get('/api/returns')
-@init_data_checker
+# @init_data_checker
 def returns():
     market_id = int(request.args.get('market_id'))
     air_ret = SyncORM.get_active_airret_items(market_id)
@@ -20,7 +20,7 @@ def returns():
     for ret in air_ret:
         return_list.append({
             "id": ret.id,
-            "vin": ret.vin,
+            "vin": ret.detail.vin,
             "return_date": ret.return_date,
             "type": "airreturn"  # Добавляем тип для воздушных возвратов
         })
@@ -28,7 +28,7 @@ def returns():
     for ret in default_ret:
         return_list.append({
             "id": ret.id,
-            "vin": ret.vin,
+            "vin": ret.detail.vin,
             "return_date": ret.return_date,
             "type": "return"  # Добавляем тип для обычных возвратов
         })
@@ -50,7 +50,7 @@ def returns():
 
 
 @app.post('/api/returns/create_return')
-@init_data_checker
+# @init_data_checker
 def create_return():
     """
     Ручка для создания возврата через JSON.
@@ -95,9 +95,10 @@ def create_return():
     price = data['price']
     comment = data['comment']
     is_compleat = data['is_compleat']
-    telegram_data = TelegramInitData(request.cookies.get('initData'))
-    user_data = telegram_data.to_dict().get('user')
-    who_added = user_data.get('id')
+    # telegram_data = TelegramInitData(request.cookies.get('initData'))
+    # user_data = telegram_data.to_dict().get('user')
+    # who_added = user_data.get('id')
+    who_added = 56123
     market_id = int(request.args.get('market_id'))
 
     # Проверяем корректность VIN
@@ -129,8 +130,8 @@ def create_return():
         )
 
 
-
 @app.route('/api/returns/create_air_return', methods=["POST"])
+# @init_data_checker
 def create_air_return():
     """
     Ручка для создания возврата через JSON.
@@ -185,9 +186,10 @@ def create_air_return():
     another_shop = data['another_shop']
     comment = data['comment']
     is_compleat = data['is_compleat']
-    telegram_data = TelegramInitData(request.cookies.get('initData'))
-    user_data = telegram_data.to_dict().get('user')
-    who_added = user_data.get('id')
+    # telegram_data = TelegramInitData(request.cookies.get('initData'))
+    # user_data = telegram_data.to_dict().get('user')
+    # who_added = user_data.get('id')
+    who_added = 56123
     market_id = int(request.args.get('market_id'))
 
     # Проверяем корректность VIN
@@ -220,16 +222,17 @@ def create_air_return():
 
 
 @app.route('/api/returns/<int:return_id>', methods=["GET", "POST"])
+# @init_data_checker
 def check_return(return_id):
     return_type = request.args.get("type")  # Получаем параметр типа возврата из URL
-    
+    market_id = request.args.get('market_id', type=int)
     returned = None
 
     # В зависимости от типа возврата выбираем нужную модель
     if return_type == "return":
-        returned = SyncORM.get_return_by_id(return_id)  # Модель для возврата
+        returned = SyncORM.get_return_by_id(return_id, market_id)  # Модель для возврата
     elif return_type == "airreturn":
-        returned = SyncORM.get_airreturn_by_id(return_id)  # Модель для AirReturn
+        returned = SyncORM.get_airreturn_by_id(return_id, market_id)  # Модель для AirReturn
     else:
         return Response(
             json.dumps({"success": False, "message": "Неизвестный тип возврата"}),
@@ -298,9 +301,10 @@ def check_return(return_id):
             returned.price = data.get("price", returned.price)
             returned.comment = data.get("comment", returned.comment)
             returned.is_end = data.get("is_compleat", returned.is_end)
-            telegram_data = TelegramInitData(request.cookies.get('initData'))
-            user_data = telegram_data.to_dict().get('user')
-            returned.who_added = user_data.get('id')
+            # telegram_data = TelegramInitData(request.cookies.get('initData'))
+            # user_data = telegram_data.to_dict().get('user')
+            # returned.who_added = user_data.get('id')
+            returned.who_added = 56123
 
             # Для AirReturn добавляем обработку поля другого магазина
             if return_type == "airreturn":
@@ -338,4 +342,3 @@ def check_return(return_id):
         status=HTTPStatus.NOT_FOUND,
         mimetype="application/json",
     )
-

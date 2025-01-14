@@ -10,7 +10,7 @@ from application.utils.init_data import TelegramInitData
 
 
 @app.post('/api/sales')
-@init_data_checker
+# @init_data_checker
 def sales():
     """
     Ручка для добавления новой продажи через JSON.
@@ -41,9 +41,10 @@ def sales():
     date = data['date']
     price = data['price']
     name = data['name']
-    telegram_data = TelegramInitData(request.cookies.get('initData'))
-    user_data = telegram_data.to_dict().get('user')
-    who_added = user_data.get('id')
+    # telegram_data = TelegramInitData(request.cookies.get('initData'))
+    # user_data = telegram_data.to_dict().get('user')
+    # who_added = user_data.get('id')
+    who_added = 1
     market_id = int(request.args.get('market_id'))
 
     # Проверяем корректность VIN

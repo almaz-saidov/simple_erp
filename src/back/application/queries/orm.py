@@ -279,7 +279,6 @@ class SyncORM:
         :param user_id: ID пользователя, добавившего запись
         :return: Объект добавленной покупки
         """
-        print(f'\norm method {market_id}\n')
         with session_factory() as session:
             vin = reformat_vin(vin)
             # Проверяем, существует ли запчасть в Detail
@@ -288,11 +287,10 @@ class SyncORM:
                 # Если детали нет, создаем новую запись
                 detail = Detail(vin=vin, name=detail_name, amount=amount, market_id=market_id)  # Примерные данные для новой записи в Detail
                 session.add(detail)
-                session.commit()  # Зафиксируем изменения в Detail
             else:
                 # Если деталь уже существует, обновляем её количество
                 detail.amount += amount
-                session.commit()
+            session.commit()
 
             # Создаем новую покупку
             purchase = Purchase(
@@ -343,16 +341,13 @@ class SyncORM:
             return purchases
 
     @staticmethod
-    def get_purchase_by_id(purchase_id: int):
+    def get_purchase_by_id(purchase_id: int, market_id: int):
         """Получить поставку по ID"""
         with session_factory() as session:
-            purchase = session.query(Purchase).get(purchase_id)
+            purchase = session.query(Purchase).filter(Purchase.id == purchase_id, Purchase.market_id == market_id).one_or_none()
             return purchase
-
-
         
     # ----------------------Sell Methods -------------------
-
     @staticmethod
     def add_sell(vin: str, amount: int, date: datetime, price: int, name: str, who_added: int, market_id: int):
         """
@@ -381,7 +376,7 @@ class SyncORM:
 
             # Создаем запись о покупке
             sell = Sell(
-                vin=vin,
+                detail_id=detail.id,
                 amount=amount,
                 sell_from_shop_date=date,
                 price=price,
@@ -392,16 +387,15 @@ class SyncORM:
             session.add(sell)
             session.commit()
             return sell
-    
+
     @staticmethod
-    def get_sell_by_id(sell_id: int):
+    def get_sell_by_id(sell_id: int, market_id: int):
         """Получить продажу по ID"""
         with session_factory() as session:
-            purchase = session.query(Sell).get(sell_id)
-            return purchase
+            sell = session.query(Sell).filter(Sell.id == sell_id, Sell.market_id == market_id).one_or_none()
+            return sell
 
     # ----------------------Returns Methods -------------------
-
     @staticmethod
     def create_return(vin: str, amount: int, sell_date: datetime, return_date: datetime, to_seller: str, price: int, comment: str, is_compleat: bool, who_added: int, market_id: int):
         """
@@ -427,7 +421,7 @@ class SyncORM:
 
             # Создаем запись о покупке
             returned = Return(
-                vin=vin,
+                detail_id=detail.id,
                 amount=amount,
                 sell_date=sell_date,
                 return_date=return_date, 
@@ -443,13 +437,11 @@ class SyncORM:
             return SyncORM.to_dict(returned)
 
     @staticmethod
-    def get_return_by_id(return_id: int):
+    def get_return_by_id(return_id: int, market_id: int):
         """Получить возврат по ID"""
         with session_factory() as session:
-            purchase = session.query(Return).filter_by(id=return_id).first()
-            return purchase
-
-
+            return_record = session.query(Return).filter(Return.id == return_id, Return.market_id == market_id).one_or_none()
+            return return_record
 
     @staticmethod
     def update_return(return_id: int, vin: str, amount: int, sell_date: datetime, return_date: datetime, to_seller: str, price: int, comment: str, is_compleat: bool, who_added: int):
@@ -471,8 +463,7 @@ class SyncORM:
             returned = session.query(Return).filter_by(id=return_id).first()
             if not returned:
                 raise ValueError(f"Возврат с ID '{return_id}' не найден.")
-            
-            # Обновляем данные возврата
+
             # Обновляем данные возврата
             returned.vin = vin
             returned.amount = amount
@@ -487,7 +478,6 @@ class SyncORM:
             # Сохраняем изменения в базе данных
             session.commit()
             return returned
-        
 
     @staticmethod
     def get_active_ret_items(market_id):
@@ -497,8 +487,7 @@ class SyncORM:
         :return: Список объектов, где is_end == False.
         """
         with session_factory() as session:
-            query = select(Return).where(Return.is_end == False, Return.market_id == market_id)
-            result = session.scalars(query).all()  # scalars() для работы с объектами
+            result = session.query(Return).filter(Return.is_end == False, Return.market_id == market_id).all()
             return result
 
     # ----------------------AirReturns Methods -------------------
@@ -540,11 +529,11 @@ class SyncORM:
             return SyncORM.to_dict(air_returned)
         
     @staticmethod
-    def get_airreturn_by_id(airreturn_id: int):
+    def get_airreturn_by_id(airreturn_id: int, market_id: int):
         """Получить возврат-воздуха по ID"""
         with session_factory() as session:
-            purchase = session.query(AirReturn).filter_by(id=airreturn_id).first()
-            return purchase
+            air_return = session.query(AirReturn).filter(AirReturn.id == airreturn_id, AirReturn.market_id == market_id).one_or_none()
+            return air_return
 
     @staticmethod
     def update_airreturn(return_id: int, vin: str, amount: int, sell_date: datetime, return_date: datetime, to_seller: str, price: int, another_shop: str, comment: str, is_compleat: bool, who_added: int):
@@ -592,8 +581,7 @@ class SyncORM:
         :return: Список объектов, где is_end == False.
         """
         with session_factory() as session:
-            query = select(AirReturn).where(AirReturn.is_end == False, AirReturn.market_id == market_id)
-            result = session.scalars(query).all()  # scalars() для работы с объектами
+            result = session.query(AirReturn).filter(AirReturn.is_end == False, AirReturn.market_id == market_id).all()
             return result
 
 # -------------------------- History -------------------------
@@ -663,4 +651,3 @@ class SyncORM:
             )
             session.add(new_mapper)
             session.commit()
-            

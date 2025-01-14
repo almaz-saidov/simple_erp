@@ -73,7 +73,6 @@ class Sell(Base):
     """Выдача со склада (продажа)"""
     __tablename__="Sell"
     id: Mapped[intpk]
-    # vin: Mapped[str] = mapped_column(String(25), ForeignKey("Detail.vin"), nullable=False)
     detail_id: Mapped[int] = mapped_column(Integer, ForeignKey("Detail.id"), nullable=False)
     detail = relationship("Detail", backref="sell", lazy="joined")
     price: Mapped[int] = mapped_column(Integer, nullable=False)
@@ -90,7 +89,6 @@ class Return(Base):
     """Возвраты в Магазин"""
     __tablename__ = "Return"
     id: Mapped[intpk]
-    # vin: Mapped[str] = mapped_column(String(25), nullable=False)
     detail_id: Mapped[int] = mapped_column(Integer, ForeignKey("Detail.id"), nullable=False)
     detail = relationship("Detail", backref="return", lazy="joined")
     amount: Mapped[int] = mapped_column(Integer, nullable=False, default=1)
@@ -112,9 +110,7 @@ class AirReturn(Base):
     __tablename__ = "AirReturn"
     # сделать поле с пометкой осуществлен ли возврат  
     id: Mapped[intpk]
-    # vin: Mapped[str] = mapped_column(String(25), nullable=False)
-    detail_id: Mapped[int] = mapped_column(Integer, ForeignKey("Detail.id"), nullable=False)
-    detail = relationship("Detail", backref="airreturn", lazy="joined")
+    vin: Mapped[str] = mapped_column(String(25), nullable=False)
     amount: Mapped[int] = mapped_column(Integer, nullable=False, default=1)
     # from_client: Mapped[str | None]
     sell_date: Mapped[datetime.date] = mapped_column(Date, nullable=False)

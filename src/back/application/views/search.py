@@ -8,7 +8,7 @@ from application.utils.checker import init_data_checker
 
 
 @app.get('/api/search')
-@init_data_checker
+# @init_data_checker
 def search_detail():
     """
     Поиск детали по VIN через JSON.

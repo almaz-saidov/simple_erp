@@ -85,7 +85,6 @@ class Sell(Base):
     details = relationship("Detail", backref="sell", lazy="joined", uselist=False) # !  автоматически создаем обратное отношение в другой таблице без явного указания relationship там.
     user_who_added = relationship("User", backref="sell", lazy="joined", uselist=False) # !  автоматически создаем обратное отношение в другой таблице без явного указания relationship там.
     market_id: Mapped[int] = mapped_column(Integer, ForeignKey('Market.id'), nullable=False)
-    market = relationship("Market", backref="sell", lazy="joined", uselist=False)
 
 
 class Return(Base):
@@ -107,7 +106,6 @@ class Return(Base):
     # another_shop: Mapped[str | None] = mapped_column(String, nullable=True)
     user_who_added = relationship("User", backref="return", lazy="joined", uselist=False) # !  автоматически создаем обратное отношение в другой таблице без явного указания relationship там.
     market_id: Mapped[int] = mapped_column(Integer, ForeignKey('Market.id'), nullable=False)
-    market = relationship("Market", backref="return", lazy="joined", uselist=False)
 
 
 class AirReturn(Base):
@@ -130,4 +128,3 @@ class AirReturn(Base):
     who_added: Mapped[BigInteger] = mapped_column(BigInteger, ForeignKey("User.id"), nullable=False)
     user_who_added = relationship("User", backref="airreturn", lazy="joined", uselist=False) # !  автоматически создаем обратное отношение в другой таблице без явного указания relationship там.
     market_id: Mapped[int] = mapped_column(Integer, ForeignKey('Market.id'), nullable=False)
-    market = relationship("Market", backref="air_return", lazy="joined", uselist=False)

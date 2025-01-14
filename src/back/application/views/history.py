@@ -243,9 +243,8 @@ def history_return(return_id):
                 )
 
             # Обновляем данные из полученного JSON
-            if return_type == 'airreturn':
-                returned.vin = data.get("vin", returned.vin)
-            if not SyncORM.is_valid_vin(returned.vin):
+            vin_from_data = data.get("vin")
+            if not SyncORM.is_valid_vin(vin_from_data):
                 return Response(
                     json.dumps({
                         "success": False,
@@ -254,8 +253,10 @@ def history_return(return_id):
                     status=HTTPStatus.BAD_REQUEST,
                     mimetype="application/json",
                 )
+            
+            if return_type == 'airreturn':
+                returned.vin = vin_from_data
 
-            # Обновляем данные из полученного JSON
             returned.amount = data.get("amount", returned.amount)
             returned.sell_date = data.get("sell_date", returned.sell_date)
             returned.return_date = data.get("return_date", returned.return_date)
@@ -276,7 +277,7 @@ def history_return(return_id):
             if return_type == "airreturn":
                 SyncORM.update_airreturn(return_id, returned.vin, returned.amount, returned.sell_date, returned.return_date, returned.to_seller, returned.price, returned.another_shop, returned.comment, returned.is_end, returned.who_added)
             else:
-                SyncORM.update_return(return_id, returned.vin, returned.amount, returned.sell_date, returned.return_date, returned.to_seller, returned.price, returned.comment, returned.is_end, returned.who_added)
+                SyncORM.update_return(return_id, vin_from_data, returned.amount, returned.sell_date, returned.return_date, returned.to_seller, returned.price, returned.comment, returned.is_end, returned.who_added)
 
             return Response(
                 json.dumps({

@@ -114,7 +114,7 @@ def get_records_purchases(vin_filter, date_from, date_before, market_id):
         result = [
             {
                 "id": record.id,
-                "vin": record.vin,
+                "vin": record.detail.vin,
                 "date": (record.add_to_shop_date).strftime('%Y-%m-%d'),
                 "amount": record.amount,
                 "price": record.price,

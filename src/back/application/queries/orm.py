@@ -74,7 +74,7 @@ def get_records_return_air_return(vin_filter, date_from, date_before, market_id)
         result = [
             {
                 "id": record.id,
-                "vin": record.detail.vin,
+                "vin": record.vin,
                 "date": (record.return_date).strftime('%Y-%m-%d'),
                 "amount": record.amount,
                 "price": record.price,
@@ -85,21 +85,19 @@ def get_records_return_air_return(vin_filter, date_from, date_before, market_id)
             for record in returns
         ]
 
-        result.append(
-            [
-                {
-                    "id": record.id,
-                    "vin": record.vin,
-                    "date": (record.return_date).strftime('%Y-%m-%d'),
-                    "amount": record.amount,
-                    "price": record.price,
-                    "type":  record.type,
-                    "who_added": record.who_added,
-                    "market_id": record.market_id,
-                }
+        result += [
+            {
+                "id": record.id,
+                "vin": record.vin,
+                "date": (record.return_date).strftime('%Y-%m-%d'),
+                "amount": record.amount,
+                "price": record.price,
+                "type":  record.type,
+                "who_added": record.who_added,
+                "market_id": record.market_id,
+            }
             for record in air_returns
-            ]
-        )
+        ]
 
         return result
 

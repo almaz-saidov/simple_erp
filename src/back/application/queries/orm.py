@@ -280,7 +280,6 @@ class SyncORM:
         :param user_id: ID пользователя, добавившего запись
         :return: Объект добавленной покупки
         """
-        print(f'\norm method {market_id}\n')
         with session_factory() as session:
             vin = reformat_vin(vin)
             # Проверяем, существует ли запчасть в Detail
@@ -296,19 +295,30 @@ class SyncORM:
                 session.commit()
 
             # Проверяем, существует ли покупка с таким vin
-            purchase = session.query(Purchase).filter_by(vin=vin).first()
-            if not purchase:
-                # Если покупки с таким VIN нет, создаем новую покупку
-                purchase = Purchase(
-                    vin=vin,
-                    price=price,
-                    amount=amount,
-                    name=detail_name,
-                    add_to_shop_date=date,
-                    who_added=who_added,
-                    market_id=market_id
-                )
-                session.add(purchase)
+            # purchase = session.query(Purchase).filter_by(vin=vin).first()
+            # if not purchase:
+            #     # Если покупки с таким VIN нет, создаем новую покупку
+            #     purchase = Purchase(
+            #         vin=vin,
+            #         price=price,
+            #         amount=amount,
+            #         name=detail_name,
+            #         add_to_shop_date=date,
+            #         who_added=who_added,
+            #         market_id=market_id
+            #     )
+            #     session.add(purchase)
+            detail = session.query(Detail).filter_by(vin=vin).first()
+            purchase = Purchase(
+                detail_id=detail.id,
+                price=price,
+                amount=amount,
+                name=detail_name,
+                add_to_shop_date=date,
+                who_added=who_added,
+                market_id=market_id
+            )
+            session.add(purchase)
 
             session.commit()  # Зафиксируем изменения в Purchase
             return purchase

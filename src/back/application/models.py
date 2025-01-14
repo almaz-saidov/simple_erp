@@ -43,8 +43,8 @@ class MarketUserMapper(Base):
 
 class Detail(Base):
     __tablename__ = "Detail"
-    # id: Mapped[intpk]
-    vin: Mapped[str] = mapped_column(String(25), primary_key=True) 
+    id: Mapped[intpk]
+    vin: Mapped[str] = mapped_column(String(25)) 
     name: Mapped[str] = mapped_column(String, nullable=False)
     amount: Mapped[int] = mapped_column(Integer, nullable=False, default=0)
     market_id: Mapped[int] = mapped_column(Integer, ForeignKey('Market.id'), nullable=False)
@@ -55,7 +55,7 @@ class Purchase(Base):
     """Добавление на склад (покупка)"""
     __tablename__ = "Purchase"
     id: Mapped[intpk]
-    vin: Mapped[str] = mapped_column(String(25), ForeignKey("Detail.vin"), nullable=False)
+    detail_id: Mapped[str] = mapped_column(Integer, ForeignKey("Detail.id"), nullable=False)
     name: Mapped[str] = mapped_column(String(100), nullable=False)
     price: Mapped[int] = mapped_column(Integer, nullable=False)
     amount: Mapped[int] = mapped_column(Integer, nullable=False, default=0)
@@ -73,7 +73,7 @@ class Sell(Base):
     """Выдача со склада (продажа)"""
     __tablename__="Sell"
     id: Mapped[intpk]
-    vin: Mapped[str] = mapped_column(String(25), ForeignKey("Detail.vin"), nullable=False) 
+    detail_id: Mapped[str] = mapped_column(Integer, ForeignKey("Detail.id"), nullable=False)
     price: Mapped[int] = mapped_column(Integer, nullable=False)
     amount: Mapped[int] = mapped_column(Integer, nullable=False, default=0)
     sell_from_shop_date: Mapped[datetime.date] = mapped_column(Date,server_default=text("TIMEZONE('utc', now())"))
@@ -90,7 +90,7 @@ class Return(Base):
     """Возвраты в Магазин"""
     __tablename__ = "Return"
     id: Mapped[intpk]
-    vin: Mapped[str] = mapped_column(String(25), nullable=False)
+    detail_id: Mapped[str] = mapped_column(Integer, ForeignKey("Detail.id"), nullable=False)
     amount: Mapped[int] = mapped_column(Integer, nullable=False, default=1)
     # from_client: Mapped[str | None]
     sell_date: Mapped[datetime.date] = mapped_column(Date, nullable=False)
@@ -111,7 +111,7 @@ class AirReturn(Base):
     __tablename__ = "AirReturn"
     # сделать поле с пометкой осуществлен ли возврат  
     id: Mapped[intpk]
-    vin: Mapped[str] = mapped_column(String(25), nullable=False)
+    detail_id: Mapped[str] = mapped_column(Integer, ForeignKey("Detail.id"), nullable=False)
     amount: Mapped[int] = mapped_column(Integer, nullable=False, default=1)
     # from_client: Mapped[str | None]
     sell_date: Mapped[datetime.date] = mapped_column(Date, nullable=False)

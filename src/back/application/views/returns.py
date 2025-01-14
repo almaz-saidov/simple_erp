@@ -317,7 +317,7 @@ def check_return(return_id):
             if return_type == "airreturn":
                 SyncORM.update_airreturn(return_id, returned.vin, returned.amount, returned.sell_date, returned.return_date, returned.to_seller, returned.price, returned.another_shop, returned.comment, returned.is_end, returned.who_added)
             else:
-                SyncORM.update_return(return_id, returned.vin, returned.amount, returned.sell_date, returned.return_date, returned.to_seller, returned.price, returned.comment, returned.is_end, returned.who_added)
+                SyncORM.update_return(return_id, returned.amount, returned.sell_date, returned.return_date, returned.to_seller, returned.price, returned.comment, returned.is_end, returned.who_added)
 
             return Response(
                 json.dumps({

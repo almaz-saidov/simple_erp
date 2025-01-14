@@ -43,8 +43,8 @@ class MarketUserMapper(Base):
 
 class Detail(Base):
     __tablename__ = "Detail"
-    # id: Mapped[intpk]
-    vin: Mapped[str] = mapped_column(String(25), primary_key=True) 
+    id: Mapped[intpk]
+    vin: Mapped[str] = mapped_column(String(25)) 
     name: Mapped[str] = mapped_column(String, nullable=False)
     amount: Mapped[int] = mapped_column(Integer, nullable=False, default=0)
     market_id: Mapped[int] = mapped_column(Integer, ForeignKey('Market.id'), nullable=False)
@@ -55,7 +55,8 @@ class Purchase(Base):
     """Добавление на склад (покупка)"""
     __tablename__ = "Purchase"
     id: Mapped[intpk]
-    vin: Mapped[str] = mapped_column(String(25), ForeignKey("Detail.vin"), nullable=False)
+    detail_id: Mapped[int] = mapped_column(Integer, ForeignKey("Detail.id"), nullable=False)
+    detail = relationship("Detail", backref="purchase", lazy="joined")
     name: Mapped[str] = mapped_column(String(100), nullable=False)
     price: Mapped[int] = mapped_column(Integer, nullable=False)
     amount: Mapped[int] = mapped_column(Integer, nullable=False, default=0)
@@ -63,7 +64,6 @@ class Purchase(Base):
     # seller: Mapped[str] = mapped_column(String, nullable=False) 
     who_added: Mapped[BigInteger] = mapped_column(BigInteger, ForeignKey("User.id"), nullable=False)
     # supplier: Mapped[str] = mapped_column(String, nullable=True) # ? на будущее поставщик кто поставил запчасть
-    detail = relationship("Detail", backref="purchase", lazy="joined", uselist=False) # !  автоматически создаем обратное отношение в другой таблице без явного указания relationship там.
     user_who_added = relationship("User", backref="purchase", lazy="joined", uselist=False) # !  автоматически создаем обратное отношение в другой таблице без явного указания relationship там.
     market_id: Mapped[int] = mapped_column(Integer, ForeignKey('Market.id'), nullable=False)
     market = relationship("Market", backref="purchase", lazy="joined", uselist=False)

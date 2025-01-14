@@ -95,7 +95,7 @@ def get_records_purchases(vin_filter, date_from, date_before, market_id):
     with session_factory() as session:
         query = session.query(
             Purchase.id,
-            Purchase.vin,
+            Purchase.detail.vin,
             Purchase.amount,
             Purchase.add_to_shop_date,
             Purchase.price,

@@ -31,7 +31,6 @@ def get_records_return_air_return(vin_filter, date_from, date_before, market_id)
     with session_factory() as session:
         return_query = session.query(
             Return.id,
-            Return.vin,
             Return.amount,
             Return.sell_date,
             Return.return_date,
@@ -41,7 +40,7 @@ def get_records_return_air_return(vin_filter, date_from, date_before, market_id)
             Return.is_end,
             Return.who_added,
             literal('return').label('type')  # Указываем тип записи
-        ).where(Return.is_end == True, Return.market_id == market_id)
+        ).join(Detail, Detail.id == Return.detail_id).filter(Return.is_end == True, Return.market_id == market_id)
 
         air_return_query = session.query(
             AirReturn.id,
@@ -131,13 +130,12 @@ def get_records_sales(vin_filter, date_from, date_before, market_id):
     with session_factory() as session:
         query = session.query(
             Sell.id,
-            Sell.vin,
             Sell.amount,
             Sell.sell_from_shop_date,
             Sell.price,
             Sell.who_added,
             literal('vidyacha').label('type')  # Указываем тип записи
-        ).where(Sell.market_id == market_id)
+        ).join(Detail, Detail.id == Sell.detail_id).filter(Sell.market_id == market_id)
         filters = []
         if vin_filter:
             filters.append(Sell.vin.ilike(f"%{vin_filter}%"))

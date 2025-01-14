@@ -96,6 +96,7 @@ def get_records_purchases(vin_filter, date_from, date_before, market_id):
             Purchase.add_to_shop_date,
             Purchase.price,
             Purchase.who_added,
+            Purchase.market_id,
             Detail.vin,
             literal('postupleniya').label('type')  # Указываем тип записи
         ).join(Detail, Detail.id == Purchase.detail_id).filter(Purchase.market_id == market_id)
@@ -134,6 +135,7 @@ def get_records_sales(vin_filter, date_from, date_before, market_id):
             Sell.sell_from_shop_date,
             Sell.price,
             Sell.who_added,
+            Sell.market_id,
             Detail.vin,
             literal('vidyacha').label('type')  # Указываем тип записи
         ).join(Detail, Detail.id == Sell.detail_id).filter(Sell.market_id == market_id)

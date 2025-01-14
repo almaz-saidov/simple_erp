@@ -8,7 +8,7 @@ from application.utils.checker import init_data_checker
 
 
 @app.get('/api/search')
-# @init_data_checker
+@init_data_checker
 def search_detail():
     """
     Поиск детали по VIN через JSON.
@@ -16,7 +16,7 @@ def search_detail():
     vin = request.args.get("vin", "")
     page = request.args.get("page", 1, type=int)
     per_page = request.args.get("per_page", 25, type=int)
-    market_id = int(request.args.get('market_id'))
+    market_id = request.args.get('market_id', type=int)
 
     if not vin:
         vin = ''

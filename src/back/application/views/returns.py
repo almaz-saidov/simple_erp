@@ -10,9 +10,9 @@ from application.utils.init_data import TelegramInitData
 
 
 @app.get('/api/returns')
-# @init_data_checker
+@init_data_checker
 def returns():
-    market_id = int(request.args.get('market_id'))
+    market_id = request.args.get('market_id', type=int)
     air_ret = SyncORM.get_active_airret_items(market_id)
     default_ret = SyncORM.get_active_ret_items(market_id)
 
@@ -50,7 +50,7 @@ def returns():
 
 
 @app.post('/api/returns/create_return')
-# @init_data_checker
+@init_data_checker
 def create_return():
     """
     Ручка для создания возврата через JSON.
@@ -95,11 +95,11 @@ def create_return():
     price = data['price']
     comment = data['comment']
     is_compleat = data['is_compleat']
-    # telegram_data = TelegramInitData(request.cookies.get('initData'))
-    # user_data = telegram_data.to_dict().get('user')
-    # who_added = user_data.get('id')
-    who_added = 56123
-    market_id = int(request.args.get('market_id'))
+    telegram_data = TelegramInitData(request.cookies.get('initData'))
+    user_data = telegram_data.to_dict().get('user')
+    who_added = user_data.get('id')
+    # who_added = 56123
+    market_id = request.args.get('market_id', type=int)
 
     # Проверяем корректность VIN
     if not SyncORM.is_valid_vin(vin):
@@ -131,7 +131,7 @@ def create_return():
 
 
 @app.route('/api/returns/create_air_return', methods=["POST"])
-# @init_data_checker
+@init_data_checker
 def create_air_return():
     """
     Ручка для создания возврата через JSON.
@@ -186,11 +186,11 @@ def create_air_return():
     another_shop = data['another_shop']
     comment = data['comment']
     is_compleat = data['is_compleat']
-    # telegram_data = TelegramInitData(request.cookies.get('initData'))
-    # user_data = telegram_data.to_dict().get('user')
-    # who_added = user_data.get('id')
-    who_added = 56123
-    market_id = int(request.args.get('market_id'))
+    telegram_data = TelegramInitData(request.cookies.get('initData'))
+    user_data = telegram_data.to_dict().get('user')
+    who_added = user_data.get('id')
+    # who_added = 56123
+    market_id = request.args.get('market_id', type=int)
 
     # Проверяем корректность VIN
     if not SyncORM.is_valid_vin(vin):
@@ -222,7 +222,7 @@ def create_air_return():
 
 
 @app.route('/api/returns/<int:return_id>', methods=["GET", "POST"])
-# @init_data_checker
+@init_data_checker
 def check_return(return_id):
     return_type = request.args.get("type")  # Получаем параметр типа возврата из URL
     market_id = request.args.get('market_id', type=int)
@@ -301,10 +301,10 @@ def check_return(return_id):
             returned.price = data.get("price", returned.price)
             returned.comment = data.get("comment", returned.comment)
             returned.is_end = data.get("is_compleat", returned.is_end)
-            # telegram_data = TelegramInitData(request.cookies.get('initData'))
-            # user_data = telegram_data.to_dict().get('user')
-            # returned.who_added = user_data.get('id')
-            returned.who_added = 56123
+            telegram_data = TelegramInitData(request.cookies.get('initData'))
+            user_data = telegram_data.to_dict().get('user')
+            returned.who_added = user_data.get('id')
+            # returned.who_added = 56123
 
             # Для AirReturn добавляем обработку поля другого магазина
             if return_type == "airreturn":

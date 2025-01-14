@@ -10,7 +10,7 @@ from application.utils.init_data import TelegramInitData
 
 
 @app.get('/api/history')
-# @init_data_checker
+@init_data_checker
 def history():
     """
     Получение записей истории в формате JSON с использованием Response.
@@ -20,7 +20,7 @@ def history():
     vin_filter = request.args.get('like', default='', type=str)
     date_from = request.args.get('date_from', type=str)
     date_before = request.args.get('date_before', type=str)
-    market_id = int(request.args.get('market_id'))
+    market_id = request.args.get('market_id', type=int)
 
     try:
         # Получаем записи по заданным параметрам
@@ -53,7 +53,7 @@ def history():
 
 
 @app.route("/api/history/sell/<int:sell_id>", methods=["GET", "POST"])
-# @init_data_checker
+@init_data_checker
 def history_sell(sell_id):
     if request.method == "POST":
         # Получаем данные из JSON запроса
@@ -116,7 +116,7 @@ def history_sell(sell_id):
 
 
 @app.route("/api/history/purchase/<int:purchase_id>", methods=["GET", "POST"])
-# @init_data_checker
+@init_data_checker
 def history_purchase(purchase_id):
     if request.method == "POST":
         # Получаем данные из JSON запроса
@@ -181,7 +181,7 @@ def history_purchase(purchase_id):
 
 
 @app.route("/api/history/returns/<int:return_id>", methods=["GET", "POST"])
-# @init_data_checker
+@init_data_checker
 def history_return(return_id):
     return_type = request.args.get("type")  # Получаем параметр типа возврата из URL или формы
     market_id = request.args.get('market_id', type=int)
@@ -263,10 +263,10 @@ def history_return(return_id):
             returned.price = data.get("price", returned.price)
             returned.comment = data.get("comment", returned.comment)
             returned.is_end = data.get("is_compleat", returned.is_end)
-            # telegram_data = TelegramInitData(request.cookies.get('initData'))
-            # user_data = telegram_data.to_dict().get('user')
-            # returned.who_added = user_data.get('id')
-            returned.who_added = 56123
+            telegram_data = TelegramInitData(request.cookies.get('initData'))
+            user_data = telegram_data.to_dict().get('user')
+            returned.who_added = user_data.get('id')
+            # returned.who_added = 56123
 
             # Для AirReturn добавляем обработку поля другого магазина
             if return_type == "airreturn":

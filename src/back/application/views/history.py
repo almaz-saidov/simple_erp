@@ -202,7 +202,7 @@ def history_return(return_id):
     if returned:
         # Получаем данные из базы и заполняем ответ для клиента
         response_data = {
-            "vin": returned.detail.vin,
+            "vin": returned.detail.vin if return_type == 'return' else returned.vin,
             "amount": returned.amount,
             "sell_date": returned.sell_date,
             "return_date": returned.return_date,
@@ -210,7 +210,6 @@ def history_return(return_id):
             "to_seller": returned.to_seller,
             "comment": returned.comment,
             "is_compleat": returned.is_end,
-            "who_added": returned.user_who_added.name,
         }
         
         # Если это AirReturn, то добавляем поле для другого магазина
@@ -244,7 +243,8 @@ def history_return(return_id):
                 )
 
             # Обновляем данные из полученного JSON
-            returned.vin = data.get("vin", returned.vin)
+            if return_type == 'airreturn':
+                returned.vin = data.get("vin", returned.vin)
             if not SyncORM.is_valid_vin(returned.vin):
                 return Response(
                     json.dumps({

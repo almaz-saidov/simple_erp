@@ -284,11 +284,8 @@ def check_return(return_id):
                 )
 
             # Обновляем данные из полученного JSON
-            if return_type == 'return':
-                returned.vin = data.get("vin", returned.detail.vin)
-            elif return_type == 'airreturn':
+            if return_type == 'airreturn':
                 returned.vin = data.get("vin", returned.vin)
-            
             if not SyncORM.is_valid_vin(returned.vin):
                 return Response(
                     json.dumps({
@@ -298,6 +295,7 @@ def check_return(return_id):
                     status=HTTPStatus.BAD_REQUEST,
                     mimetype="application/json",
                 )
+            
             returned.amount = data.get("amount", returned.amount)
             returned.sell_date = data.get("sell_date", returned.sell_date)
             returned.return_date = data.get("return_date", returned.return_date)

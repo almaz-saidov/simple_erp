@@ -473,6 +473,9 @@ class SyncORM:
         """
         with session_factory() as session:
             # Получаем возврат по ID
+            detail = session.query(Detail).filter_by(vin=vin).first()
+            if not detail:
+                raise ValueError(f"Деталь с VIN '{vin}' не найдена.")
             returned = session.query(Return).filter_by(id=return_id).first()
             if not returned:
                 raise ValueError(f"Возврат с ID '{return_id}' не найден.")

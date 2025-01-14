@@ -49,6 +49,7 @@ class Detail(Base):
     amount: Mapped[int] = mapped_column(Integer, nullable=False, default=0)
     market_id: Mapped[int] = mapped_column(Integer, ForeignKey('Market.id'), nullable=False)
     market = relationship("Market", backref="detail", lazy="joined", uselist=False)
+    purchase = relationship("Purchase", backref="detail", lazy="joined", uselist=False)
     
 
 class Purchase(Base):

@@ -20,7 +20,7 @@ def returns():
     for ret in air_ret:
         return_list.append({
             "id": ret.id,
-            "vin": ret.detail.vin,
+            "vin": ret.vin,
             "return_date": ret.return_date,
             "type": "airreturn"  # Добавляем тип для воздушных возвратов
         })

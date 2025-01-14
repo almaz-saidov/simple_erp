@@ -71,9 +71,9 @@ def get_records_return_air_return(vin_filter, date_from, date_before, market_id)
             air_return_query = air_return_query.filter(AirReturn.return_date <= date_before)
 
         # Объединяем запросы
-        combined_query = return_query.union(air_return_query)
+        returns = return_query.all()
+        air_returns = air_return_query.all()
         # Получаем результаты
-        records = combined_query.all()
         result = [
             {
                 "id": record.id,
@@ -83,7 +83,17 @@ def get_records_return_air_return(vin_filter, date_from, date_before, market_id)
                 "price": record.price,
                 "type":  record.type,  # Используем заранее добавленный тип
             }
-            for record in records
+            for record in returns
+        ] + [
+            {
+                "id": record.id,
+                "vin": record.vin,
+                "date": (record.return_date).strftime('%Y-%m-%d'),
+                "amount": record.amount,
+                "price": record.price,
+                "type":  record.type,  # Используем заранее добавленный тип
+            }
+            for record in air_returns
         ]
         return result
 

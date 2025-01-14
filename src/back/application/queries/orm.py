@@ -67,16 +67,14 @@ def get_records_return_air_return(vin_filter, date_from, date_before, market_id)
             return_query = return_query.filter(Return.return_date <= date_before)
             air_return_query = air_return_query.filter(AirReturn.return_date <= date_before)
 
-        # Объединяем запросы через union
-        combined_query = return_query.union(air_return_query)
-
         # Получаем результаты
-        records = combined_query.all()
+        returns = return_query.all()
+        air_returns = air_return_query.all()
 
         result = [
             {
                 "id": record.id,
-                "vin": record.vin,
+                "vin": record.detail.vin,
                 "date": (record.return_date).strftime('%Y-%m-%d'),
                 "amount": record.amount,
                 "price": record.price,
@@ -84,8 +82,24 @@ def get_records_return_air_return(vin_filter, date_from, date_before, market_id)
                 "who_added": record.who_added,
                 "market_id": record.market_id,
             }
-            for record in records
+            for record in returns
         ]
+
+        result.append(
+            [
+                {
+                    "id": record.id,
+                    "vin": record.vin,
+                    "date": (record.return_date).strftime('%Y-%m-%d'),
+                    "amount": record.amount,
+                    "price": record.price,
+                    "type":  record.type,
+                    "who_added": record.who_added,
+                    "market_id": record.market_id,
+                }
+            for record in air_returns
+            ]
+        )
 
         return result
 
@@ -112,7 +126,7 @@ def get_records_purchases(vin_filter, date_from, date_before, market_id):
         result = [
             {
                 "id": record.id,
-                "vin": record.vin,
+                "vin": record.detail.vin,
                 "date": (record.add_to_shop_date).strftime('%Y-%m-%d'),
                 "amount": record.amount,
                 "price": record.price,
@@ -147,7 +161,7 @@ def get_records_sales(vin_filter, date_from, date_before, market_id):
         result = [
             {
                 "id": record.id,
-                "vin": record.vin,
+                "vin": record.detail.vin,
                 "date": (record.sell_from_shop_date).strftime('%Y-%m-%d'),
                 "amount": record.amount,
                 "price": record.price,

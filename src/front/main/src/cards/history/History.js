@@ -48,7 +48,7 @@ function History() {
             date_before: endDate,
         }
     }
-    const handleApiResponse = async (editedReturn, isNew, isAir) => {
+    const handleApiResponse = async (editedReturn, isNew, isAir, type) => {
         const successMessage = isNew ? 'Возврат создан' : 'Возврат изменён';
         try {
             if (isNew) {

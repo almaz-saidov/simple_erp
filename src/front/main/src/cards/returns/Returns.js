@@ -62,7 +62,7 @@ function Returns() {
         const successMessage = isNew ? 'Возврат создан' : 'Возврат изменён';
         try {
             if (type === 'edit') {
-                tryEditReturn(editedReturn, isNew, isAir, value.id);
+                await tryEditReturn(editedReturn, isAir, isNew, value.id);
             } else if (type === 'delete') {
                 await deleteReturnById(editedReturn, isAir, value.id);
             }

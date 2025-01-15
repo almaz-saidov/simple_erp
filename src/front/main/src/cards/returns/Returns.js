@@ -4,7 +4,7 @@ import Return from './Return';
 import { SyncLoader } from 'react-spinners'
 import ReturnModal from './ReturnModal';
 import { fetchReturns, fetchReturnsAll } from '../../api/Api'
-import { createReturn, updateReturnById } from '../../api/Api';
+import { createReturn, updateReturnById, deleteReturnById } from '../../api/Api';
 import toast, { Toaster } from 'react-hot-toast';
 import { MarketContext } from '../../markets/MarketContext'
 
@@ -50,13 +50,21 @@ function Returns() {
 
     const getSubmitButtonOnClick = () => { }
 
-    const handleApiResponse = async (editedReturn, isNew, isAir) => {
+    async function tryEditReturn(editedReturn, isAir, isNew, id) {
+        if (isNew) {
+            await createReturn(editedReturn, isAir, id);
+        } else {
+            await updateReturnById(editedReturn, isAir, id);
+        }
+    }
+
+    const handleApiResponse = async (editedReturn, isNew, isAir, type) => {
         const successMessage = isNew ? 'Возврат создан' : 'Возврат изменён';
         try {
-            if (isNew) {
-                await createReturn(editedReturn, isAir, value.id);
-            } else {
-                await updateReturnById(editedReturn, isAir, value.id);
+            if (type === 'edit') {
+                tryEditReturn(editedReturn, isNew, isAir, value.id);
+            } else if (type === 'delete') {
+                await deleteReturnById(editedReturn, isAir, value.id);
             }
 
             // Успешное завершение

@@ -58,6 +58,31 @@ export const postData = async (dataObject, url) => {
 
 };
 
+export const deleteData = async (dataObject, url) => {
+    //let response;
+    try {
+        const response = await fetch(url, {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(dataObject),
+        });
+
+        if (!response.ok) {
+            throw new Error(`HTTP ошибка! Статус: ${response.status}, text: ${response.text()}`);
+        }
+
+        const data = await response.json();
+        return data;
+
+    } catch (error) {
+        console.error("Ошибка при отправке данных:", error);
+        throw error;
+    }
+
+};
+
 export const getData = async (url, parseData) => {
     try {
         const response = await fetch(url, {
@@ -108,6 +133,14 @@ export const createReturn = async (newReturn, isAir, market_id) => {
     await postData(newReturn, url);
 }
 
+
+export const deleteReturnById = async (updatedReturn, isAir, market_id) => {
+    const type = isAir ? "airreturn" : "return";
+    updatedReturn.sell_date = formatDateToSend(updatedReturn.sell_date);
+    updatedReturn.return_date = formatDateToSend(updatedReturn.return_date);
+    await deleteData(updatedReturn, `${API_URL}/returns/${updatedReturn.id}?type=${type}&market_id=${market_id}`);
+
+}
 export const createPurchase = async (newPurchase, market_id) => {
     await postData(newPurchase, `${API_URL}/purchases?market_id=${market_id}`);
 }

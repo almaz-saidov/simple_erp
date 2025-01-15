@@ -5,7 +5,8 @@ import Checkbox from '../../components/CheckBox';
 import { ReactComponent as LeftArrow } from '../../assets/left_arrow_icon.svg';
 import { ReactComponent as AirIcon } from '../../assets/air_icon.svg';
 import { SyncLoader } from 'react-spinners';
-import TextField from '../../components/TextField';
+import TextField from '../../components/TextField'
+import { DeleteButton } from '../../components/SubmitButton';
 
 import { fetchReturnById, fetchReturnHistoryById } from '../../api/Api';
 import toast from 'react-hot-toast';
@@ -135,15 +136,18 @@ const ReturnModal = ({ isOpen, onClose, returnData, isCreating, isAir, isHistory
     const handleOnClick = () => {
         if (!checkWithToastIsBadReturn()) {
             setIsBadInput(true);
-            //toast.error('Заполниет все обязательные поля');
-
         } else {
             setIsBadInput(false);
             let returnToSend = getReturn();
             returnToSend.id = returnData.id;
-            handleApiResponse(returnToSend, isCreating, isAir);
-
+            handleApiResponse(returnToSend, isCreating, isAir, "edit");
         }
+    }
+
+    const handleDelete = () => {
+        let returnToSend = getReturn();
+        returnToSend.id = returnData.id;
+        handleApiResponse(returnToSend, isCreating, isAir, "delete");
     }
 
     const getSubmitButtonText = () => {
@@ -286,9 +290,16 @@ const ReturnModal = ({ isOpen, onClose, returnData, isCreating, isAir, isHistory
                 </div>
                 {loading ?
                     <></>
-                    : <button className='SubmitButton' onClick={handleOnClick}>
-                        {getSubmitButtonText()}
-                    </button>
+                    : <>
+                        <button className='SubmitButton' onClick={handleOnClick}>
+                            {getSubmitButtonText()}
+                        </button>
+                        {isHistory || isCreating ? (
+                            <DeleteButton onClick={handleDelete}>
+
+                            </DeleteButton>) : {}}
+
+                    </>
                 }
             </div>
 

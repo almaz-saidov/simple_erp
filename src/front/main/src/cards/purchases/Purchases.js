@@ -1,6 +1,6 @@
 import CardHeader from "../../components/CardHeader";
 import Input from '../../components/Input';
-import IssuanceButton from '../../components/SubmitButton';
+import { IssuanceButton } from '../../components/SubmitButton';
 import toast from 'react-hot-toast';
 import { useState, useContext } from 'react';
 import '../../styles/Card.css';

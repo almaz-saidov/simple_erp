@@ -147,7 +147,8 @@ input[type="number"]:focus {
     margin-top: 5px;
 }
 
-.SubmitButton {
+.SubmitButton,
+.DeleteButton {
     width: 100%;
     border-radius: 5px;
     border: solid 1px;
@@ -287,4 +288,72 @@ input[type="date"] {
         font-size: 20px;
         line-height: 20px;
     }
+}
+
+.SubmitModal {
+    position: fixed;
+    /* top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%); */
+    width: 100%;
+    height: 100%;
+    height: 30%;
+    z-index: 1001;
+    background-color: var(--color-base-fill);
+    padding: 20px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    width: 100%;
+}
+
+.SubmitModalWrapper {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    height: 30%;
+    width: 100%;
+    height: 100%;
+    background-color: var(--color-transparent-fill);
+    color: var(--color-primary-text);
+    border-radius: 5px;
+}
+
+.SubmitModalContent {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    height: 30%;
+    width: 90%;
+    height: 30%;
+    padding: 20px;
+    background-color: var(--color-component-background);
+    color: var(--color-primary-text);
+    border-radius: 5px;
+}
+
+
+.SubmitDeleteButtonsContainer {
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+}
+
+.SubmitModalContent h2 {
+    font-size: 20px;
+    font-weight: 400;
+    text-align: center;
+}
+
+.DeleteButton {
+    background-color: var(--color-cool-red);
+    color: var(--color-primary-text);
+    border-color: var(--color-primary-text);
+    font-size: 18px;
 }

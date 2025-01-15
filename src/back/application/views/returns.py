@@ -50,7 +50,7 @@ def returns():
 
 
 @app.post('/api/returns/create_return')
-# @init_data_checker
+@init_data_checker
 def create_return():
     """
     Ручка для создания возврата через JSON.
@@ -95,10 +95,10 @@ def create_return():
     price = data['price']
     comment = data['comment']
     is_compleat = data['is_compleat']
-    # telegram_data = TelegramInitData(request.cookies.get('initData'))
-    # user_data = telegram_data.to_dict().get('user')
-    # who_added = user_data.get('id')
-    who_added = 1
+    telegram_data = TelegramInitData(request.cookies.get('initData'))
+    user_data = telegram_data.to_dict().get('user')
+    who_added = user_data.get('id')
+    # who_added = 1
     market_id = request.args.get('market_id', type=int)
 
     # Проверяем корректность VIN
@@ -221,7 +221,7 @@ def create_air_return():
         )
 
 @app.route('/api/returns/<int:return_id>', methods=["GET", "POST", "DELETE"])
-# @init_data_checker
+@init_data_checker
 def check_return(return_id):
     return_type = request.args.get("type")  # Получаем параметр типа возврата из URL
     market_id = request.args.get('market_id', type=int)
@@ -310,10 +310,10 @@ def check_return(return_id):
             returned.price = data.get("price", returned.price)
             returned.comment = data.get("comment", returned.comment)
             returned.is_end = data.get("is_compleat", returned.is_end)
-            # telegram_data = TelegramInitData(request.cookies.get('initData'))
-            # user_data = telegram_data.to_dict().get('user')
-            # returned.who_added = user_data.get('id')
-            returned.who_added = 56123
+            telegram_data = TelegramInitData(request.cookies.get('initData'))
+            user_data = telegram_data.to_dict().get('user')
+            returned.who_added = user_data.get('id')
+            # returned.who_added = 56123
 
             # Для AirReturn добавляем обработку поля другого магазина
             if return_type == "airreturn":

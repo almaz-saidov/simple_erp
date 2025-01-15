@@ -210,6 +210,7 @@ def history_return(return_id):
             "to_seller": returned.to_seller,
             "comment": returned.comment,
             "is_compleat": returned.is_end,
+            "who_added": returned.user_who_added.name
         }
         
         # Если это AirReturn, то добавляем поле для другого магазина

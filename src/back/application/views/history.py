@@ -10,7 +10,7 @@ from application.utils.init_data import TelegramInitData
 
 
 @app.get('/api/history')
-@init_data_checker
+# @init_data_checker
 def history():
     """
     Получение записей истории в формате JSON с использованием Response.
@@ -53,7 +53,7 @@ def history():
 
 
 @app.route("/api/history/sell/<int:sell_id>", methods=["GET", "POST"])
-@init_data_checker
+# @init_data_checker
 def history_sell(sell_id):
     if request.method == "POST":
         # Получаем данные из JSON запроса
@@ -82,8 +82,8 @@ def history_sell(sell_id):
     else:
         # Для GET запроса создаем пустой объект данных
         data = {}
-    # Находим продажу по ID в базе данных
-    sell = SyncORM.get_sell_by_id(sell_id)
+    market_id = request.args.get('market_id', type=int)
+    sell = SyncORM.get_sell_by_id(sell_id, market_id)
 
     if not sell:
         return Response(
@@ -96,7 +96,7 @@ def history_sell(sell_id):
         )
 
     # Если пришли данные на обновление или это GET запрос, заполняем их из базы
-    data["vin"] = sell.vin
+    data["vin"] = sell.detail.vin
     data["amount"] = sell.amount
     data["date"] = sell.sell_from_shop_date
     data["price"] = sell.price
@@ -107,7 +107,7 @@ def history_sell(sell_id):
     return Response(
         json.dumps({
             "success": True,
-            "message": f"Данные для продажи VIN {sell.vin} успешно обновлены!",
+            "message": f"Данные для продажи VIN {sell.detail.vin} успешно обновлены!",
             "sell": data  # Отправляем обновленные данные
         }),
         status=HTTPStatus.OK,
@@ -116,7 +116,7 @@ def history_sell(sell_id):
 
 
 @app.route("/api/history/purchase/<int:purchase_id>", methods=["GET", "POST"])
-@init_data_checker
+# @init_data_checker
 def history_purchase(purchase_id):
     if request.method == "POST":
         # Получаем данные из JSON запроса
@@ -148,19 +148,20 @@ def history_purchase(purchase_id):
         data = {}
 
     # В зависимости от типа возврата выбираем нужную форму
-    purchase = SyncORM.get_purchase_by_id(purchase_id)  # Модель для возврата
-     
+    market_id = request.args.get('market_id', type=int)
+    purchase = SyncORM.get_purchase_by_id(purchase_id, market_id)  # Модель для возврата
+
     if not purchase:
         return Response(
             json.dumps({
                 "success": False,
-                "message": f"Продажа с ID {purchase_id} не найдена!"
+                "message": f"Приход с ID {purchase_id} не найден!"
             }),
             status=HTTPStatus.NOT_FOUND,
             mimetype="application/json",
         )
 
-    data["vin"] = purchase.vin
+    data["vin"] = purchase.detail.vin
     data["amount"] = purchase.amount
     data["date"] = purchase.add_to_shop_date
     data["price"] = purchase.price
@@ -171,7 +172,7 @@ def history_purchase(purchase_id):
     return Response(
         json.dumps({
             "success": True,
-            "message": f"Данные для продажи VIN {purchase.vin} успешно обновлены!",
+            "message": f"Данные для продажи VIN {purchase.detail.vin} успешно обновлены!",
             "purchase": data  # Отправляем обновленные данные
         }),
         status=HTTPStatus.OK,
@@ -180,16 +181,17 @@ def history_purchase(purchase_id):
 
 
 @app.route("/api/history/returns/<int:return_id>", methods=["GET", "POST"])
-@init_data_checker
+# @init_data_checker
 def history_return(return_id):
     return_type = request.args.get("type")  # Получаем параметр типа возврата из URL или формы
+    market_id = request.args.get('market_id', type=int)
     returned = None
 
     # В зависимости от типа возврата выбираем нужную форму
     if return_type == "return":
-        returned = SyncORM.get_return_by_id(return_id)  # Модель для возврата
+        returned = SyncORM.get_return_by_id(return_id, market_id)  # Модель для возврата
     elif return_type == "airreturn":
-        returned = SyncORM.get_airreturn_by_id(return_id)  # Модель для AirReturn
+        returned = SyncORM.get_airreturn_by_id(return_id, market_id)  # Модель для AirReturn
     else:
         return Response(
             json.dumps({"success": False, "message": "Неизвестный тип возврата"}),
@@ -200,7 +202,7 @@ def history_return(return_id):
     if returned:
         # Получаем данные из базы и заполняем ответ для клиента
         response_data = {
-            "vin": returned.vin,
+            "vin": returned.detail.vin,
             "amount": returned.amount,
             "sell_date": returned.sell_date,
             "return_date": returned.return_date,
@@ -261,9 +263,10 @@ def history_return(return_id):
             returned.price = data.get("price", returned.price)
             returned.comment = data.get("comment", returned.comment)
             returned.is_end = data.get("is_compleat", returned.is_end)
-            telegram_data = TelegramInitData(request.cookies.get('initData'))
-            user_data = telegram_data.to_dict().get('user')
-            returned.who_added = user_data.get('id')
+            # telegram_data = TelegramInitData(request.cookies.get('initData'))
+            # user_data = telegram_data.to_dict().get('user')
+            # returned.who_added = user_data.get('id')
+            returned.who_added = 56123
 
             # Для AirReturn добавляем обработку поля другого магазина
             if return_type == "airreturn":

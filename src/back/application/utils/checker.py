@@ -15,9 +15,7 @@ def initial_init_data_checker(func):
         if not init_data:
             return jsonify({'error': 'No initData'}), 400
         
-        print(f'\ninitial\n')
         telegram_data = TelegramInitData(init_data)
-        print(f'\ninitial end \n')
         bot_token = settings.TELEGRAM_BOT_TOKEN
         if not telegram_data.validate(bot_token, lifetime=3600):  # lifetime in seconds
             return jsonify({'status': 'Not authorized'}), 401 # redirect to error
@@ -46,9 +44,7 @@ def init_data_checker(func):
         if not init_data:
             return jsonify({'error': 'No initData'}), 400
         
-        print(f'\nnormal\n')
         telegram_data = TelegramInitData(init_data)
-        print(f'\nnormal end \n')
         bot_token = settings.TELEGRAM_BOT_TOKEN
         if not telegram_data.validate(bot_token, lifetime=3600):  # lifetime in seconds
             return jsonify({'status': 'Not authorized'}), 401 # redirect to error

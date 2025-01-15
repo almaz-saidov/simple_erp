@@ -13,7 +13,7 @@ def telegram_auth():
     user_data = telegram_data.to_dict().get('user')
     user_id = user_data.get('id')
     
-    response = make_response(jsonify({'user_status': f'{SyncORM.get_user_status(user_id)}', 'status': 'Cookie was set!'}))
+    response = make_response(jsonify({'user_status': f'{SyncORM.get_user_status(user_id)}', 'market_id': f'{SyncORM.get_all_markets(user_id).id}', 'status': 'Cookie was set!'}))
     response.set_cookie('initData', request.get_json().get('initData'), path='/', httponly=True, secure=True, samesite='None')
     response.status_code = 200
     

@@ -649,12 +649,12 @@ class SyncORM:
     
 # ------------------------MARKETS---------------------------
     @staticmethod
-    def get_all_markets():
+    def get_all_markets(user_id):
         '''
         Получение всех магазинов пльзователя с user_id, к которым он имеет доступ
         '''
         with session_factory() as session:
-            markets = session.query(Market).all()
+            markets = session.query(Market).filter_by(user_id=user_id)
             return markets
 
     @staticmethod

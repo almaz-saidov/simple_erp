@@ -453,6 +453,17 @@ class SyncORM:
         with session_factory() as session:
             return_record = session.query(Return).filter(Return.id == return_id, Return.market_id == market_id).one_or_none()
             return return_record
+        
+    @staticmethod
+    def delete_return(return_id: int, type_return: str):
+        """Удалить возврат"""
+        with session_factory() as session:
+            if type_return == "airreturn":
+                return_to_delete = session.query(AirReturn).filter_by(id=return_id).first()
+            elif type_return == "return":
+                return_to_delete = session.query(Return).filter_by(id=return_id).first()
+            session.delete(return_to_delete)
+            session.commit()
 
     @staticmethod
     def update_return(return_id: int, vin: str, amount: int, sell_date: datetime, return_date: datetime, to_seller: str, price: int, comment: str, is_compleat: bool, who_added: int):

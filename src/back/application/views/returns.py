@@ -50,7 +50,7 @@ def returns():
 
 
 @app.post('/api/returns/create_return')
-@init_data_checker
+# @init_data_checker
 def create_return():
     """
     Ручка для создания возврата через JSON.
@@ -95,10 +95,10 @@ def create_return():
     price = data['price']
     comment = data['comment']
     is_compleat = data['is_compleat']
-    telegram_data = TelegramInitData(request.cookies.get('initData'))
-    user_data = telegram_data.to_dict().get('user')
-    who_added = user_data.get('id')
-    # who_added = 56123
+    # telegram_data = TelegramInitData(request.cookies.get('initData'))
+    # user_data = telegram_data.to_dict().get('user')
+    # who_added = user_data.get('id')
+    who_added = 1
     market_id = request.args.get('market_id', type=int)
 
     # Проверяем корректность VIN
@@ -189,7 +189,7 @@ def create_air_return():
     telegram_data = TelegramInitData(request.cookies.get('initData'))
     user_data = telegram_data.to_dict().get('user')
     who_added = user_data.get('id')
-    # who_added = 56123
+    # who_added = 1
     market_id = request.args.get('market_id', type=int)
 
     # Проверяем корректность VIN
@@ -220,9 +220,8 @@ def create_air_return():
             mimetype="application/json"
         )
 
-
-@app.route('/api/returns/<int:return_id>', methods=["GET", "POST"])
-@init_data_checker
+@app.route('/api/returns/<int:return_id>', methods=["GET", "POST", "DELETE"])
+# @init_data_checker
 def check_return(return_id):
     return_type = request.args.get("type")  # Получаем параметр типа возврата из URL
     market_id = request.args.get('market_id', type=int)
@@ -241,9 +240,8 @@ def check_return(return_id):
         )
 
     if returned:
-        # Заполняем данные для отправки
+        # Заполняем данные для отправки        
         response_data = {
-            "vin": returned.detail.vin if return_type == 'return' else returned.vin,
             "amount": returned.amount,
             "sell_date": returned.sell_date,
             "return_date": returned.return_date,
@@ -256,7 +254,18 @@ def check_return(return_id):
         # Если это AirReturn, то добавляем поле для другого магазина
         if return_type == "airreturn":
             response_data["another_shop"] = returned.another_shop
+            response_data["vin"] = returned.vin
 
+        if request.method == "DELETE":
+            try:
+                SyncORM.delete_return(return_id, return_type)
+            except Exception as e:
+                return Response(
+                    json.dumps({"success": False, "message": "Неизвестный тип возврата", "return": e}),
+                    status=HTTPStatus.BAD_REQUEST,
+                    mimetype="application/json",
+                )
+            
         # Обрабатываем POST-запрос (обновление данных)
         if request.method == "POST":
             data = request.get_json()
@@ -284,8 +293,8 @@ def check_return(return_id):
                 )
 
             # Обновляем данные из полученного JSON
-            vin_from_data = data.get("vin")
-            if not SyncORM.is_valid_vin(vin_from_data):
+            returned.vin = data.get("vin", returned.vin)
+            if not SyncORM.is_valid_vin(returned.vin):
                 return Response(
                     json.dumps({
                         "success": False,
@@ -294,9 +303,6 @@ def check_return(return_id):
                     status=HTTPStatus.BAD_REQUEST,
                     mimetype="application/json",
                 )
-            
-            if return_type == 'airreturn':
-                returned.vin = vin_from_data
             returned.amount = data.get("amount", returned.amount)
             returned.sell_date = data.get("sell_date", returned.sell_date)
             returned.return_date = data.get("return_date", returned.return_date)
@@ -304,10 +310,10 @@ def check_return(return_id):
             returned.price = data.get("price", returned.price)
             returned.comment = data.get("comment", returned.comment)
             returned.is_end = data.get("is_compleat", returned.is_end)
-            telegram_data = TelegramInitData(request.cookies.get('initData'))
-            user_data = telegram_data.to_dict().get('user')
-            returned.who_added = user_data.get('id')
-            # returned.who_added = 56123
+            # telegram_data = TelegramInitData(request.cookies.get('initData'))
+            # user_data = telegram_data.to_dict().get('user')
+            # returned.who_added = user_data.get('id')
+            returned.who_added = 56123
 
             # Для AirReturn добавляем обработку поля другого магазина
             if return_type == "airreturn":
@@ -317,7 +323,7 @@ def check_return(return_id):
             if return_type == "airreturn":
                 SyncORM.update_airreturn(return_id, returned.vin, returned.amount, returned.sell_date, returned.return_date, returned.to_seller, returned.price, returned.another_shop, returned.comment, returned.is_end, returned.who_added)
             else:
-                SyncORM.update_return(return_id, vin_from_data, returned.amount, returned.sell_date, returned.return_date, returned.to_seller, returned.price, returned.comment, returned.is_end, returned.who_added)
+                SyncORM.update_return(return_id, returned.vin, returned.amount, returned.sell_date, returned.return_date, returned.to_seller, returned.price, returned.comment, returned.is_end, returned.who_added)
 
             return Response(
                 json.dumps({

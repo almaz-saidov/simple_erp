@@ -288,19 +288,18 @@ const ReturnModal = ({ isOpen, onClose, returnData, isCreating, isAir, isHistory
                         </>
                     }
                 </div>
-                {loading ?
-                    <></>
-                    : <>
+                {loading ? (
+                    null
+                ) : (
+                    <>
                         <button className='SubmitButton' onClick={handleOnClick}>
                             {getSubmitButtonText()}
                         </button>
-                        {isHistory || isCreating ? (
-                            <DeleteButton onClick={handleDelete}>
-
-                            </DeleteButton>) : {}}
-
+                        {!isHistory && !isCreating ? (
+                            <DeleteButton onClick={handleDelete} />
+                        ) : null}
                     </>
-                }
+                )}
             </div>
 
         </div >

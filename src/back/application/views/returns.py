@@ -256,6 +256,9 @@ def check_return(return_id):
             response_data["another_shop"] = returned.another_shop
             response_data["vin"] = returned.vin
 
+        if return_type == "return":
+            response_data["vin"] = returned.detail.vin
+
         if request.method == "DELETE":
             try:
                 SyncORM.delete_return(return_id, return_type)

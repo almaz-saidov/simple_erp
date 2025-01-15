@@ -423,7 +423,7 @@ class SyncORM:
         """
         with session_factory() as session:
             # Проверяем, существует ли запчасть
-            detail = session.query(Detail).filter_by(vin=vin).first()
+            detail = session.query(Detail).filter(Detail.vin == vin, Detail..market_id == market_id).first()
             if not detail:
                 raise ValueError(f"Деталь с VIN '{vin}' не найдена.")
                     

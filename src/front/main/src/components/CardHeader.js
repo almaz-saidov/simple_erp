@@ -6,7 +6,7 @@ function CardHeader(props) {
     return (
         <div className="CardHeader">
             <h1>{label}</h1>
-            <BackButton />
+            {/* <BackButton /> */}
         </div>
     );
 }

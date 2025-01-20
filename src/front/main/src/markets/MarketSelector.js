@@ -29,7 +29,7 @@ function MarketSelector() {
     useEffect(() => {
         const fetchMarketsWrapper = async () => {
             try {
-                fetchMarkets(setMarkets);
+                await fetchMarkets(setMarkets);
             } catch (error) {
                 console.error("Ошибка при загрузке рынков:", error);
             } finally {
@@ -37,20 +37,11 @@ function MarketSelector() {
             }
         };
         fetchMarketsWrapper();
-        // setLoading(false);
-        // setMarkets([
-        //     { id: "123", name: "tatmak", address: "Kazan" },
-        //     { id: "123", name: "tatmak", address: "Kazan" },
-        //     { id: "123", name: "tatmak", address: "Kazan" },
-        //     { id: "123", name: "tatmak", address: "Kazan" },
-        //     { id: "123", name: "tatmak", address: "Kazan" },
-        //     { id: "123", name: "tatmak", address: "Kazan" },
-        //     { id: "123", name: "tatmak", address: "Kazan" },
-        //     { id: "123", name: "tatmak", address: "Kazan" },
-        //     { id: "123", name: "tatmak", address: "Kazan" },
-        //     { id: "123", name: "tatmak", address: "Kazan" },
-        //     { id: "123", name: "tatmak", address: "Kazan" },
-        // ]);
+
+        if (window.Telegram.WebApp.BackButton.isVisible) {
+            window.Telegram.WebApp.BackButton.hide();
+        }
+
 
     }, []);
 
@@ -66,8 +57,6 @@ function MarketSelector() {
     const displayMarketsList = () => {
         return markets.map((el) => (
             <MarketItem market={el} onClick={onMarketClick} />
-
-
         ));
     };
 

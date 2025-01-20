@@ -2,8 +2,8 @@ import CardHeader from "../components/CardHeader";
 import Input from '../components/Input';
 import { IssuanceButton } from '../components/SubmitButton';
 import toast from 'react-hot-toast';
-import { React, useState, useContext } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { React, useState, useRef, useEffect, useContext } from 'react';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { createPurchase } from '../api/Api'
 import { createMarket } from '../api/MarketsApi'
 
@@ -16,6 +16,7 @@ function CreateMarket() {
     const [name, setName] = useState('');
     const [address, setAddress] = useState('');
     const navigate = useNavigate();
+
 
 
     const getMarket = () => {
@@ -41,7 +42,7 @@ function CreateMarket() {
             success: () => {
                 resetPurchaseInput();
                 navigate(`/markets`);
-                return 'Выдача создана';
+                return 'Магазин создан';
             },
             error: 'Что то пошло не так',
         });
@@ -58,6 +59,16 @@ function CreateMarket() {
             addPurchaseWithToast();
         }
     }
+
+    useEffect(() => {
+
+        if (!window.Telegram.WebApp.BackButton.isVisible) {
+            window.Telegram.WebApp.BackButton.show();
+            window.Telegram.WebApp.BackButton.onClick(() => { navigate("/markets") })
+        }
+
+    }, []);
+
 
     return (
         <div className="CreateMarket">

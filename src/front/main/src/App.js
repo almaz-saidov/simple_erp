@@ -10,7 +10,7 @@ import Search from './cards/search/Search';
 import { Fragment } from 'react';
 import { SyncLoader } from 'react-spinners';
 import { ReactComponent as FailIcon } from './assets/auth_fail_icon.svg'
-import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, Navigate, useNavigate } from 'react-router-dom';
 import { Toaster } from 'react-hot-toast';
 import { ToasterWithMax } from './components/ToasterWithMax';
 import Market from './markets/Market';
@@ -26,21 +26,18 @@ function App() {
 
   const cards = [<Search />, <Sells />, <Purchases />, <Returns />, <History />];
 
-  const renderComponent = () => {
-    return cards[currentCardId];
-  };
-
   return (
     <div className="App">
       <MarketProvider>
         <BrowserRouter>
           <Routes>
-            <Route path="/front" element={<Navigate to="/markets" />} />
             <Route path="markets/:market_id" element={<Market />} />
             <Route path="markets" element={<MarketSelector />} />
             <Route path="markets/create" element={<CreateMarket />} />
+            <Route path="*" element={<Navigate to="/markets" />} />
           </Routes>
         </BrowserRouter>
+        <div>BLYAT RABOTAI SUKA</div>
       </MarketProvider>
       <ToasterWithMax toastOptions={{
         duration: 1000,

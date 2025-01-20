@@ -7,18 +7,28 @@ import Sells from '../cards/sells/Sells';
 import Purchases from '../cards/purchases/Purchases';
 import Returns from '../cards/returns/Returns';
 import Search from '../cards/search/Search';
+import { useNavigate } from 'react-router-dom';
 
 import { ToasterWithMax } from '../components/ToasterWithMax'
 function Market() {
     const [currentCardId, setCurrentCardId] = useState(0);
     const [authorized, setAuthorized] = useState(true);
     const [loading, setLoading] = useState(false);
-
+    const navigate = useNavigate();
     const cards = [<Search />, <Sells />, <Purchases />, <Returns />, <History />];
 
     const renderComponent = () => {
         return cards[currentCardId];
     };
+
+    useEffect(() => {
+        if (!window.Telegram.WebApp.BackButton.isVisible) {
+            window.Telegram.WebApp.BackButton.show();
+            window.Telegram.WebApp.BackButton.onClick(() => { navigate("/markets") })
+        }
+
+
+    }, [])
 
     return (
         <div className="Market">
@@ -27,7 +37,7 @@ function Market() {
                     {renderComponent()}
                 </div>
                 <Nav getCurrentCardId={() => currentCardId} setCurrentCardId={setCurrentCardId} />
-               
+
 
             </Fragment>
         </div>

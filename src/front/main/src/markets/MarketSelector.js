@@ -26,7 +26,7 @@ function MarketSelector() {
     const { value, setValue } = useContext(MarketContext);
 
     const navigate = useNavigate();
-    useEffect(() => {
+    useEffect(async () => {
         const fetchMarketsWrapper = async () => {
             try {
                 await fetchMarkets(setMarkets);
@@ -36,14 +36,22 @@ function MarketSelector() {
                 setLoading(false);
             }
         };
-        fetchMarketsWrapper();
-
-        if (window.Telegram.WebApp.BackButton.isVisible) {
-            window.Telegram.WebApp.BackButton.hide();
-        }
+        await fetchMarketsWrapper();
 
 
     }, []);
+
+    useEffect(() => {
+        const user_status = localStorage.getItem('user_status');
+        // console.log("FROM_LOCAL_STORAGE user_status", user_status);
+        if (user_status !== "StatusObject.admin") {
+            // markets[0] && navigate(`/markets/${markets[0].id}`);
+        } else {
+            if (window.Telegram.WebApp.BackButton.isVisible) {
+                window.Telegram.WebApp.BackButton.hide();
+            }
+        }
+    }, [markets])
 
     const onMarketClick = (market) => {
         setValue(market);

@@ -23,10 +23,12 @@ function App() {
         try {
             const csrfToken = "almaz-ymeet-delat-graz";
             const init_data = retrieveLaunchParams().initDataRaw;
-            console.log(init_data);
+            //console.log(init_data);
 
             const initializeAuth = async (postUrl) => {
                 try {
+
+                    //console.log("RESPONSE__TRY");
                     const response = await fetch(postUrl, {
                         method: 'POST',
                         headers: {
@@ -39,12 +41,14 @@ function App() {
                             }
                         ),
                     });
-
+                    //console.log("RESPONSE__1", response);
                     if (!response.ok) {
                         throw new Error('Network response was not ok');
                     }
-
-                    //localStorage.setItem('authorize', init_data);
+                    const data = await response.json();
+                    //console.log("RESPONSE_DATA", data);
+                    //console.log("USER_STATUS", data.user_status);
+                    localStorage.setItem('user_status', data.user_status);
                     setIsAuthorized(true);
                     // Теперь этот редирект будет происходить в следующем useEffect 
                     timeoutReached && setLoading(false); // Обновляем состояние загрузки
@@ -67,7 +71,7 @@ function App() {
 
     useEffect(() => {
         if (!loading && timeoutReached && isAuthorized) {
-            navigate('/front'); // Редирект происходит только если loading = false и timeoutReached = true
+            navigate('/front');
             window.location.reload();
         }
     }, [loading, timeoutReached, navigate]);

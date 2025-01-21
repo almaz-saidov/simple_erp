@@ -164,6 +164,7 @@ input[type="number"]:focus {
 }
 
 .NumberDoesNotExist {
+    font-family: "VelaSansLight";
     color: var(--color-primary-dark-text);
     text-align: center;
     width: 100%;

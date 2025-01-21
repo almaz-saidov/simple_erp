@@ -7,7 +7,7 @@ function CardHeader(props) {
         <div className="CardHeader">
             <h1>{label}</h1>
             <div className="CardMarketName">
-                {marketName}
+                <h1>{marketName ? marketName : "unknown"}</h1>
             </div>
         </div>
     );

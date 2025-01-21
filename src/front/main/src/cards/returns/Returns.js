@@ -86,7 +86,7 @@ function Returns() {
     return (
         <>
             <div className="Returns">
-                <CardHeader label="Возврат" />
+                <CardHeader label="Возврат" marketName={value.name} />
 
                 <span className='ReturnAddictionHeader' >Незавершённые возвраты</span>
 

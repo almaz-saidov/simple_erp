@@ -74,7 +74,7 @@ function Sells() {
 
     return (
         <div className="Issuance">
-            <CardHeader label="Выдача" />
+            <CardHeader label="Выдача" marketName={value.name} />
             <div className="CardContent">
                 <Input label="Номер запчасти" hint="А2222222222" parentText={partNumber} setParentText={setPartNumber} isDynamic={true} maxLength={20} isNeedText={isNeedText} />
                 <Input label="Количество" hint="000" parentText={count} setParentText={setCount} type="number" isDynamic={true} maxLength={10} isNeedText={isNeedText} />

@@ -46,7 +46,7 @@ function App() {
                         throw new Error('Network response was not ok');
                     }
                     const data = await response.json();
-                    //console.log("RESPONSE_DATA", data);
+                    console.log("RESPONSE_DATA", data);
                     //console.log("USER_STATUS", data.user_status);
                     localStorage.setItem('user_status', data.user_status);
                     setIsAuthorized(true);

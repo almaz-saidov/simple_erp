@@ -48,7 +48,7 @@ function Search() {
 
     return (
         <div className="Search">
-            <CardHeader label="Поиск" />
+            <CardHeader label="Поиск" marketName={value.name} />
             <Input label=""
                 hint="Номер запчасти"
                 isDynamic={true}

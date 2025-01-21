@@ -70,7 +70,7 @@ function Purchases() {
 
     return (
         <div className="Issuance">
-            <CardHeader label="Поступление" />
+            <CardHeader label="Поступление" marketName={value.name} />
             <div className="CardContent">
                 <Input label="Номер запчасти" hint="А2222222222" parentText={partNumber} setParentText={setPartNumber} isDynamic={true} maxlength={20} isNeedText={isNeedText} />
                 <Input label="Количество" hint="000" parentText={count} setParentText={setCount} type="number" isDynamic={true} maxlength={10} isNeedText={isNeedText} />

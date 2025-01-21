@@ -30,7 +30,12 @@
 
 }
 
-.CardHeader h1 {
+.CardMarketName {
+    color: var(--color-control-elements);
+}
+
+.CardHeader h1,
+.CardMarketName h1 {
     font-weight: 500;
     font: 2em;
     line-height: 2em;

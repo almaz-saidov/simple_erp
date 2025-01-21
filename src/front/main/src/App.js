@@ -37,7 +37,6 @@ function App() {
             <Route path="*" element={<Navigate to="/markets" />} />
           </Routes>
         </BrowserRouter>
-        <div>BLYAT RABOTAI SUKA</div>
       </MarketProvider>
       <ToasterWithMax toastOptions={{
         duration: 1000,

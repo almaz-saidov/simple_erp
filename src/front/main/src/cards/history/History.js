@@ -193,7 +193,7 @@ function History() {
 
     return (
         <div className="History">
-            <CardHeader label="История" />
+            <CardHeader label="История" marketName={value.name} />
             <div className="HistoryDateWrapper">
                 <div className="DateInputWrapper">
                     <label htmlFor="date_from" className="form-label">С</label>

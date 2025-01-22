@@ -22,7 +22,6 @@ function Detail(props) {
                     <span className='HelperText'>Номер запчасти</span>
                     <span className='PrimaryText'>{detail.detailNumber}</span>
                 </div>
-                <RightArrow />
             </div>
         </div>
     );

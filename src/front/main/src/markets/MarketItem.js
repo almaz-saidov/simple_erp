@@ -18,11 +18,14 @@ function MarketItem(props) {
                 <div className='NameCutter'>
                     <TextField text={market.name} />
                 </div>
-                <div className='MarketAdress'>
-
-                    <span className='HelperText'>Адрес</span>
-                    <span className='PrimaryText'>{market.address}</span>
-                </div>
+                {
+                    market.address && (
+                        <div className='MarketAdress'>
+                            <span className='HelperText'>Адрес</span>
+                            <span className='PrimaryText'>{market.address}</span>
+                        </div>
+                    )
+                }
             </div>
             <RightArrow />
         </div>

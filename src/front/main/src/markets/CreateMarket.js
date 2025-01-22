@@ -72,7 +72,7 @@ function CreateMarket() {
 
     return (
         <div className="CreateMarket">
-            <CardHeader label="Создать Магазин" />
+            <CardHeader label="Создать Магазин" isMarketNameVisible={false} />
             <div className="CreateMarketContent">
                 <Input label="Название" hint="MG PARTS" parentText={name} setParentText={setName} type="text" isDynamic={true} maxlength={15} isNeedText={isNeedText} />
                 <Input label="Адресс магазина" hint="Москва, Нижняя Красносельская ул., 35, стр. 59, 6 этаж" isLong={true} parentText={address} setParentText={setAddress} type="text" isDynamic={true} maxlength={40} isNeedText={false} />

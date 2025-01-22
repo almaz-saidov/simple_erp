@@ -44,10 +44,10 @@ function MarketSelector() {
     }, []);
 
     useEffect(() => {
-        console.log("DEBUG__Updated markets:", markets);
+
         if (markets.length > 0) {
             const user_status = localStorage.getItem('user_status');
-            console.log("DEBUG__FROM_LOCAL_STORAGE user_status", user_status);
+
             if (user_status)
                 if (user_status !== "StatusObject.admin") {
                     // markets[0] && navigate(`/markets/${markets[0].id}`);

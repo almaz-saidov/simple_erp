@@ -40,13 +40,17 @@
     text-align: center;
     display: flex;
     align-items: center;
-  
+    max-width: calc(50% - 20px);
+
 }
 
 .CardHeader h1 {
-    font: 2em;
+    font-size: 24px;
     line-height: 2em;
     font-weight: 500;
+    max-width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .CardMarketName h1 {

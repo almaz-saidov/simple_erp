@@ -60,15 +60,6 @@ function CreateMarket() {
         }
     }
 
-    useEffect(() => {
-
-        if (!window.Telegram.WebApp.BackButton.isVisible) {
-            window.Telegram.WebApp.BackButton.show();
-            window.Telegram.WebApp.BackButton.onClick(() => { navigate("/markets") })
-        }
-
-    }, []);
-
 
     return (
         <div className="CreateMarket">

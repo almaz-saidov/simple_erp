@@ -52,19 +52,21 @@ function MarketSelector() {
                 if (user_status !== "StatusObject.admin") {
                     // markets[0] && navigate(`/markets/${markets[0].id}`);
                 } else {
-                    if (window.Telegram.WebApp.BackButton.isVisible) {
-                        window.Telegram.WebApp.BackButton.hide();
-                    }
+                    window.Telegram.WebApp.BackButton.hide();
                 }
         }
     }, [markets])
 
     const onMarketClick = (market) => {
         setValue(market);
+        window.Telegram.WebApp.BackButton.show();
+        window.Telegram.WebApp.BackButton.onClick(() => { navigate("/markets") })
         navigate(`/markets/${market.id}`);
     }
 
     const onCreateMarketButtonClick = () => {
+        window.Telegram.WebApp.BackButton.show();
+        window.Telegram.WebApp.BackButton.onClick(() => { navigate("/markets") })
         navigate(`/markets/create`);
     }
 

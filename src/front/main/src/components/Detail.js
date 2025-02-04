@@ -13,14 +13,14 @@ function Detail(props) {
             <div className='DetailLeft'>
                 <span className='PrimaryText'>{detail.name}</span>
                 <div className='DetailCountWrapper'>
-                    <span className='HelperText'>Количество: </span>
-                    <span className='PrimaryText'>{detail.count}</span>
+                    <p className='HelperText'>Количество: </p>
+                    <p className='PrimaryText'>{detail.count}</p>
                 </div>
             </div>
             <div className='DetailRight'>
                 <div className='DetailNumberWrapper'>
-                    <span className='HelperText'>Номер запчасти</span>
-                    <span className='PrimaryText'>{detail.detailNumber}</span>
+                    <p className='HelperText'>Номер запчасти</p>
+                    <p className='PrimaryText'>{detail.detailNumber}</p>
                 </div>
             </div>
         </div>

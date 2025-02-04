@@ -349,5 +349,43 @@ export const fetchDetailsNew = async (vin, setData, market_id) => {
     }
 };
 
+// export const fetchDetailsNew = async (vin, setData, market_id) => {
+//     const parseDetailsData = (data) => {
+//         if (data.success && Array.isArray(data.details)) {
+//             return data.details.map(detail => ({
+//                 detailNumber: detail.vin,
+//                 name: detail.name,
+//                 count: detail.amount || 0,
+//             }));
+//         }
+//         return null;
+//     };
+
+//     // Мок-функция для тестирования
+//     const mockFetchDetails = () => {
+//         return new Promise((resolve) => {
+//             setTimeout(() => {
+//                 resolve({
+//                     success: true,
+//                     details: [
+//                         { vin: '1234567890', name: 'Detail 1Detail 1Detail 1Detail 1Detail 1Detail 1Detail 1', amount: 5 },
+//                         { vin: '0987654321', name: 'Detail 2', amount: 3 },
+//                         { vin: '1357924680', name: 'Detail 3', amount: 7 },
+//                     ],
+//                 });
+//             }, 1000); // Имитация задержки сети
+//         });
+//     };
+
+//     // Используем мок-функцию вместо реального запроса
+//     const result = await mockFetchDetails().then(parseDetailsData);
+
+//     if (result == null) {
+//         setData([]);
+//     } else {
+//         setData(result);
+//     }
+// };
+
 
 

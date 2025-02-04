@@ -6,10 +6,10 @@ import '../styles/Detail.css'
 import '../styles/Components.css'
 
 function Detail(props) {
-    const { detail } = props;
+    const { detail, onClick } = props;
 
     return (
-        <div className="Detail">
+        <div className="Detail" onClick={onClick}>
             <div className='DetailLeft'>
                 <span className='PrimaryText'>{detail.name}</span>
                 <div className='DetailCountWrapper'>

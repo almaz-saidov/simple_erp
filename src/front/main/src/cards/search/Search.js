@@ -4,11 +4,12 @@ import Detail from "../../components/Detail";
 import { SyncLoader } from 'react-spinners'
 import { useEffect, useState, useContext } from 'react';
 import { fetchDetailsNew } from "../../api/Api";
-import { MarketContext } from '../../markets/MarketContext'
+import { MarketContext } from '../../markets/MarketContext';
+import SlidePanel from "../../components/slide_panel/SlidePanel";
 
-import '../../styles/Card.css'
-import '../../styles/Cards/Search.css'
-import '../../styles/Components.css'
+import '../../styles/Card.css';
+import '../../styles/Cards/Search.css';
+import '../../styles/Components.css';
 
 function Search() {
     const [detailNumber, setDetailNumber] = useState('');
@@ -16,12 +17,23 @@ function Search() {
     const [loading, setLoading] = useState(false);
     const [detail, setDetail] = useState(null);
     const { value, setValue } = useContext(MarketContext);
+    const [selectedItem, setSelectedItem] = useState(null); // Храним выбранный элемент
+    const [isPanelOpen, setIsPanelOpen] = useState(false); // Открыта ли панель
 
+    const handleItemClick = (item) => {
+        setSelectedItem(item); // Устанавливаем выбранный элемент
+        setIsPanelOpen(true); // Открываем панель
+    };
+
+    // Закрытие панели
+    const closePanel = () => {
+        setIsPanelOpen(false);
+    };
 
     const loadDetails = () => {
         if (data.length == 0) {
             return (
-                <div className="NumberDoesNotExist">
+                <div className="NumberDoesNotExist" >
                     <span>Ничего <br /> не найдено</span>
                 </div>
             )
@@ -30,7 +42,7 @@ function Search() {
         return (<div className="DetailsWrapper">
             {
                 data.map((el, index) => (
-                    <Detail detail={el} key={index} />
+                    <Detail detail={el} key={index} onClick={() => handleItemClick(el)} />
                 ))
             }
             <div className='Space' />
@@ -66,6 +78,7 @@ function Search() {
                 < div className="SearchContent">
                     {loadDetails()}
                 </div>}
+            {selectedItem && <SlidePanel isOpen={isPanelOpen} onClose={closePanel} children={<Detail detail={selectedItem} />} />}
         </div >
 
     );

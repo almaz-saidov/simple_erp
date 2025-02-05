@@ -70,9 +70,9 @@ def sales():
             for admin_id in admins_id:
                 send_notification(message_text=f"На складе закончилась деталь:\n{name}, VIN: {vin}, магазин: {market.name}", id=admin_id)
 
-            workers_id = SyncORM.get_workers_id()
-            for worker_id in workers_id:
-                send_notification(message_text=f"На складе закончилась деталь:\n{name}, VIN: {vin}", id=worker_id)
+            # workers_id = SyncORM.get_workers_id()
+            # for worker_id in workers_id:
+            #     send_notification(message_text=f"На складе закончилась деталь:\n{name}, VIN: {vin}", id=worker_id)
         
         return Response(
             json.dumps({

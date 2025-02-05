@@ -2,7 +2,7 @@ import CardHeader from "../../components/CardHeader";
 import React, { useEffect, useState, useContext } from 'react';
 import Input from '../../components/Input';
 import HistoryNavButton from "./HistoryNavButton";
-import { fetchReturns, fetchPurchases, fetchSells } from "../../api/Api";
+import { fetchReturns, fetchPurchases, fetchSells, updateSell, updatePurchase } from "../../api/Api";
 import Return from '../returns/Return';
 import { SyncLoader } from 'react-spinners';
 import ReturnModal from '../returns/ReturnModal';
@@ -12,7 +12,8 @@ import toast from 'react-hot-toast';
 import { createReturn, updateReturnHistoryById } from '../../api/Api';
 import { isFirstEarlier } from "../../common/common"
 import { MarketContext } from '../../markets/MarketContext'
-
+import PurchaseModal from "../purchases/PurchaseModal";
+import SellsModal from "../sells/SellsModal";
 
 import '../../styles/Card.css';
 import '../../styles/Cards/History.css';
@@ -70,6 +71,45 @@ function History() {
             toast.error('Что-то пошло не так');
         }
     };
+
+    const handleUpdateSell = async (sell, setLoading) => {
+        const successMessage = 'Выдача обновлена';
+        try {
+            setLoading(true);
+            await updateSell(sell);
+            if (isReturnModalOpen) {
+                togglePurchaseModal();
+            }
+            loadData();
+            toast.success(successMessage);
+            setLoading(false);
+        } catch (e) {
+            // Обработка ошибок
+            console.error('Ошибка в handleApiResponse:', e);
+            toast.error('Что-то пошло не так');
+            setLoading(false);
+        }
+    };
+
+    const handleUpdatePurchase = async (purchase) => {
+        const successMessage = 'Продажа обновлена';
+        try {
+            setLoading(true);
+            await updatePurchase(purchase);
+            if (isReturnModalOpen) {
+                toggleSellModal();
+            }
+            loadData();
+            toast.success(successMessage);
+            setLoading(false);
+        } catch (e) {
+            setLoading(false);
+            // Обработка ошибок
+            console.error('Ошибка в handleApiResponse:', e);
+            toast.error('Что-то пошло не так');
+        }
+    };
+
 
 
 
@@ -230,17 +270,17 @@ function History() {
                 loadReturns={loadData}
                 handleApiResponse={handleApiResponse}
             />
-            <HistoryItemModal
+            <SellsModal
                 isOpen={isSellModalOpen}
                 onClose={toggleSellModal}
                 itemData={modalSellData}
-                isSell={true}
+                updateSell={handleUpdateSell}
             />
-            <HistoryItemModal
+            <PurchaseModal
                 isOpen={isPurchaseModalOpen}
                 onClose={togglePurchaseModal}
                 itemData={modalPurchaseData}
-                isSell={false}
+                updatePurchase={handleUpdatePurchase}
             />
         </div>
     );

@@ -6,7 +6,7 @@ import React, { useState } from 'react';
 
 
 export function IssuanceButton(props) {
-    const { label, onClick } = props;
+    const { label, onClick, disabled } = props;
 
     const handleClick = () => {
         onClick && onClick();
@@ -14,7 +14,7 @@ export function IssuanceButton(props) {
 
     return (
         <div className="SubmitButtonWrapper">
-            <button className="SubmitButton" onClick={handleClick}>{label}</button>
+            <button className="SubmitButton" onClick={handleClick} disabled={disabled}>{label}</button>
         </div>
     );
 }

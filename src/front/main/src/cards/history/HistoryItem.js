@@ -1,5 +1,6 @@
 import '../../styles/Cards/History.css'
 import { ReactComponent as RightArrow } from '../../assets/right_arrow_icon.svg';
+
 import { useState } from 'react';
 
 function HistoryItem(props) {

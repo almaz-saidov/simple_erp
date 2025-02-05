@@ -202,52 +202,7 @@ export const fetchReturnById = async (itemId, isAir, market_id) => {
 };
 
 
-// export const fetchPurchasesById = async (itemId, market_id) => {
-
-//     const parseData = (data) => {
-//         return {
-//             count: data.purchase.amount,
-//             date: formatDateToDisplay(data.purchase.date),
-//             detailName: data.purchase.detail_name,
-//             price: data.purchase.price,
-//             detailNumber: data.purchase.vin,
-//             whoAdded: data.purchase.who_added,
-//         };
-//     }
-//     const url = `${API_URL}/history/purchase/${itemId}?market_id=${market_id}`;
-//     let result = await getData(url, parseData);
-//     if (result == null) { return {}; }
-//     return result;
-// };
-
 export const fetchPurchasesById = async (itemId, market_id) => {
-    // Функция для форматирования даты (заглушка)
-    const formatDateToDisplay = (date) => {
-        return new Date(date).toLocaleDateString(); // Пример форматирования
-    };
-
-    // Заглушка для получения данных
-    const getData = async (url, parseData) => {
-        return new Promise((resolve) => {
-            setTimeout(() => {
-                // Пример данных
-                const mockData = {
-                    success: true,
-                    purchase: {
-                        amount: 3,
-                        date: '2025-01-15',
-                        detail_name: 'Продукт A',
-                        price: 150,
-                        vin: 'ABC123',
-                        who_added: 'User123',
-                    }
-                };
-
-                // Возвращаем обработанные данные
-                resolve(parseData(mockData));
-            }, 1500); // Задержка 1.5 секунды
-        });
-    };
 
     const parseData = (data) => {
         return {
@@ -258,64 +213,15 @@ export const fetchPurchasesById = async (itemId, market_id) => {
             detailNumber: data.purchase.vin,
             whoAdded: data.purchase.who_added,
         };
-    };
-
+    }
     const url = `${API_URL}/history/purchase/${itemId}?market_id=${market_id}`;
     let result = await getData(url, parseData);
-
-    // Обработка результата
-    if (result == null) {
-        return {};
-    }
+    if (result == null) { return {}; }
     return result;
 };
 
-// export const fetchSellById = async (itemId, market_id) => {
-
-//     const parseData = (data) => {
-//         return {
-//             count: data.sell.amount,
-//             date: formatDateToDisplay(data.sell.date),
-//             name: data.sell.name,
-//             price: data.sell.price,
-//             detailNumber: data.sell.vin,
-//             whoAdded: data.sell.who_added,
-//         };
-//     }
-//     const url = `${API_URL}/history/sell/${itemId}?market_id=${market_id}`;
-//     let result = await getData(url, parseData);
-//     if (result == null) { return {}; }
-//     return result;
-// };
 
 export const fetchSellById = async (itemId, market_id) => {
-    // Функция для форматирования даты (заглушка)
-    const formatDateToDisplay = (date) => {
-        return new Date(date).toLocaleDateString(); // Пример форматирования
-    };
-
-    // Заглушка для получения данных
-    const getData = async (url, parseData) => {
-        return new Promise((resolve) => {
-            setTimeout(() => {
-                // Пример данных
-                const mockData = {
-                    success: true,
-                    sell: {
-                        amount: 10,
-                        date: '2025-02-01',
-                        name: 'Запчасть A',
-                        price: 300,
-                        vin: 'VIN123456',
-                        who_added: 'UserXYZ',
-                    }
-                };
-
-                // Возвращаем обработанные данные
-                resolve(parseData(mockData));
-            }, 1500); // Задержка 1.5 секунды
-        });
-    };
 
     const parseData = (data) => {
         return {
@@ -326,79 +232,15 @@ export const fetchSellById = async (itemId, market_id) => {
             detailNumber: data.sell.vin,
             whoAdded: data.sell.who_added,
         };
-    };
-
-    // Формируем URL для запроса
+    }
     const url = `${API_URL}/history/sell/${itemId}?market_id=${market_id}`;
     let result = await getData(url, parseData);
-
-    // Проверяем результат
-    if (result == null) {
-        return {};
-    }
+    if (result == null) { return {}; }
     return result;
 };
 
-// export const fetchPurchases = async (filters, setData, market_id) => {
-
-//     const parseData = (data) => {
-//         return data.records.map(sell => ({
-//             count: sell.amount || 0,
-//             date: formatDateToDisplay(sell.date),
-//             id: sell.id,
-//             price: sell.price,
-//             type: sell.type,
-//             detailNumber: sell.vin,
-
-//         }));
-//     }
-
-//     const url = `${API_URL}/history?type=postupleniya&like=${filters.vin || ""}&date_from=${filters.date_from}&date_before=${filters.date_before}&market_id=${market_id}`;
-//     let result = await getData(url, parseData);
-//     if (result == null) { setData([]); }
-//     else {
-//         setData(result);
-//     }
-// }
 
 export const fetchPurchases = async (filters, setData, market_id) => {
-    // Функция для форматирования даты (заглушка)
-    const formatDateToDisplay = (date) => {
-        return new Date(date).toLocaleDateString(); // Пример форматирования
-    };
-
-    // Заглушка для получения данных
-    const getData = async (url, parseData) => {
-        return new Promise((resolve) => {
-            setTimeout(() => {
-                // Пример данных
-                const mockData = {
-                    success: true,
-                    records: [
-                        {
-                            amount: 3,
-                            date: '2025-01-15',
-                            id: 1,
-                            price: 150,
-                            type: 'purchase',
-                            vin: 'ABC123'
-                        },
-                        {
-                            amount: 5,
-                            date: '2025-01-20',
-                            id: 2,
-                            price: 250,
-                            type: 'purchase',
-                            vin: 'DEF456'
-                        }
-                    ]
-                };
-
-                // Возвращаем обработанные данные
-                resolve(parseData(mockData));
-            }, 1500); // Задержка 1.5 секунды
-        });
-    };
 
     const parseData = (data) => {
         return data.records.map(sell => ({
@@ -408,83 +250,20 @@ export const fetchPurchases = async (filters, setData, market_id) => {
             price: sell.price,
             type: sell.type,
             detailNumber: sell.vin,
+
         }));
-    };
+    }
 
     const url = `${API_URL}/history?type=postupleniya&like=${filters.vin || ""}&date_from=${filters.date_from}&date_before=${filters.date_before}&market_id=${market_id}`;
     let result = await getData(url, parseData);
-
-    // Обработка результата
-    if (result == null) {
-        setData([]);
-    } else {
+    if (result == null) { setData([]); }
+    else {
         setData(result);
     }
-};
+}
 
-
-
-// export const fetchSells = async (filters, setData, market_id) => {
-//     const parseData = (data) => {
-//         return data.records.map(sell => ({
-//             count: sell.amount || 0,
-//             date: formatDateToDisplay(sell.date),
-//             id: sell.id,
-//             price: sell.price,
-//             type: sell.type,
-//             detailNumber: sell.vin,
-
-//         }));
-//     };
-
-//     const url = `${API_URL}/history?type=vidyacha&like=${filters.vin || ""}&date_from=${filters.date_from}&date_before=${filters.date_before}&market_id=${market_id}`;
-//     let result = await getData(url, parseData);
-//     if (result == null) { setData([]); }
-//     else {
-//         setData(result);
-//     }
-
-// };
 
 export const fetchSells = async (filters, setData, market_id) => {
-    // Функция для форматирования даты (заглушка)
-    const formatDateToDisplay = (date) => {
-        return new Date(date).toLocaleDateString(); // Пример форматирования
-    };
-
-    // Заглушка для получения данных
-    const getData = async (url, parseData) => {
-        return new Promise((resolve) => {
-            setTimeout(() => {
-                // Пример данных
-                const mockData = {
-                    success: true,
-                    records: [
-                        {
-                            amount: 2,
-                            date: '2025-01-10',
-                            id: 1,
-                            price: 120,
-                            type: 'sale',
-                            vin: 'VINABC1',
-                        },
-                        {
-                            amount: 5,
-                            date: '2025-01-15',
-                            id: 2,
-                            price: 250,
-                            type: 'sale',
-                            vin: 'VINDEF2',
-                        }
-                    ]
-                };
-
-                // Возвращаем обработанные данные
-                resolve(parseData(mockData));
-            }, 1500); // Задержка 1.5 секунды
-        });
-    };
-
     const parseData = (data) => {
         return data.records.map(sell => ({
             count: sell.amount || 0,
@@ -493,84 +272,22 @@ export const fetchSells = async (filters, setData, market_id) => {
             price: sell.price,
             type: sell.type,
             detailNumber: sell.vin,
+
         }));
     };
 
     const url = `${API_URL}/history?type=vidyacha&like=${filters.vin || ""}&date_from=${filters.date_from}&date_before=${filters.date_before}&market_id=${market_id}`;
     let result = await getData(url, parseData);
-
-    // Обработка результата
-    if (result == null) {
-        setData([]);
-    } else {
+    if (result == null) { setData([]); }
+    else {
         setData(result);
     }
+
 };
 
 
-// export const fetchReturns = async (filters, setData, market_id) => {
-//     const parseData = (data) => {
-//         if (data.success && Array.isArray(data.records)) {
-//             return data.records.map(returnData => ({
-//                 count: returnData.amount || 0,
-//                 returnDate: formatDateToDisplay(returnData.date),
-//                 id: returnData.id,
-//                 price: returnData.price,
-//                 isAir: returnData.type === "airreturn",
-//                 detailNumber: returnData.vin,
-
-//             }));
-//         }
-//     }
-
-//     const url = `${API_URL}/history?type=vozvraty&like=${filters.vin || ""}&date_from=${filters.date_from}&date_before=${filters.date_before}&market_id=${market_id}`;
-//     let result = await getData(url, parseData);
-//     if (result == null) { setData([]); }
-//     else {
-//         setData(result);
-//     }
-// };
-
 
 export const fetchReturns = async (filters, setData, market_id) => {
-    // Функция для форматирования даты (заглушка)
-    const formatDateToDisplay = (date) => {
-        return new Date(date).toLocaleDateString(); // Пример форматирования
-    };
-
-    // Заглушка для получения данных
-    const getData = async (url, parseData) => {
-        return new Promise((resolve) => {
-            setTimeout(() => {
-                // Пример данных
-                const mockData = {
-                    success: true,
-                    records: [
-                        {
-                            amount: 5,
-                            date: '2025-02-01',
-                            id: 1,
-                            price: 100,
-                            type: 'airreturn',
-                            vin: 'ABC123'
-                        },
-                        {
-                            amount: 2,
-                            date: '2025-02-02',
-                            id: 2,
-                            price: 200,
-                            type: 'other',
-                            vin: 'DEF456'
-                        }
-                    ]
-                };
-
-                // Возвращаем обработанные данные
-                resolve(parseData(mockData));
-            }, 1500); // Задержка 1.5 секунды
-        });
-    };
-
     const parseData = (data) => {
         if (data.success && Array.isArray(data.records)) {
             return data.records.map(returnData => ({
@@ -580,76 +297,22 @@ export const fetchReturns = async (filters, setData, market_id) => {
                 price: returnData.price,
                 isAir: returnData.type === "airreturn",
                 detailNumber: returnData.vin,
+
             }));
         }
-    };
+    }
 
     const url = `${API_URL}/history?type=vozvraty&like=${filters.vin || ""}&date_from=${filters.date_from}&date_before=${filters.date_before}&market_id=${market_id}`;
     let result = await getData(url, parseData);
-
-
-    // Обработка результата
-    if (result == null) {
-
-        setData([]);
-    } else {
-
+    if (result == null) { setData([]); }
+    else {
         setData(result);
     }
 };
 
-// export const fetchReturnsAll = async (setData, market_id) => {
-//     const parseData = (data) => {
-//         if (data.success && Array.isArray(data.sorted_return_list)) {
-//             return data.sorted_return_list.map(returnData => ({
-//                 id: returnData.id,
-//                 returnDate: formatDateToDisplay(returnData.return_date),
-//                 isAir: returnData.type == "airreturn",
-//                 detailNumber: returnData.vin,
-//             }));
-//         }
-//         return null;
-//     };
-
-//     const url = `${API_URL}/returns?market_id=${market_id}`;
-//     let result = await getData(url, parseData);
-//     if (result == null) { setData([]); }
-//     else {
-//         setData(result);
-//     }
-// };
 
 
 export const fetchReturnsAll = async (setData, market_id) => {
-    // Имитация задержки сети
-    await new Promise(resolve => setTimeout(resolve, 1000));
-
-    // Временные данные для тестирования
-    const mockData = {
-        success: true,
-        sorted_return_list: [
-            {
-                id: 1,
-                return_date: "2023-10-01T12:00:00Z",
-                type: "airreturn",
-                vin: "ABC123"
-            },
-            {
-                id: 2,
-                return_date: "2023-10-02T14:00:00Z",
-                type: "groundreturn",
-                vin: "XYZ789"
-            },
-            {
-                id: 3,
-                return_date: "2023-10-03T16:00:00Z",
-                type: "airreturn",
-                vin: "DEF456"
-            }
-        ]
-    };
-
-    // Парсинг данных (аналогично вашей функции parseData)
     const parseData = (data) => {
         if (data.success && Array.isArray(data.sorted_return_list)) {
             return data.sorted_return_list.map(returnData => ({
@@ -662,34 +325,15 @@ export const fetchReturnsAll = async (setData, market_id) => {
         return null;
     };
 
-    // Имитация вызова setData
-    const result = parseData(mockData);
-    if (result == null) {
-        setData([]);
-    } else {
+    const url = `${API_URL}/returns?market_id=${market_id}`;
+    let result = await getData(url, parseData);
+    if (result == null) { setData([]); }
+    else {
         setData(result);
     }
 };
 
-// export const fetchDetailsNew = async (vin, setData, market_id) => {
-//     const parseDetailsData = (data) => {
-//         if (data.success && Array.isArray(data.details)) {
-//             return data.details.map(detail => ({
-//                 detailNumber: detail.vin,
-//                 name: detail.name,
-//                 count: detail.amount || 0,
-//             }));
-//         }
-//         return null;
-//     };
 
-//     const url = `${API_URL}/search?vin=${vin || ""}&market_id=${market_id}`;
-//     const result = await getData(url, parseDetailsData);
-//     if (result == null) { setData([]); }
-//     else {
-//         setData(result);
-//     }
-// };
 
 export const fetchDetailsNew = async (vin, setData, market_id) => {
     const parseDetailsData = (data) => {
@@ -703,34 +347,13 @@ export const fetchDetailsNew = async (vin, setData, market_id) => {
         return null;
     };
 
-    // Мок-функция для тестирования
-    const mockFetchDetails = () => {
-        return new Promise((resolve) => {
-            setTimeout(() => {
-                resolve({
-                    success: true,
-                    details: [
-                        { vin: '1234567890', name: 'Detail 1Detail 1Detail 1Detail 1Detail 1Detail 1Detail 1', amount: 5 },
-                        { vin: '0987654321', name: 'Detail 2', amount: 3 },
-                        { vin: '1357924680', name: 'Detail 3', amount: 7 },
-                    ],
-                });
-            }, 1000); // Имитация задержки сети
-        });
-    };
-
-    // Используем мок-функцию вместо реального запроса
-    const result = await mockFetchDetails().then(parseDetailsData);
-
-    if (result == null) {
-        setData([]);
-    } else {
+    const url = `${API_URL}/search?vin=${vin || ""}&market_id=${market_id}`;
+    const result = await getData(url, parseDetailsData);
+    if (result == null) { setData([]); }
+    else {
         setData(result);
     }
 };
-
-
-
 
 
 export const deleteDetailById = async (detailNumber) => {

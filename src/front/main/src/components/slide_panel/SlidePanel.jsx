@@ -4,52 +4,44 @@ import { ReactComponent as LeftArrow } from '../../assets/left_arrow_icon.svg';
 import "./SlidePanel.css";
 
 const SlidePanel = ({ isOpen, onClose, children }) => {
-    const [isDragging, setIsDragging] = useState(false); // Состояние перетаскивания
-    const [startY, setStartY] = useState(0); // Начальная позиция Y
-    const [panelHeight, setPanelHeight] = useState(300); // Высота панели
-    const panelRef = useRef(null); // Ссылка на панель
+    const [isDragging, setIsDragging] = useState(false);
+    const [startY, setStartY] = useState(0);
+    const [panelHeight, setPanelHeight] = useState(250);
+    const panelRef = useRef(null);
 
-    // Обработчик начала перетаскивания
     const handleMouseDown = (e) => {
         setIsDragging(true);
-        setStartY(e.clientY || e.touches[0].clientY); // Запоминаем начальную позицию Y
+        setStartY(e.clientY || e.touches[0].clientY);
     };
 
-    // Обработчик перемещения
     const handleMouseMove = (e) => {
         if (!isDragging) return;
 
-        const clientY = e.clientY || e.touches[0].clientY; // Текущая позиция Y
-        const deltaY = clientY - startY; // Разница между текущей и начальной позицией Y
+        const clientY = e.clientY || e.touches[0].clientY;
+        const deltaY = clientY - startY;
 
-        // Вычисляем новую высоту панели
         const newHeight = panelHeight - deltaY;
 
-        // Ограничиваем высоту панели (например, от 100px до 500px)
-        if (newHeight >= 100 && newHeight <= 300) {
+        if (newHeight >= 100 && newHeight <= 400) {
             setPanelHeight(newHeight);
-            setStartY(clientY); // Обновляем начальную позицию для плавного перемещения
+            setStartY(clientY);
         }
     };
 
-    // Обработчик завершения перетаскивания
     const handleMouseUp = () => {
         setIsDragging(false);
 
-        // Если панель слишком маленькая, закрываем её
         if (panelHeight < 150) {
             onClose();
-            setPanelHeight(300); // Сбрасываем высоту после закрытия
+            setPanelHeight(250);
         }
     };
 
-    // Стиль для панели
     const panelStyle = {
         height: `${panelHeight}px`,
-        transition: isDragging ? "none" : "height 0.3s ease-in-out", // Плавная анимация, если не перетаскиваем
+        transition: isDragging ? "none" : "height 0.3s ease-in-out",
     };
 
-    // Закрытие панели при клике вне её области
     useEffect(() => {
         const handleClickOutside = (e) => {
             if (panelRef.current && !panelRef.current.contains(e.target)) {
@@ -69,18 +61,19 @@ const SlidePanel = ({ isOpen, onClose, children }) => {
             onMouseDown={handleMouseDown}
             onMouseMove={handleMouseMove}
             onMouseUp={handleMouseUp}
-            onMouseLeave={handleMouseUp} // Если курсор вышел за пределы панели
+            onMouseLeave={handleMouseUp}
             onTouchStart={handleMouseDown}
             onTouchMove={handleMouseMove}
             onTouchEnd={handleMouseUp}
         >
 
             <div className="SlidePanelHeader">
-                <button className="close-button" onClick={onClose}>
+                <div className="close-button" onClick={onClose}>
                     <LeftArrow />Назад
-                </button>
+                </div>
             </div>
             <div className="panel-content">
+
                 {children && children}
             </div>
         </div>

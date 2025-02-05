@@ -1,44 +1,47 @@
 .slide-panel.open {
-    bottom: 0;
-    /* Панель выезжает на экран */
+    bottom: 0px;
+    height: auto;
+
 }
 
-/* Выезжающая панель */
 .slide-panel {
+    transform: translateX(-50%);
+    left: 50%;
     position: fixed;
+    display: flex;
+    flex-direction: column;
     bottom: -100%;
-    left: 0;
-    width: 100vw;
+    width: 100%;
     background-color: var(--color-component-background);
     box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
     transition: height 0.3s ease-in-out;
     z-index: 1000;
-
-
-    /* Добавляем прокрутку, если контент не помещается */
+    padding: 10px;
+    padding-bottom: 0px;
+    border-bottom: none;
+    border-radius: 5px;
 }
 
-/* Контент панели */
 .panel-content {
-    margin: 15px 20px;
-    position: relative;
-    border: 1px solid var(--dark-border-2);
+    border-bottom: none;
+    border-radius: 5px;
+    padding: 10px;
+    border: 2px solid var(--dark-border-2);
     overflow-y: auto;
     height: 100%;
 }
 
 .SlidePanelHeader {
-    position: relative;
+    display: flex;
+    justify-content: flex-end;
+    gap: 5px;
     height: 30px;
 }
 
-/* Кнопка закрытия */
 .close-button {
-    position: absolute;
     color: var(--color-secondary-text);
     font-size: 16px;
     font-family: "VelaSansRegular";
-    /* position: relative; */
     top: 10px;
     right: 10px;
     gap: 5px;

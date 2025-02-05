@@ -307,7 +307,58 @@ export const fetchReturns = async (filters, setData, market_id) => {
     }
 };
 
+// export const fetchReturnsAll = async (setData, market_id) => {
+//     const parseData = (data) => {
+//         if (data.success && Array.isArray(data.sorted_return_list)) {
+//             return data.sorted_return_list.map(returnData => ({
+//                 id: returnData.id,
+//                 returnDate: formatDateToDisplay(returnData.return_date),
+//                 isAir: returnData.type == "airreturn",
+//                 detailNumber: returnData.vin,
+//             }));
+//         }
+//         return null;
+//     };
+
+//     const url = `${API_URL}/returns?market_id=${market_id}`;
+//     let result = await getData(url, parseData);
+//     if (result == null) { setData([]); }
+//     else {
+//         setData(result);
+//     }
+// };
+
+
 export const fetchReturnsAll = async (setData, market_id) => {
+    // Имитация задержки сети
+    await new Promise(resolve => setTimeout(resolve, 1000));
+
+    // Временные данные для тестирования
+    const mockData = {
+        success: true,
+        sorted_return_list: [
+            {
+                id: 1,
+                return_date: "2023-10-01T12:00:00Z",
+                type: "airreturn",
+                vin: "ABC123"
+            },
+            {
+                id: 2,
+                return_date: "2023-10-02T14:00:00Z",
+                type: "groundreturn",
+                vin: "XYZ789"
+            },
+            {
+                id: 3,
+                return_date: "2023-10-03T16:00:00Z",
+                type: "airreturn",
+                vin: "DEF456"
+            }
+        ]
+    };
+
+    // Парсинг данных (аналогично вашей функции parseData)
     const parseData = (data) => {
         if (data.success && Array.isArray(data.sorted_return_list)) {
             return data.sorted_return_list.map(returnData => ({
@@ -320,14 +371,14 @@ export const fetchReturnsAll = async (setData, market_id) => {
         return null;
     };
 
-    const url = `${API_URL}/returns?market_id=${market_id}`;
-    let result = await getData(url, parseData);
-    if (result == null) { setData([]); }
-    else {
+    // Имитация вызова setData
+    const result = parseData(mockData);
+    if (result == null) {
+        setData([]);
+    } else {
         setData(result);
     }
 };
-
 
 // export const fetchDetailsNew = async (vin, setData, market_id) => {
 //     const parseDetailsData = (data) => {
@@ -389,3 +440,28 @@ export const fetchDetailsNew = async (vin, setData, market_id) => {
 
 
 
+
+
+export const deleteDetailById = async (detailNumber) => {
+    return new Promise((resolve, reject) => {
+        setTimeout(() => {
+            let shouldResolve = Math.random() > 0.5; // 50% шанс на успех
+            shouldResolve = false;
+            if (shouldResolve) {
+                resolve(true); // Успех
+            } else {
+                reject(new Error(`Не удалось удалить деталь с номером: ${detailNumber}`)); // Ошибка
+            }
+
+            // Uncomment the following block to simulate a success scenario
+            /*
+            resolve(true); // Успех
+            */
+
+            // Uncomment the following block to simulate an error scenario
+            /*
+            reject(new Error(`Не удалось удалить деталь с номером: ${detailNumber}`)); // Ошибка
+            */
+        }, 1500);
+    });
+};

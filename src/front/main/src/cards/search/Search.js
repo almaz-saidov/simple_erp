@@ -3,9 +3,11 @@ import Input from '../../components/Input'
 import Detail from "../../components/Detail";
 import { SyncLoader } from 'react-spinners'
 import { useEffect, useState, useContext } from 'react';
-import { fetchDetailsNew } from "../../api/Api";
+import { fetchDetailsNew, deleteDetailById } from "../../api/Api";
 import { MarketContext } from '../../markets/MarketContext';
 import SlidePanel from "../../components/slide_panel/SlidePanel";
+import { DeleteButton } from '../../components/SubmitButton';
+import toast from 'react-hot-toast';
 
 import '../../styles/Card.css';
 import '../../styles/Cards/Search.css';
@@ -50,13 +52,32 @@ function Search() {
         )
     }
 
-    const lookForDetails = () => {
-        fetchDetailsNew(detailNumber, setData, value.id)
+    const lookForDetails = async () => {
+        setLoading(true);
+        await fetchDetailsNew(detailNumber, setData, value.id);
+        setLoading(false);
     }
 
     useEffect(() => {
         lookForDetails();
     }, [detailNumber]);
+
+
+    const getDeleteFunc = (detailNumber) => {
+        return async () => {
+            try {
+                setLoading(true);
+                await deleteDetailById(detailNumber);
+                lookForDetails();
+                toast.success("Деталь удладена");
+            } catch (e) {
+                console.error('Ошибка в handleApiResponse:', e);
+                toast.error('Что-то пошло не так');
+            } finally {
+                setLoading(false);
+            }
+        }
+    }
 
     return (
         <div className="Search">
@@ -78,8 +99,19 @@ function Search() {
                 < div className="SearchContent">
                     {loadDetails()}
                 </div>}
-            {selectedItem && <SlidePanel isOpen={isPanelOpen} onClose={closePanel} children={<Detail detail={selectedItem} />} />}
+            {selectedItem &&
+                <SlidePanel
+                    isOpen={isPanelOpen}
+                    onClose={closePanel}
+                    children={
+                        <div>
+                            <Detail detail={selectedItem} />
+                            <DeleteButton onClick={getDeleteFunc(selectedItem.detailNumber)} />
+                        </div>
+                    }
+                />}
         </div >
+
 
     );
 }

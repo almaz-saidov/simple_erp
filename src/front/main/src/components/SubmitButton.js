@@ -1,5 +1,6 @@
-import '../styles/Components.css'
-import '../styles/Components.css'
+import { useModal } from './SubmitModalContext';
+import '../styles/Components.css';
+import '../styles/Components.css';
 import React, { useState } from 'react';
 
 
@@ -20,51 +21,50 @@ export function IssuanceButton(props) {
 
 
 
-const ConfirmationModal = ({ isVisible, onClose, onConfirm }) => {
+export const ConfirmationModal = ({ isVisible, onClose, onConfirm }) => {
+    const handleConfirm = () => {
+        if (onConfirm) {
+            onConfirm(); // Выполняем функцию подтверждения
+        }
+        onClose(); // Закрываем модалку
+    };
+
     if (!isVisible) return null;
 
     return (
         <div className="SubmitModal">
-            <div className='SubmitModalWrapper' onClick={onClose}>
-                <div className="SubmitModalContent">
-                    <h2 className='PrimaryText'>Вы уверены, что хотите удалить этот элемент?</h2>
-                    <div className='SubmitDeleteButtonsContainer'>
-                        <button className='SubmitButton' onClick={onClose}>Нет</button>
-                        <button className='DeleteButton' onClick={onConfirm}>Да</button>
+            <div className="SubmitModalWrapper" onClick={onClose}>
+                <div className="SubmitModalContent" onClick={(e) => e.stopPropagation()}>
+                    <h2 className="PrimaryText">Вы уверены, что хотите удалить этот элемент?</h2>
+                    <div className="SubmitDeleteButtonsContainer">
+                        <button className="SubmitButton" onClick={onClose}>
+                            Нет
+                        </button>
+                        <button className="DeleteButton" onClick={handleConfirm}>
+                            Да
+                        </button>
                     </div>
                 </div>
             </div>
-        </div >
+        </div>
     );
 };
 
-export function DeleteButton(props) {
-    const { onClick } = props;
-    const [isModalVisible, setModalVisible] = useState(false);
 
-    const handleClick = () => {
-        setModalVisible(true);
-    };
+export function DeleteButton({ onClick }) {
+    const { openModal } = useModal();
 
-    const handleClose = () => {
-        setModalVisible(false);
-    };
-
-    const handleConfirm = () => {
-        onClick && onClick();
-        setModalVisible(false);
+    const handleDelete = () => {
+        openModal(() => {
+            onClick && onClick();
+        });
     };
 
     return (
-        <div className="SubmitButtonWrapper" >
-            <button className="SubmitButton" onClick={handleClick}>Удалить</button>
-            <ConfirmationModal
-                isVisible={isModalVisible}
-                onClose={handleClose}
-                onConfirm={handleConfirm}
-            />
-        </div >
+        <div className="SubmitButtonWrapper">
+            <button className="SubmitButton" onClick={handleDelete}>
+                Удалить
+            </button>
+        </div>
     );
 }
-
-

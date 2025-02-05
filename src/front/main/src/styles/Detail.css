@@ -78,3 +78,9 @@
 .DetailNumber {
     color: var(--color-primary-text);
 }
+
+.RightArrowWrapper{
+    display: flex;
+    height: 100%;
+    align-items: center;
+}

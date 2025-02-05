@@ -22,7 +22,11 @@ function Detail(props) {
                     <p className='HelperText'>Номер запчасти</p>
                     <p className='PrimaryText'>{detail.detailNumber}</p>
                 </div>
+                <div className='RightArrowWrapper'>
+                    <RightArrow />
+                </div>
             </div>
+
         </div>
     );
 }

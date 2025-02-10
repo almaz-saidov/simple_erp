@@ -13,9 +13,7 @@ import { TDetail } from '../../types/Detail';
 import { mockSearchDetails } from '../../services/DetailApi';
 
 // @ts-ignore
-import '../../styles/Card.css';
-// @ts-ignore
-import '../../styles/Cards/Search.css';
+import styles from './Search.module.css';
 // @ts-ignore
 import '../../styles/Components.css';
 
@@ -29,11 +27,10 @@ function Search() {
     const [isPanelOpen, setIsPanelOpen] = useState(false);
 
     const handleItemClick = (item: any) => {
-        setSelectedItem(item); // Устанавливаем выбранный элемент
-        setIsPanelOpen(true); // Открываем панель
+        setSelectedItem(item);
+        setIsPanelOpen(true);
     };
-
-    // Закрытие панели
+    
     const closePanel = () => {
         setIsPanelOpen(false);
     };
@@ -47,7 +44,7 @@ function Search() {
             )
         }
 
-        return (<div className="DetailsWrapper">
+        return (<div className={styles.DetailsWrapper}>
             {
                 data.map((el, index) => (
                     <Detail detail={el} key={index} onClick={() => handleItemClick(el)} />
@@ -87,7 +84,7 @@ function Search() {
     }
 
     return (
-        <div className="Search">
+        <div className={styles.Search}>
             <CardHeader label="Поиск" marketName={value.name} />
             <Input label=""
                 hint="Номер запчасти"
@@ -103,7 +100,7 @@ function Search() {
                 </div>
                 :
 
-                < div className="SearchContent">
+                < div className={styles.SearchContent}>
                     {loadDetails()}
                 </div>}
             {selectedItem &&

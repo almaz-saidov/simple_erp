@@ -10,7 +10,7 @@ import SlidePanel from "../../components/slide_panel/SlidePanel";
 import { DeleteButton } from '../../components/SubmitButton';
 import toast from 'react-hot-toast';
 import { TDetail } from '../../types/Detail';
-import { mockSearchDetails } from '../../services/DetailApi';
+import { searchDetails } from '../../services/DetailApi';
 
 // @ts-ignore
 import styles from './Search.module.css';
@@ -30,7 +30,7 @@ function Search() {
         setSelectedItem(item);
         setIsPanelOpen(true);
     };
-    
+
     const closePanel = () => {
         setIsPanelOpen(false);
     };
@@ -57,7 +57,7 @@ function Search() {
 
     const lookForDetails = async () => {
         setLoading(true);
-        const details = await mockSearchDetails(detailNumber, value.id);
+        const details = await searchDetails(detailNumber, value.id);
         setData(details);
         setLoading(false);
     }

@@ -26,17 +26,17 @@ export const searchDetails = (vin: string, market_id: string): Promise<TDetail[]
 };
 
 
-export const mockSearchDetails = async (vin: string, market_id: string): Promise<TDetail[]> => {
-    const mockData: TDetail[] = [{
-        vin: vin || "12345678901234567",
-        name: "Тестовый Автомобиль",
-        amount: Math.floor(Math.random() * 10000) + 1000,
-    }];
-    return new Promise((resolve) => {
-        setTimeout(() => {
-            resolve(mockData);
-        }, 1000);
+// export const mockSearchDetails = async (vin: string, market_id: string): Promise<TDetail[]> => {
+//     const mockData: TDetail[] = [{
+//         vin: vin || "12345678901234567",
+//         name: "Тестовый Автомобиль",
+//         amount: Math.floor(Math.random() * 10000) + 1000,
+//     }];
+//     return new Promise((resolve) => {
+//         setTimeout(() => {
+//             resolve(mockData);
+//         }, 1000);
 
-    });
+//     });
 
-};
+// };

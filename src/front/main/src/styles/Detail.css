@@ -19,15 +19,14 @@
 .DetailRight {
     display: flex;
     flex-direction: row;
-    align-items: center;
-    /* width: 45%; */
+    justify-content: center;
     gap: 10px;
 }
 
 .DetailNumberWrapper {
-    width: 100%;
+
     height: 100%;
-    justify-content: space-between;
+    justify-content: flex-start;
     display: flex;
     flex-direction: column;
     padding: 10px;
@@ -38,7 +37,29 @@
     background-color: var(--color-input-background);
 }
 
-.DetailName {
+@media (max-width: 400px) {
+    .DetailNumberWrapper {
+        width: 135px;
+        height: 65px;
+    }
+}
+
+@media (min-width: 401px) and (max-width: 800px) {
+    .DetailNumberWrapper {
+        width: 165px;
+        height: 65px;
+    }
+}
+
+
+@media (min-width: 801px) {
+    .DetailNumberWrapper {
+        width: 175px;
+        height: 75px;
+    }
+}
+
+Ъ .DetailName {
     color: var(--color-primary-text);
 }
 
@@ -56,4 +77,10 @@
 
 .DetailNumber {
     color: var(--color-primary-text);
+}
+
+.RightArrowWrapper{
+    display: flex;
+    height: 100%;
+    align-items: center;
 }

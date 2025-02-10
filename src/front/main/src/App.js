@@ -9,25 +9,23 @@ import Returns from './cards/returns/Returns';
 import Search from './cards/search/Search';
 import { Fragment } from 'react';
 import { SyncLoader } from 'react-spinners';
-import { ReactComponent as FailIcon } from './assets/auth_fail_icon.svg'
+import { ReactComponent as FailIcon } from './assets/auth_fail_icon.svg';
 import { BrowserRouter, Routes, Route, Navigate, useNavigate } from 'react-router-dom';
-import { Toaster } from 'react-hot-toast';
 import { ToasterWithMax } from './components/ToasterWithMax';
 import Market from './markets/Market';
 import MarketSelector from './markets/MarketSelector';
 import CreateMarket from './markets/CreateMarket';
-import { MarketProvider } from './markets/MarketContext'
+import { MarketProvider } from './markets/MarketContext';
+import { ModalProvider, useModal } from './components/SubmitModalContext';
+import { ConfirmationModal } from './components/SubmitButton';
 
 function App() {
   const [currentCardId, setCurrentCardId] = useState(0);
   const [authorized, setAuthorized] = useState(true);
   const [loading, setLoading] = useState(false);
 
-
-  const cards = [<Search />, <Sells />, <Purchases />, <Returns />, <History />];
-
   return (
-    <div className="App">
+    <ModalProvider>
       <MarketProvider>
         <BrowserRouter>
           <Routes>
@@ -36,8 +34,23 @@ function App() {
             <Route path="markets/create" element={<CreateMarket />} />
             <Route path="*" element={<Navigate to="/markets" />} />
           </Routes>
+          <MainContent />
         </BrowserRouter>
       </MarketProvider>
+    </ModalProvider>
+  );
+}
+
+function MainContent() {
+  const { isModalVisible, closeModal, onConfirm } = useModal();
+
+  return (
+    <>
+      <ConfirmationModal
+        isVisible={isModalVisible}
+        onClose={closeModal}
+        onConfirm={onConfirm}
+      />
       <ToasterWithMax toastOptions={{
         duration: 1000,
         style: {
@@ -45,7 +58,7 @@ function App() {
           color: '#DBDBDB',
         }
       }} />
-    </div>
+    </>
   );
 }
 

@@ -220,6 +220,7 @@ export const fetchPurchasesById = async (itemId, market_id) => {
     return result;
 };
 
+
 export const fetchSellById = async (itemId, market_id) => {
 
     const parseData = (data) => {
@@ -284,6 +285,8 @@ export const fetchSells = async (filters, setData, market_id) => {
 
 };
 
+
+
 export const fetchReturns = async (filters, setData, market_id) => {
     const parseData = (data) => {
         if (data.success && Array.isArray(data.records)) {
@@ -307,6 +310,8 @@ export const fetchReturns = async (filters, setData, market_id) => {
     }
 };
 
+
+
 export const fetchReturnsAll = async (setData, market_id) => {
     const parseData = (data) => {
         if (data.success && Array.isArray(data.sorted_return_list)) {
@@ -327,6 +332,7 @@ export const fetchReturnsAll = async (setData, market_id) => {
         setData(result);
     }
 };
+
 
 
 export const fetchDetailsNew = async (vin, setData, market_id) => {
@@ -350,4 +356,58 @@ export const fetchDetailsNew = async (vin, setData, market_id) => {
 };
 
 
+export const deleteDetailById = async (detailNumber) => {
+    return new Promise((resolve, reject) => {
+        setTimeout(() => {
+            let shouldResolve = Math.random() > 0.5; // 50% шанс на успех
+            shouldResolve = false;
+            if (shouldResolve) {
+                resolve(true); // Успех
+            } else {
+                reject(new Error(`Не удалось удалить деталь с номером: ${detailNumber}`)); // Ошибка
+            }
 
+            // Uncomment the following block to simulate a success scenario
+            /*
+            resolve(true); // Успех
+            */
+
+            // Uncomment the following block to simulate an error scenario
+            /*
+            reject(new Error(`Не удалось удалить деталь с номером: ${detailNumber}`)); // Ошибка
+            */
+        }, 1500);
+    });
+};
+
+
+export const updateSell = async (detailNumber) => {
+    return new Promise((resolve, reject) => {
+        setTimeout(() => {
+            let shouldResolve = Math.random() > 0.5; // 50% шанс на успех
+            shouldResolve = false;
+            if (shouldResolve) {
+                resolve(true); // Успех
+            } else {
+                reject(new Error(`Не удалось удалить деталь с номером: ${detailNumber}`)); // Ошибка
+            }
+
+        }, 1500);
+    });
+};
+
+
+export const updatePurchase = async (detailNumber) => {
+    return new Promise((resolve, reject) => {
+        setTimeout(() => {
+            let shouldResolve = Math.random() > 0.5; // 50% шанс на успех
+            shouldResolve = false;
+            if (shouldResolve) {
+                resolve(true); // Успех
+            } else {
+                reject(new Error(`Не удалось удалить деталь с номером: ${detailNumber}`)); // Ошибка
+            }
+
+        }, 1500);
+    });
+};

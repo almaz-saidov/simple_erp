@@ -280,7 +280,7 @@ input[type="date"] {
     }
 }
 
-@media (min-width: 1201px) {
+@media (min-width: 801px) {
     .HelperText {
         font-size: 18px;
         line-height: 18px;
@@ -294,17 +294,15 @@ input[type="date"] {
 
 .SubmitModal {
     position: fixed;
-    /* top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%); */
-    width: 100%;
-    height: 100%;
-    height: 30%;
     z-index: 1001;
-    background-color: var(--color-base-fill);
-    padding: 20px;
+    /* background-color: var(--color-base-fill); */
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-    width: 100%;
+    width: 100vw;
+    height: 100vh;
+    position: fixed;
+    top: 0;
+    left: 0;
+    background-color: var(--color-transparent-fill);
 }
 
 .SubmitModalWrapper {
@@ -316,11 +314,12 @@ input[type="date"] {
     flex-direction: column;
     justify-content: space-around;
     height: 30%;
-    width: 100%;
+    width: 80%;
     height: 100%;
-    background-color: var(--color-transparent-fill);
+
     color: var(--color-primary-text);
     border-radius: 5px;
+    padding: 20px;
 }
 
 .SubmitModalContent {

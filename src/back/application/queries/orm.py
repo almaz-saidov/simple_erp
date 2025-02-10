@@ -239,6 +239,30 @@ class SyncORM:
             ]
             
             return serialized_details
+        
+    @staticmethod
+    def entire_search_by_vin(vin: str, offset: int = 0, limit: int = 25):
+        """Получить детали по VIN"""
+        with session_factory() as session:
+            vin = reformat_vin(vin)
+            query = session.query(Detail)
+
+            if vin == '':
+                details = query.offset(offset).limit(limit)
+            else:
+                details = query.filter(Detail.vin.ilike(f'%{vin}%')).offset(offset).limit(limit)
+            
+            # Преобразуем ORM-объекты в словари
+            serialized_details = [
+                {
+                    "vin": detail.vin,
+                    "name": detail.name,
+                    "amount": detail.amount,
+                }
+                for detail in details
+            ]
+            
+            return serialized_details
 
         
     @staticmethod

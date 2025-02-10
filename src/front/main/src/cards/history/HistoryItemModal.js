@@ -24,7 +24,7 @@ const HistoryItemModal = ({ isOpen, isSell, onClose, itemData }) => {
                 const newItem = isSell ? await fetchSellById(itemData.id, value.id) : await fetchPurchasesById(itemData.id, value.id);
                 setItem(newItem);
             } catch (error) {
-                console.error('Ошибка при загрузке данных возврата:', error);
+                console.error('Ошибка при загрузке данных:', error);
             } finally {
                 setLoading(false);
             }

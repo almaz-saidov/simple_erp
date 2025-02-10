@@ -59,3 +59,53 @@ def search_detail():
         status=HTTPStatus.OK,
         mimetype="application/json",
     )
+
+
+@app.get('/api/entire-search')
+@init_data_checker
+def entire_search_detail():
+    vin = request.args.get("vin", "")
+    page = request.args.get("page", 1, type=int)
+    per_page = request.args.get("per_page", 25, type=int)
+
+    if not vin:
+        vin = ''
+
+    # Проверяем корректность VIN
+    if not SyncORM.is_valid_vin(vin):
+        return Response(
+            json.dumps({
+                "success": False,
+                "error_message": "Некорректный формат VIN номера."
+            }),
+            status=HTTPStatus.BAD_REQUEST,
+            mimetype="application/json",
+        )
+
+     # Определяем offset для пагинации
+    offset = (page - 1) * per_page
+
+    # Получаем детали по VIN с учетом пагинации
+    details = SyncORM.entire_search_by_vin(vin, offset=offset, limit=per_page)
+
+    if not details:
+        return Response(
+            json.dumps({
+                "success": False,
+                "message": f"Деталь с VIN {vin} не найдена. Количество: 0."
+            }),
+            status=HTTPStatus.NOT_FOUND,
+            mimetype="application/json",
+        )
+
+    # Возвращаем успешный ответ с деталями
+    return Response(
+        json.dumps({
+            "success": True,
+            "details": details,  # Убедитесь, что `details` сериализуем
+            "page": page,
+            "per_page": per_page
+        }),
+        status=HTTPStatus.OK,
+        mimetype="application/json",
+    )

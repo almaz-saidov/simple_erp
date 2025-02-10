@@ -44,7 +44,7 @@ class MarketUserMapper(Base):
 class Detail(Base):
     __tablename__ = "Detail"
     id: Mapped[intpk]
-    vin: Mapped[str] = mapped_column(String(25), unique=True)
+    vin: Mapped[str] = mapped_column(String(25))
     name: Mapped[str] = mapped_column(String, nullable=False)
     amount: Mapped[int] = mapped_column(Integer, nullable=False, default=0)
     market_id: Mapped[int] = mapped_column(Integer, ForeignKey('Market.id'), nullable=False)

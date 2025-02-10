@@ -6,7 +6,7 @@ from application.utils import init_data_checker
 from application import app
 
 
-@app.get('/front')
+@app.get('/front/test')
 @init_data_checker
 def front():
     return render_template('/build/index.html')

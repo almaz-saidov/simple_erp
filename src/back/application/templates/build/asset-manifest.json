@@ -1,0 +1,25 @@
+{
+  "files": {
+    "main.css": "/static/css/main.8400fd64.css",
+    "main.js": "/static/js/main.af42d906.js",
+    "static/media/VelaSans-Regular.woff": "/static/media/VelaSans-Regular.00cb672688ae8cd7b356.woff",
+    "static/media/VelaSans-Medium.woff": "/static/media/VelaSans-Medium.f16ed904a5dd4a6aeb7f.woff",
+    "static/media/VelaSans-ExtraLight.woff": "/static/media/VelaSans-ExtraLight.396ac357d703d51e9066.woff",
+    "static/media/air_icon.svg": "/static/media/air_icon.9d7dbcb665631e6e9af0d4454fc186ea.svg",
+    "static/media/auth_fail_icon.svg": "/static/media/auth_fail_icon.0e87afe588dac99d72151c8ae8ba5a24.svg",
+    "static/media/receipt_icon.svg": "/static/media/receipt_icon.1d8fdec302153a4635f77fd763a7d63f.svg",
+    "static/media/issuance_icon.svg": "/static/media/issuance_icon.fbf85f9a5820b263441bbaaf1ca84a05.svg",
+    "index.html": "/index.html",
+    "static/media/returns_icon.svg": "/static/media/returns_icon.11c5597e36f0d3a6da1f01f2f5f0fa62.svg",
+    "static/media/search_icon.svg": "/static/media/search_icon.5e365dd294d80ce6cfb72d7f22a65f57.svg",
+    "static/media/history_icon.svg": "/static/media/history_icon.e656cb7f05f6ec04d9ddbc11d239c0a3.svg",
+    "static/media/right_arrow_icon.svg": "/static/media/right_arrow_icon.4e60ec9b2a7627cec0af2a0e582d7862.svg",
+    "static/media/left_arrow_icon.svg": "/static/media/left_arrow_icon.c79e683b72d15b70ad5922e102be45a3.svg",
+    "main.8400fd64.css.map": "/static/css/main.8400fd64.css.map",
+    "main.af42d906.js.map": "/static/js/main.af42d906.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.8400fd64.css",
+    "static/js/main.af42d906.js"
+  ]
+}

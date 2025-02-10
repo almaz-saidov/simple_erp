@@ -6,7 +6,7 @@ from application.utils import initial_init_data_checker
 from application.utils.init_data import TelegramInitData
 
 
-@app.route('/api/auth', methods=['GET', 'POST'])
+@app.route('/api/auth/test', methods=['GET', 'POST'])
 @initial_init_data_checker
 def telegram_auth():
     telegram_data = TelegramInitData(request.get_json().get('initData'))

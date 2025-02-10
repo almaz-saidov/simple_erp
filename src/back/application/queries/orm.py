@@ -213,7 +213,7 @@ class SyncORM:
         """
         with session_factory() as session:
             user = session.query(User).filter_by(id=user_id).first()
-            return user.status
+            return user.status._name_
     # ----------------------Detail Methods -------------------
 
     @staticmethod
@@ -282,18 +282,11 @@ class SyncORM:
     def add_purchase(vin: str, amount: int, date: datetime, price: int, detail_name: str, who_added: int, market_id: int):
         """
         Добавить приход товара на склад.
-
-        :param vin: VIN детали
-        :param price: Цена за единицу
-        :param amount: Количество деталей
-        :param detail_name: Наименование детали
-        :param user_id: ID пользователя, добавившего запись
-        :return: Объект добавленной покупки
         """
         with session_factory() as session:
             vin = reformat_vin(vin)
             # Проверяем, существует ли запчасть в Detail
-            detail = session.query(Detail).filter_by(vin=vin).first()
+            detail = session.query(Detail).filter(Detail.vin == vin, Detail.market_id == market_id).first()
             if not detail:
                 # Если детали нет, создаем новую запись
                 detail = Detail(vin=vin, name=detail_name, amount=amount, market_id=market_id)  # Примерные данные для новой записи в Detail
@@ -375,7 +368,7 @@ class SyncORM:
         with session_factory() as session:
             # Проверяем, существует ли запчасть
             vin = reformat_vin(vin)
-            detail = session.query(Detail).filter_by(vin=vin).first()
+            detail = session.query(Detail).filter(Detail.vin == vin, Detail.market_id == market_id).first()
             if not detail:
                 raise ValueError(f"Деталь с VIN '{vin}' не найдена.")
             
@@ -649,13 +642,22 @@ class SyncORM:
     
 # ------------------------MARKETS---------------------------
     @staticmethod
+    def get_market(user_id: int):
+        '''
+        Получение всех магазинов пльзователя с user_id, к которым он имеет доступ
+        '''
+        with session_factory() as session:
+            market_id = session.query(Market).join(MarketUserMapper, Market.id == MarketUserMapper.market_id).filter(MarketUserMapper.user_id == user_id).one_or_none()
+            return market_id
+
+    @staticmethod
     def get_all_markets():
         '''
         Получение всех магазинов пльзователя с user_id, к которым он имеет доступ
         '''
         with session_factory() as session:
-            market_id = session.query(Market).all()
-            return market_id
+            markets = session.query(Market).all()
+            return markets
 
     @staticmethod
     def cerate_market(user_id: int, name: str, address: str = 'no address'):

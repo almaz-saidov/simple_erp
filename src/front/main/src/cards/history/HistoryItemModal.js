@@ -5,7 +5,7 @@ import Checkbox from '../../components/CheckBox';
 import { useState, useEffect, useContext } from 'react';
 import { ReactComponent as LeftArrow } from '../../assets/left_arrow_icon.svg';
 import { ReactComponent as AirIcon } from '../../assets/air_icon.svg';
-import { fetchPurchasesById, fetchSellById } from '../../api/Api'
+import { fetchPurchasesById, fetchSellById } from '../../services/Api'
 import { SyncLoader } from 'react-spinners';
 import { MarketContext } from '../../markets/MarketContext'
 

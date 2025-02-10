@@ -1,15 +1,6 @@
-import './styles/App.css';
 
+import React from 'react';
 import { useEffect, useState } from 'react';
-import Nav from './components/Nav';
-import History from './cards/history/History';
-import Sells from './cards/sells/Sells';
-import Purchases from './cards/purchases/Purchases';
-import Returns from './cards/returns/Returns';
-import Search from './cards/search/Search';
-import { Fragment } from 'react';
-import { SyncLoader } from 'react-spinners';
-import { ReactComponent as FailIcon } from './assets/auth_fail_icon.svg';
 import { BrowserRouter, Routes, Route, Navigate, useNavigate } from 'react-router-dom';
 import { ToasterWithMax } from './components/ToasterWithMax';
 import Market from './markets/Market';
@@ -19,10 +10,10 @@ import { MarketProvider } from './markets/MarketContext';
 import { ModalProvider, useModal } from './components/SubmitModalContext';
 import { ConfirmationModal } from './components/SubmitButton';
 
+// @ts-ignore
+import './styles/App.css';
+
 function App() {
-  const [currentCardId, setCurrentCardId] = useState(0);
-  const [authorized, setAuthorized] = useState(true);
-  const [loading, setLoading] = useState(false);
 
   return (
     <ModalProvider>

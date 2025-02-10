@@ -1,28 +1,34 @@
+import React from "react";
 import CardHeader from "../../components/CardHeader";
 import Input from '../../components/Input'
-import Detail from "../../components/Detail";
+import Detail from "../../components/Detail/Detail";
 import { SyncLoader } from 'react-spinners'
 import { useEffect, useState, useContext } from 'react';
-import { fetchDetailsNew, deleteDetailById } from "../../api/Api";
+import { fetchDetailsNew, deleteDetailById } from "../../services/Api";
 import { MarketContext } from '../../markets/MarketContext';
 import SlidePanel from "../../components/slide_panel/SlidePanel";
 import { DeleteButton } from '../../components/SubmitButton';
 import toast from 'react-hot-toast';
+import { TDetail } from '../../types/Detail';
+import { mockSearchDetails } from '../../services/DetailApi';
 
+// @ts-ignore
 import '../../styles/Card.css';
+// @ts-ignore
 import '../../styles/Cards/Search.css';
+// @ts-ignore
 import '../../styles/Components.css';
 
 function Search() {
     const [detailNumber, setDetailNumber] = useState('');
-    const [data, setData] = useState([]);
-    const [loading, setLoading] = useState(false);
+    const [data, setData] = useState<TDetail[]>([]);
+    const [loading, setLoading] = useState<boolean>(false);
     const [detail, setDetail] = useState(null);
     const { value, setValue } = useContext(MarketContext);
-    const [selectedItem, setSelectedItem] = useState(null); // Храним выбранный элемент
-    const [isPanelOpen, setIsPanelOpen] = useState(false); // Открыта ли панель
+    const [selectedItem, setSelectedItem] = useState<TDetail>();
+    const [isPanelOpen, setIsPanelOpen] = useState(false);
 
-    const handleItemClick = (item) => {
+    const handleItemClick = (item: any) => {
         setSelectedItem(item); // Устанавливаем выбранный элемент
         setIsPanelOpen(true); // Открываем панель
     };
@@ -54,7 +60,8 @@ function Search() {
 
     const lookForDetails = async () => {
         setLoading(true);
-        await fetchDetailsNew(detailNumber, setData, value.id);
+        const details = await mockSearchDetails(detailNumber, value.id);
+        setData(details);
         setLoading(false);
     }
 
@@ -63,7 +70,7 @@ function Search() {
     }, [detailNumber]);
 
 
-    const getDeleteFunc = (detailNumber) => {
+    const getDeleteFunc = (detailNumber: string) => {
         return async () => {
             try {
                 setLoading(true);
@@ -106,7 +113,7 @@ function Search() {
                     children={
                         <div>
                             <Detail detail={selectedItem} />
-                            <DeleteButton onClick={getDeleteFunc(selectedItem.detailNumber)} />
+                            <DeleteButton onClick={getDeleteFunc(selectedItem.vin)} />
                         </div>
                     }
                 />}

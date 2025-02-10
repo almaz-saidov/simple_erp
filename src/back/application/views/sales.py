@@ -9,7 +9,7 @@ from application.utils.checker import init_data_checker
 from application.utils.init_data import TelegramInitData
 
 
-@app.post('/api/sales')
+@app.post('/api/test/sales')
 @init_data_checker
 def sales():
     """

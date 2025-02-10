@@ -7,7 +7,7 @@ from application.queries.orm import SyncORM
 from application.utils.checker import init_data_checker
 
 
-@app.get('/api/search')
+@app.get('/api/test/search')
 @init_data_checker
 def search_detail():
     """
@@ -61,7 +61,7 @@ def search_detail():
     )
 
 
-@app.get('/api/entire-search')
+@app.get('/api/test/entire-search')
 @init_data_checker
 def entire_search_detail():
     vin = request.args.get("vin", "")

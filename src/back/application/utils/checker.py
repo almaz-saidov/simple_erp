@@ -19,7 +19,7 @@ def initial_init_data_checker(func):
         bot_token = settings.TELEGRAM_BOT_TOKEN
         if not telegram_data.validate(bot_token, lifetime=3600):  # lifetime in seconds
             return jsonify({'status': 'Not authorized'}), 401 # redirect to error
-
+            
         user_data = telegram_data.to_dict().get('user')
         if user_data is None:
             return jsonify({'status': 'Not authorized'}), 401 # redirect to error

@@ -6,7 +6,7 @@ from application.utils import initial_init_data_checker
 from application.utils.init_data import TelegramInitData
 
 
-@app.route('/api/auth/test', methods=['GET', 'POST'])
+@app.route('/api/test/auth', methods=['GET', 'POST'])
 @initial_init_data_checker
 def telegram_auth():
     telegram_data = TelegramInitData(request.get_json().get('initData'))
@@ -16,5 +16,4 @@ def telegram_auth():
     response = make_response(jsonify({'user_status': f'{SyncORM.get_user_status(user_id)}', 'status': 'Cookie was set!'}))
     response.set_cookie('initData', request.get_json().get('initData'), path='/', httponly=True, secure=True, samesite='None')
     response.status_code = 200
-    
     return response

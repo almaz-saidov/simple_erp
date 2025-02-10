@@ -12,7 +12,7 @@ def front():
     return render_template('/build/index.html')
 
 
-@app.route('/static-front/<path:path>')
+@app.route('/static-front/test/<path:path>')
 @init_data_checker
 def static_index_build(path):
     print(os.path.join('./application/templates/build/static/'))

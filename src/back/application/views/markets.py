@@ -7,7 +7,7 @@ from application.utils.init_data import TelegramInitData
 from . import bp
 
 
-@bp.get('/api/test/markets')
+@bp.get('/api/markets')
 @init_data_checker
 def markets():
     telegram_data = TelegramInitData(request.cookies.get('initData'))
@@ -34,7 +34,7 @@ def markets():
     # return jsonify({'markets': markets_list}), 200
 
 
-@bp.post('/api/test/markets')
+@bp.post('/api/markets')
 @init_data_checker
 def create_market():
     if not request.is_json:

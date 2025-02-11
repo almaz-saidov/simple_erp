@@ -2,7 +2,7 @@ from http import HTTPStatus
 
 from flask import json, request, Response
 
-from application import app
+# from application import app
 from application.queries.orm import SyncORM
 from application.utils.checker import init_data_checker
 from . import bp

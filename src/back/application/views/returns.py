@@ -2,7 +2,7 @@ from http import HTTPStatus
 
 from flask import Response, json, request
 
-from application import app
+# from application import app
 from application.forms import ReturnForm, AirReturnForm
 from application.queries.orm import SyncORM
 from application.utils.checker import init_data_checker

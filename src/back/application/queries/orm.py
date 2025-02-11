@@ -213,9 +213,6 @@ class SyncORM:
         """
         with session_factory() as session:
             user = session.query(User).filter_by(id=user_id).first()
-<<<<<<< HEAD
-            return user.status._name_
-=======
             return user.status
         
     @staticmethod
@@ -231,7 +228,6 @@ class SyncORM:
         with session_factory() as session:
             workers = session.query(User).filter_by(status='worker').all()
             return [worker.id for worker in workers]
->>>>>>> fix_notifications
     # ----------------------Detail Methods -------------------
 
     @staticmethod

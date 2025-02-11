@@ -3,7 +3,7 @@ import os
 from flask import render_template, send_from_directory
 
 from application.utils import init_data_checker
-from application import app
+# from application import app
 from . import bp
 
 

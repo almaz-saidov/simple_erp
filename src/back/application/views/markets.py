@@ -1,6 +1,6 @@
 from flask import jsonify, request
 
-from application import app
+# from application import app
 from application.queries.orm import SyncORM
 from application.utils import init_data_checker
 from application.utils.init_data import TelegramInitData

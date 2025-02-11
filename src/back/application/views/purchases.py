@@ -10,7 +10,7 @@ from application.utils.init_data import TelegramInitData
 from . import bp
 
 
-@bp.post('/api/test/purchases')
+@bp.post('/api/purchases')
 @init_data_checker
 def purchases():
     """

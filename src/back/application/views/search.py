@@ -8,7 +8,7 @@ from application.utils.checker import init_data_checker
 from . import bp
 
 
-@bp.get('/api/test/search')
+@bp.get('/api/search')
 @init_data_checker
 def search_detail():
     """
@@ -62,7 +62,7 @@ def search_detail():
     )
 
 
-@bp.get('/api/test/entire-search')
+@bp.get('/api/entire-search')
 @init_data_checker
 def entire_search_detail():
     vin = request.args.get("vin", "")

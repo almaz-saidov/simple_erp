@@ -10,7 +10,7 @@ from application.utils.init_data import TelegramInitData
 from . import bp
 
 
-@bp.get('/api/test/history')
+@bp.get('/api/history')
 @init_data_checker
 def history():
     """
@@ -53,7 +53,7 @@ def history():
     )
 
 
-@bp.route("/api/test/history/sell/<int:sell_id>", methods=["GET", "POST"])
+@bp.route("/api/history/sell/<int:sell_id>", methods=["GET", "POST"])
 @init_data_checker
 def history_sell(sell_id):
     if request.method == "POST":
@@ -116,7 +116,7 @@ def history_sell(sell_id):
     )
 
 
-@bp.route("/api/test/history/purchase/<int:purchase_id>", methods=["GET", "POST"])
+@bp.route("/api/history/purchase/<int:purchase_id>", methods=["GET", "POST"])
 @init_data_checker
 def history_purchase(purchase_id):
     if request.method == "POST":
@@ -181,7 +181,7 @@ def history_purchase(purchase_id):
     )
 
 
-@bp.route("/api/test/history/returns/<int:return_id>", methods=["GET", "POST"])
+@bp.route("/api/history/returns/<int:return_id>", methods=["GET", "POST"])
 @init_data_checker
 def history_return(return_id):
     return_type = request.args.get("type")  # Получаем параметр типа возврата из URL или формы

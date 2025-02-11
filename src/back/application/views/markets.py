@@ -31,7 +31,7 @@ def markets():
     #     for market in markets
     # ]
 
-    # return jsonify({'markets': markets_list}), 200
+    return jsonify({'markets': 'None'}), 404
 
 
 @bp.post('/api/markets')

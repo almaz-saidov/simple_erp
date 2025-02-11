@@ -1,3 +1,7 @@
+from flask import Blueprint
+
+bp = Blueprint('main', __name__, url_prefix='/test')
+
 from application.views import search
 from application.views import purchases
 from application.views import returns

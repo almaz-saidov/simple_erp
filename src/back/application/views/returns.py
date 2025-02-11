@@ -7,9 +7,10 @@ from application.forms import ReturnForm, AirReturnForm
 from application.queries.orm import SyncORM
 from application.utils.checker import init_data_checker
 from application.utils.init_data import TelegramInitData
+from . import bp
 
 
-@app.get('/api/test/returns')
+@bp.get('/api/test/returns')
 @init_data_checker
 def returns():
     market_id = request.args.get('market_id', type=int)
@@ -49,7 +50,7 @@ def returns():
     )
 
 
-@app.post('/api/test/returns/create_return')
+@bp.post('/api/test/returns/create_return')
 @init_data_checker
 def create_return():
     """
@@ -130,7 +131,7 @@ def create_return():
         )
 
 
-@app.route('/api/test/returns/create_air_return', methods=["POST"])
+@bp.route('/api/test/returns/create_air_return', methods=["POST"])
 @init_data_checker
 def create_air_return():
     """
@@ -220,7 +221,7 @@ def create_air_return():
             mimetype="application/json"
         )
 
-@app.route('/api/test/returns/<int:return_id>', methods=["GET", "POST", "DELETE"])
+@bp.route('/api/test/returns/<int:return_id>', methods=["GET", "POST", "DELETE"])
 @init_data_checker
 def check_return(return_id):
     return_type = request.args.get("type")  # Получаем параметр типа возврата из URL

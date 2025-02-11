@@ -1,33 +1,36 @@
+import React from "react";
 import CardHeader from "../../components/CardHeader";
 import Input from '../../components/Input'
-import Detail from "../../components/Detail";
+import Detail from "../../components/Detail/Detail";
 import { SyncLoader } from 'react-spinners'
 import { useEffect, useState, useContext } from 'react';
-import { fetchDetailsNew, deleteDetailById } from "../../api/Api";
+import { fetchDetailsNew, deleteDetailById } from "../../services/Api";
 import { MarketContext } from '../../markets/MarketContext';
 import SlidePanel from "../../components/slide_panel/SlidePanel";
 import { DeleteButton } from '../../components/SubmitButton';
 import toast from 'react-hot-toast';
+import { TDetail } from '../../types/Detail';
+import { searchDetails } from '../../services/DetailApi';
 
-import '../../styles/Card.css';
-import '../../styles/Cards/Search.css';
+// @ts-ignore
+import styles from './Search.module.css';
+// @ts-ignore
 import '../../styles/Components.css';
 
 function Search() {
     const [detailNumber, setDetailNumber] = useState('');
-    const [data, setData] = useState([]);
-    const [loading, setLoading] = useState(false);
+    const [data, setData] = useState<TDetail[]>([]);
+    const [loading, setLoading] = useState<boolean>(false);
     const [detail, setDetail] = useState(null);
     const { value, setValue } = useContext(MarketContext);
-    const [selectedItem, setSelectedItem] = useState(null); // Храним выбранный элемент
-    const [isPanelOpen, setIsPanelOpen] = useState(false); // Открыта ли панель
+    const [selectedItem, setSelectedItem] = useState<TDetail>();
+    const [isPanelOpen, setIsPanelOpen] = useState(false);
 
-    const handleItemClick = (item) => {
-        setSelectedItem(item); // Устанавливаем выбранный элемент
-        setIsPanelOpen(true); // Открываем панель
+    const handleItemClick = (item: any) => {
+        setSelectedItem(item);
+        setIsPanelOpen(true);
     };
 
-    // Закрытие панели
     const closePanel = () => {
         setIsPanelOpen(false);
     };
@@ -41,7 +44,7 @@ function Search() {
             )
         }
 
-        return (<div className="DetailsWrapper">
+        return (<div className={styles.DetailsWrapper}>
             {
                 data.map((el, index) => (
                     <Detail detail={el} key={index} onClick={() => handleItemClick(el)} />
@@ -54,7 +57,8 @@ function Search() {
 
     const lookForDetails = async () => {
         setLoading(true);
-        await fetchDetailsNew(detailNumber, setData, value.id);
+        const details = await searchDetails(detailNumber, value.id);
+        setData(details);
         setLoading(false);
     }
 
@@ -63,7 +67,7 @@ function Search() {
     }, [detailNumber]);
 
 
-    const getDeleteFunc = (detailNumber) => {
+    const getDeleteFunc = (detailNumber: string) => {
         return async () => {
             try {
                 setLoading(true);
@@ -80,7 +84,7 @@ function Search() {
     }
 
     return (
-        <div className="Search">
+        <div className={styles.Search}>
             <CardHeader label="Поиск" marketName={value.name} />
             <Input label=""
                 hint="Номер запчасти"
@@ -96,7 +100,7 @@ function Search() {
                 </div>
                 :
 
-                < div className="SearchContent">
+                < div className={styles.SearchContent}>
                     {loadDetails()}
                 </div>}
             {selectedItem &&
@@ -106,7 +110,7 @@ function Search() {
                     children={
                         <div>
                             <Detail detail={selectedItem} />
-                            <DeleteButton onClick={getDeleteFunc(selectedItem.detailNumber)} />
+                            <DeleteButton onClick={getDeleteFunc(selectedItem.vin)} />
                         </div>
                     }
                 />}

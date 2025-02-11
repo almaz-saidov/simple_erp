@@ -4,8 +4,8 @@ import { IssuanceButton } from '../components/SubmitButton';
 import toast from 'react-hot-toast';
 import { React, useState, useRef, useEffect, useContext } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { createPurchase } from '../api/Api'
-import { createMarket } from '../api/MarketsApi'
+import { createPurchase } from '../services/Api'
+import { createMarket } from '../services/MarketsApi'
 
 import '../styles/Card.css';
 import '../styles/Cards/Issuance.css';

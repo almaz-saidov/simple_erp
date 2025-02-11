@@ -245,13 +245,14 @@ class SyncORM:
                 details = query.filter(Detail.market_id == market_id).offset(offset).limit(limit)
             else:
                 details = query.filter(Detail.vin.ilike(f'%{vin}%'), Detail.market_id == market_id).offset(offset).limit(limit)
-            
+
             # Преобразуем ORM-объекты в словари
             serialized_details = [
                 {
-                    "vin": detail.vin,
-                    "name": detail.name,
-                    "amount": detail.amount,
+                    'vin': detail.vin,
+                    'name': detail.name,
+                    'amount': detail.amount,
+                    'price': session.query(Purchase).filter(Purchase.detail_id == detail.id).order_by(Purchase.add_to_shop_date.desc()).first().price,
                 }
                 for detail in details
             ]

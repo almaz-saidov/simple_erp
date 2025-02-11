@@ -6,7 +6,7 @@ import { ThemeProvider, createTheme } from '@mui/material/styles';
 import { useNavigate } from 'react-router-dom';
 import { MarketContext } from './MarketContext';
 import React, { useContext } from 'react';
-import { fetchMarkets } from '../api/MarketsApi';
+import { fetchMarkets } from '../services/MarketsApi';
 import { SyncLoader } from 'react-spinners';
 import MarketItem from './MarketItem';
 

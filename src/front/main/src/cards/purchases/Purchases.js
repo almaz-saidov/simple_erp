@@ -5,7 +5,7 @@ import toast from 'react-hot-toast';
 import { useState, useContext } from 'react';
 import '../../styles/Card.css';
 import '../../styles/Cards/Issuance.css';
-import { createPurchase } from '../../api/Api'
+import { createPurchase } from '../../services/Api'
 import { MarketContext } from '../../markets/MarketContext'
 
 

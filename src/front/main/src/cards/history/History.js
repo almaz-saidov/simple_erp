@@ -2,14 +2,14 @@ import CardHeader from "../../components/CardHeader";
 import React, { useEffect, useState, useContext } from 'react';
 import Input from '../../components/Input';
 import HistoryNavButton from "./HistoryNavButton";
-import { fetchReturns, fetchPurchases, fetchSells, updateSell, updatePurchase } from "../../api/Api";
+import { fetchReturns, fetchPurchases, fetchSells, updateSell, updatePurchase } from "../../services/Api";
 import Return from '../returns/Return';
 import { SyncLoader } from 'react-spinners';
 import ReturnModal from '../returns/ReturnModal';
 import HistoryItemModal from "./HistoryItemModal";
 import HistoryItem from "./HistoryItem";
 import toast from 'react-hot-toast';
-import { createReturn, updateReturnHistoryById } from '../../api/Api';
+import { createReturn, updateReturnHistoryById } from '../../services/Api';
 import { isFirstEarlier } from "../../common/common"
 import { MarketContext } from '../../markets/MarketContext'
 import PurchaseModal from "../purchases/PurchaseModal";

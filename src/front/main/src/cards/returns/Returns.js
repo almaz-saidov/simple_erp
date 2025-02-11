@@ -3,8 +3,8 @@ import CardHeader from '../../components/CardHeader';
 import Return from './Return';
 import { SyncLoader } from 'react-spinners'
 import ReturnModal from './ReturnModal';
-import { fetchReturns, fetchReturnsAll } from '../../api/Api'
-import { createReturn, updateReturnById, deleteReturnById } from '../../api/Api';
+import { fetchReturns, fetchReturnsAll } from '../../services/Api'
+import { createReturn, updateReturnById, deleteReturnById } from '../../services/Api';
 import toast, { Toaster } from 'react-hot-toast';
 import { MarketContext } from '../../markets/MarketContext'
 

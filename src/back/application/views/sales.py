@@ -8,9 +8,10 @@ from application.queries.orm import SyncORM
 from application.utils.checker import init_data_checker
 from application.utils.details_notifications import send_notification
 from application.utils.init_data import TelegramInitData
+from . import bp
 
 
-@app.post('/api/test/sales')
+@bp.post('/api/test/sales')
 @init_data_checker
 def sales():
     """

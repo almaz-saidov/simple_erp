@@ -5,9 +5,10 @@ from flask import json, request, Response
 from application import app
 from application.queries.orm import SyncORM
 from application.utils.checker import init_data_checker
+from . import bp
 
 
-@app.get('/api/test/search')
+@bp.get('/api/test/search')
 @init_data_checker
 def search_detail():
     """
@@ -61,7 +62,7 @@ def search_detail():
     )
 
 
-@app.get('/api/test/entire-search')
+@bp.get('/api/test/entire-search')
 @init_data_checker
 def entire_search_detail():
     vin = request.args.get("vin", "")

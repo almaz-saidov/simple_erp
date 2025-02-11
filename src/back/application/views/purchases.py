@@ -7,9 +7,10 @@ from application.forms import PurchaseForm
 from application.queries.orm import SyncORM
 from application.utils.checker import init_data_checker
 from application.utils.init_data import TelegramInitData
+from . import bp
 
 
-@app.post('/api/test/purchases')
+@bp.post('/api/test/purchases')
 @init_data_checker
 def purchases():
     """

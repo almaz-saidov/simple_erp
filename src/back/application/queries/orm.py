@@ -213,7 +213,25 @@ class SyncORM:
         """
         with session_factory() as session:
             user = session.query(User).filter_by(id=user_id).first()
+<<<<<<< HEAD
             return user.status._name_
+=======
+            return user.status
+        
+    @staticmethod
+    def get_admins_id():
+        """ Получение id всех админов """
+        with session_factory() as session:
+            admins = session.query(User).filter_by(status='admin').all()
+            return [admin.id for admin in admins]
+    
+    @staticmethod
+    def get_workers_id():
+        """ Получение id всех работников """
+        with session_factory() as session:
+            workers = session.query(User).filter_by(status='worker').all()
+            return [worker.id for worker in workers]
+>>>>>>> fix_notifications
     # ----------------------Detail Methods -------------------
 
     @staticmethod
@@ -414,7 +432,7 @@ class SyncORM:
             )
             session.add(sell)
             session.commit()
-            return sell
+            return detail.amount
 
     @staticmethod
     def get_sell_by_id(sell_id: int, market_id: int):
@@ -682,6 +700,13 @@ class SyncORM:
         with session_factory() as session:
             markets = session.query(Market).all()
             return markets
+
+    @staticmethod
+    def get_market(market_id: int):
+        ''' Получение магазина по его id'''
+        with session_factory() as session:
+            market = session.query(Market).filter_by(id=market_id).one_or_none()
+            return market
 
     @staticmethod
     def cerate_market(user_id: int, name: str, address: str = 'no address'):

@@ -249,7 +249,7 @@ class SyncORM:
                     'vin': detail.vin,
                     'name': detail.name,
                     'amount': detail.amount,
-                    'price': session.query(Purchase).filter(Purchase.detail_id == detail.id).order_by(Purchase.add_to_shop_date.desc()).first().price,
+                    'price': session.query(Purchase).filter(Purchase.detail_id == detail.id, Purchase.market_id == market_id).order_by(Purchase.add_to_shop_date.desc()).first().price,
                     'market': market.name
                 }
                 for detail in details

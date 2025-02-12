@@ -62,4 +62,3 @@ export const fetchMarkets = (): Promise<TMarket[]> => {
         });
 };
 
-

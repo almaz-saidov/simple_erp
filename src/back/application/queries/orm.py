@@ -2,7 +2,7 @@ import re
 from datetime import datetime
 from typing import Optional
 
-from sqlalchemy import and_, literal, select
+from sqlalchemy import and_, literal, select, update
 
 from application.database import Base, engine, session_factory # движок, сессии, базовый класс
 from application.models import Detail, Purchase, Sell, Return, User, AirReturn, MarketUserMapper, Market
@@ -256,7 +256,14 @@ class SyncORM:
             ]
             
             return serialized_details
-        
+    
+    @staticmethod
+    def change_detail(detail_id, name, vin):
+        with session_factory() as session:
+            query = update(Detail).where(Detail.id == detail_id).values(name=name, vin=vin)
+            session.execute(query)
+            session.commit()
+
     @staticmethod
     def entire_search_by_vin(vin: str, offset: int = 0, limit: int = 25):
         """Получить детали по VIN"""

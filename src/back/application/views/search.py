@@ -110,3 +110,47 @@ def entire_search_detail():
         status=HTTPStatus.OK,
         mimetype="application/json",
     )
+
+
+@bp.post('/api/change-detail')
+def change_detail():
+    data = request.get_json()
+
+    if not data:
+        return Response(
+            json.dumps({"error": "Пустой запрос или неверный формат JSON."}),
+            status=HTTPStatus.BAD_REQUEST,
+            mimetype="application/json",
+        )
+    
+    detail_id = data['detail_id']
+    name = data['name']
+    vin = data['vin']
+
+    if not SyncORM.is_valid_vin(vin):
+        return Response(
+            json.dumps({
+                "success": False,
+                "error_message": "Incorrect VIN."
+            }),
+            status=HTTPStatus.BAD_REQUEST,
+            mimetype="application/json",
+        )
+    
+    try:
+        SyncORM.change_detail(detail_id, name, vin)
+        
+        return Response(
+            json.dumps({
+                "success": True,
+                "message": f"Деталь изменена",
+            }),
+            status=HTTPStatus.CREATED,
+            mimetype="application/json"
+        )
+    except ValueError as e:
+        return Response(
+            json.dumps({"success": False, "message": f"Ошибка: {str(e)}"}),
+            status=HTTPStatus.BAD_REQUEST,
+            mimetype="application/json"
+        )

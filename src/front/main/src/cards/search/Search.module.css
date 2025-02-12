@@ -25,3 +25,14 @@
     scrollbar-width: none;
     -ms-overflow-style: none;
 }
+
+.NumberDoesNotExist {
+    font-family: "VelaSansLight";
+    color: var(--color-primary-dark-text);
+    text-align: center;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    padding: 20px;
+    font-weight: 300;
+}

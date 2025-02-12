@@ -8,3 +8,4 @@ export type TCreateMarketData = {
     name: string;
     address: string;
 }
+

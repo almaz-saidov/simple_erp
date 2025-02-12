@@ -2,7 +2,7 @@ import React from "react";
 import CardHeader from "../../components/CardHeader";
 import Input from '../../components/Input'
 import Detail from "../../components/Detail/Detail";
-import { SyncLoader } from 'react-spinners'
+import { SyncLoader } from 'react-spinners';
 import { useEffect, useState, useContext } from 'react';
 import { fetchDetailsNew, deleteDetailById } from "../../services/Api";
 import { MarketContext } from '../../markets/MarketContext';
@@ -29,10 +29,10 @@ function CommonSearch() {
     const navigate = useNavigate();
 
     const handleItemClick = (item: any) => {
-        // setSelectedItem(item);
+        setSelectedItem(item);
         // setIsPanelOpen(true);
-        console.log("O$KO")
-        navigate(`/common/detail/${item.vin}`);
+        // console.log("O$KO")
+        navigate(`/common/detail/${item.vin}`, { state: item });
     };
 
     const closePanel = () => {

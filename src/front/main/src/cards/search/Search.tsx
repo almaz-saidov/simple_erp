@@ -38,9 +38,9 @@ function Search() {
     const loadDetails = () => {
         if (data.length == 0) {
             return (
-                <div className="NumberDoesNotExist" >
-                    <span>Ничего <br /> не найдено</span>
-                </div>
+                <div className={styles.NumberDoesNotExist} >
+                    < span > Ничего < br /> не найдено</span >
+                </div >
             )
         }
 

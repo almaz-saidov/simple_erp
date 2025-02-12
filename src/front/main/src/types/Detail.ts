@@ -5,4 +5,3 @@ export type TDetail = {
     price: number;
     market: string; //market name
 }
-

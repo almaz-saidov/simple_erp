@@ -1,6 +1,6 @@
 export type TMarket = {
     id: string;
-    name: string | number;
+    name: number;
     address: string;
 }
 

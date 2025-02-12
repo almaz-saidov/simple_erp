@@ -236,6 +236,7 @@ class SyncORM:
         with session_factory() as session:
             vin = reformat_vin(vin)
             query = session.query(Detail)
+            market = session.query(Market).filter_by(Market.id == market_id).one_or_none()
 
             if vin == '':
                 details = query.filter(Detail.market_id == market_id).offset(offset).limit(limit)
@@ -249,6 +250,7 @@ class SyncORM:
                     'name': detail.name,
                     'amount': detail.amount,
                     'price': session.query(Purchase).filter(Purchase.detail_id == detail.id).order_by(Purchase.add_to_shop_date.desc()).first().price,
+                    'market': market.name
                 }
                 for detail in details
             ]

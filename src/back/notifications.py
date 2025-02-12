@@ -46,11 +46,11 @@ async def notifications(bot: Bot):
                     for admin in admins:
                         await bot.send_message(admin[0], f'Незавершенный возврат:\nДата продажи: {normal_return[3].isoformat()}\nДата возврата: {normal_return[4].isoformat()}\nДней до возврата: {days_for_return}\nЦена: {normal_return[6]}\nПричина возврата: {normal_return[7]}\nМагазин: {market[0]["name"]}')
 
-            data = await conn.fetch("SELECT * FROM \"Detail\" WHERE amount = 0;")
-            for detail in data:
-                market = await conn.fetch(f"SELECT name FROM \"Market\" WHERE id = {detail[-1]}")
-                for admin in admins:
-                    await bot.send_message(admin[0], f"На складе закончилась деталь:\n{detail['name']}, VIN: {detail['vin']}, магазин: {market[0]['name']}")
+            # data = await conn.fetch("SELECT * FROM \"Detail\" WHERE amount = 0;")
+            # for detail in data:
+            #     market = await conn.fetch(f"SELECT name FROM \"Market\" WHERE id = {detail[-1]}")
+            #     for admin in admins:
+            #         await bot.send_message(admin[0], f"На складе закончилась деталь:\n{detail['name']}, VIN: {detail['vin']}, магазин: {market[0]['name']}")
                     
             
             workers = await conn.fetch("SELECT * FROM \"User\" WHERE status = 'worker';")
@@ -74,10 +74,10 @@ async def notifications(bot: Bot):
                     if days_for_return <= 3:
                         await bot.send_message(worker[0], f'Незавершенный возврат:\nДата продажи: {normal_return[3].isoformat()}\nДата возврата: {normal_return[4].isoformat()}\nДней до возврата: {days_for_return}\nЦена: {normal_return[6]}\nПричина возврата: {normal_return[7]}')
 
-                data = await conn.fetch(f"SELECT * FROM \"Detail\" WHERE amount = 0 AND market_id = {workers_market[0]['market_id']};")
-                for detail in data:
-                    market = await conn.fetch(f"SELECT name FROM \"Market\" WHERE id = {detail[-1]};")
-                    await bot.send_message(worker[0], f"На складе закончилась деталь:\n{detail['name']}, VIN: {detail['vin']}")
+                # data = await conn.fetch(f"SELECT * FROM \"Detail\" WHERE amount = 0 AND market_id = {workers_market[0]['market_id']};")
+                # for detail in data:
+                #     market = await conn.fetch(f"SELECT name FROM \"Market\" WHERE id = {detail[-1]};")
+                #     await bot.send_message(worker[0], f"На складе закончилась деталь:\n{detail['name']}, VIN: {detail['vin']}")
 
     except Exception as e:
         print(f"Ошибка подключения к базе данных: {e}")

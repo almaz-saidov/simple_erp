@@ -2,14 +2,16 @@ from http import HTTPStatus
 
 from flask import Response, json, request
 
-from application import app
+# from application import app
 from application.forms import SalesForm
 from application.queries.orm import SyncORM
 from application.utils.checker import init_data_checker
+from application.utils.details_notifications import send_notification
 from application.utils.init_data import TelegramInitData
+from . import bp
 
 
-@app.post('/api/test/sales')
+@bp.post('/api/sales')
 @init_data_checker
 def sales():
     """
@@ -60,12 +62,23 @@ def sales():
 
     # Пытаемся добавить продажу
     try:
-        sale = SyncORM.add_sell(vin, amount, date, price, name, who_added, market_id)
+        residue = SyncORM.add_sell(vin, amount, date, price, name, who_added, market_id)
+        
+        if residue == 0:
+            market = SyncORM.get_market(market_id)
+
+            admins_id = SyncORM.get_admins_id()
+            for admin_id in admins_id:
+                send_notification(message_text=f"На складе закончилась деталь:\n{name}, VIN: {vin}, магазин: {market.name}", id=admin_id)
+
+            # workers_id = SyncORM.get_workers_id()
+            # for worker_id in workers_id:
+            #     send_notification(message_text=f"На складе закончилась деталь:\n{name}, VIN: {vin}", id=worker_id)
+        
         return Response(
             json.dumps({
                 "success": True,
-                "message": f"Add sale with VIN {vin}.",
-                # "sale": sale  # Убедитесь, что `sale` сериализуем
+                "message": f"Add sale with VIN {vin}."
             }),
             status=HTTPStatus.CREATED,
             mimetype="application/json",

@@ -1,22 +1,13 @@
 from flask import jsonify, request
 
-from application import app
+# from application import app
 from application.queries.orm import SyncORM
 from application.utils import init_data_checker
 from application.utils.init_data import TelegramInitData
+from . import bp
 
 
-# @app.get('/api/markets')
-# @init_data_checker
-# def markets():
-#     telegram_data = TelegramInitData(request.cookies.get('initData'))
-#     user_data = telegram_data.to_dict().get('user')
-
-#     markets = SyncORM.get_all_markets(user_data.get('id'))
-
-#     return jsonify({'markets': [f'{market.market_id},{market.name},{market.address}' for market in markets]}), 200
-
-@app.get('/api/test/markets')
+@bp.get('/api/markets')
 @init_data_checker
 def markets():
     telegram_data = TelegramInitData(request.cookies.get('initData'))
@@ -24,6 +15,7 @@ def markets():
     user_id = user_data.get('id')
 
     user_status = SyncORM.get_user_status(user_id)
+    print(user_status)
 
     if user_status == 'admin':
         markets = SyncORM.get_all_markets()
@@ -40,10 +32,10 @@ def markets():
     #     for market in markets
     # ]
 
-    # return jsonify({'markets': markets_list}), 200
+    return jsonify({'markets': 'None'}), 404
 
 
-@app.post('/api/test/markets')
+@bp.post('/api/markets')
 @init_data_checker
 def create_market():
     if not request.is_json:

@@ -2,7 +2,7 @@ import re
 from datetime import datetime
 from typing import Optional
 
-from sqlalchemy import and_, literal, select
+from sqlalchemy import and_, literal, select, update
 
 from application.database import Base, engine, session_factory # движок, сессии, базовый класс
 from application.models import Detail, Purchase, Sell, Return, User, AirReturn, MarketUserMapper, Market
@@ -214,6 +214,20 @@ class SyncORM:
         with session_factory() as session:
             user = session.query(User).filter_by(id=user_id).first()
             return user.status._name_
+        
+    @staticmethod
+    def get_admins_id():
+        """ Получение id всех админов """
+        with session_factory() as session:
+            admins = session.query(User).filter_by(status='admin').all()
+            return [admin.id for admin in admins]
+    
+    @staticmethod
+    def get_workers_id():
+        """ Получение id всех работников """
+        with session_factory() as session:
+            workers = session.query(User).filter_by(status='worker').all()
+            return [worker.id for worker in workers]
     # ----------------------Detail Methods -------------------
 
     @staticmethod
@@ -222,24 +236,34 @@ class SyncORM:
         with session_factory() as session:
             vin = reformat_vin(vin)
             query = session.query(Detail)
+            market = session.query(Market).filter_by(Market.id == market_id).one_or_none()
 
             if vin == '':
                 details = query.filter(Detail.market_id == market_id).offset(offset).limit(limit)
             else:
                 details = query.filter(Detail.vin.ilike(f'%{vin}%'), Detail.market_id == market_id).offset(offset).limit(limit)
-            
+
             # Преобразуем ORM-объекты в словари
             serialized_details = [
                 {
-                    "vin": detail.vin,
-                    "name": detail.name,
-                    "amount": detail.amount,
+                    'vin': detail.vin,
+                    'name': detail.name,
+                    'amount': detail.amount,
+                    'price': session.query(Purchase).filter(Purchase.detail_id == detail.id, Purchase.market_id == market_id).order_by(Purchase.add_to_shop_date.desc()).first().price,
+                    'market': market.name
                 }
                 for detail in details
             ]
             
             return serialized_details
-        
+    
+    @staticmethod
+    def change_detail(detail_id, name, vin):
+        with session_factory() as session:
+            query = update(Detail).where(Detail.id == detail_id).values(name=name, vin=vin)
+            session.execute(query)
+            session.commit()
+
     @staticmethod
     def entire_search_by_vin(vin: str, offset: int = 0, limit: int = 25):
         """Получить детали по VIN"""
@@ -414,7 +438,7 @@ class SyncORM:
             )
             session.add(sell)
             session.commit()
-            return sell
+            return detail.amount
 
     @staticmethod
     def get_sell_by_id(sell_id: int, market_id: int):
@@ -682,6 +706,13 @@ class SyncORM:
         with session_factory() as session:
             markets = session.query(Market).all()
             return markets
+
+    @staticmethod
+    def get_market(market_id: int):
+        ''' Получение магазина по его id'''
+        with session_factory() as session:
+            market = session.query(Market).filter_by(id=market_id).one_or_none()
+            return market
 
     @staticmethod
     def cerate_market(user_id: int, name: str, address: str = 'no address'):

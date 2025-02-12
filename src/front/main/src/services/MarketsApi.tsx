@@ -50,7 +50,8 @@ export const fetchMarkets = (): Promise<TMarket[]> => {
             },
         })
         .then((response) => {
-            return response.data;
+            console.log('fetchMarkets', response.data);
+            return response.data.records;
         })
         .catch((error) => {
             if (axios.isAxiosError(error)) {

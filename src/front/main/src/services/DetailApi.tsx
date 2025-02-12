@@ -35,7 +35,8 @@ export const searchDetailsCommon = (vin: string): Promise<TDetail[]> => {
         },
     })
         .then((response) => {
-            return response.data;
+            console.log(response.data)
+            return response.data.details;
         })
 
         .catch((error) => {

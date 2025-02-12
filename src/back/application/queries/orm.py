@@ -213,7 +213,7 @@ class SyncORM:
         """
         with session_factory() as session:
             user = session.query(User).filter_by(id=user_id).first()
-            return user.status
+            return user.status._name_
         
     @staticmethod
     def get_admins_id():

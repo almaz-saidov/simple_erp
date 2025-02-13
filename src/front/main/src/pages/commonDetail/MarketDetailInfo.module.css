@@ -1,0 +1,80 @@
+.MarketItem {
+    color: var(--color-primary-text);
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    padding: 15px;
+    border-radius: 5px;
+    background-color: var(--color-component-background);
+    border: 1px solid var(--color-base-background);
+}
+
+.MarketItem .Text {
+    color: var(--color-primary-text);
+    padding: 10px;
+
+}
+
+@media (max-width: 400px) {
+    .MarketItem>.Text {
+        font-size: 16px;
+        line-height: 16px;
+    }
+
+    .HelperText,
+    .PrimaryText {
+        font-size: 15px;
+        line-height: 15px;
+    }
+
+}
+
+@media (min-width: 401px) and (max-width: 800px) {
+
+    .HelperText,
+    .PrimaryText {
+        font-size: 16px;
+        line-height: 16px;
+    }
+}
+
+@media (min-width: 1201px) {
+
+
+    .HelperText,
+    .PrimaryText {
+        font-size: 18px;
+        line-height: 18px;
+    }
+
+
+}
+
+
+.MarketItemContent {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+
+.NameCutter {
+    width: auto;
+}
+
+.MarketAddress {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.HelperText {
+    color: var(--color-primary-dark-text);
+}
+
+.MarketsWrap {
+    display: flex;
+    gap: 15px;
+    flex-direction: column;
+}

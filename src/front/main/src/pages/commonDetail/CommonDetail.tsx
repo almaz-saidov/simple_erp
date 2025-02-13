@@ -11,11 +11,12 @@ import { SyncLoader } from 'react-spinners';
 import { searchDetailInMarkets } from '../../services/DetailApi';
 import { TDetail } from "../../types/Detail";
 import Market from "../../markets/Market";
+import toast from "react-hot-toast";
+
 // @ts-ignore
 import styles from './CommonDetail.module.css';
-
-
-
+// @ts-ignore
+import detail_info_styles from './MarketDetailInfo.module.css';
 
 function CommonDetail() {
     const location = useLocation();
@@ -31,19 +32,36 @@ function CommonDetail() {
         navigate(`/common/detail/${item.vin}`);
     };
 
+    // useEffect(() => {
+    //     searchDetailInMarkets(detail.vin)
+    //         .then((res) => {
+    //             setInMarkets(res);
+    //             setLoading(false);
+    //             console.log('NOOoops');
+    //         })
+    //         .catch((err) => {
+    //             console.log('Ooops', err);
+    //             setLoading(false);
+    //         })
+    // }, [])
+
     useEffect(() => {
-        searchDetailInMarkets(detail.vin)
-            .then((res) => {
+        const fetchData = async () => {
+            try {
+                setLoading(true); // Убедитесь, что загрузка включена перед началом
+                const res = await searchDetailInMarkets(detail.vin);
                 setInMarkets(res);
-                setLoading(false);
-            })
-            .catch((err) => {
-                console.log('Ooops');
-                setLoading(false);
-            })
-    }, [])
+                console.log('Найденные детали:', res);
+            } catch (err) {
+                console.log('Ooops', err);
+                toast.error('Не удалось найти детали');
+            } finally {
+                setLoading(false); // Обязательно выключите загрузку в любом случае
+            }
+        };
 
-
+        fetchData();
+    }, []);
 
     return (
         <div className={styles.common_search__CommonDetail}>
@@ -61,9 +79,10 @@ function CommonDetail() {
                             <p>Ничего не найдено </p>
                         </div>
                         :
-                        <div className={styles.detailMarketsContainer}>
+                        <div className={styles.DetailMarketsContainer}>
                             {inMarkets && inMarkets.map((el) => {
-                                return <MarketDetailInfo detail={el} key={el.market} />;
+                                console.log(el);
+                                return el ? <MarketDetailInfo detail={el} key={el.market} /> : null;
                             })}
                         </div>
 
@@ -81,22 +100,26 @@ interface MarketDetailInfoProps {
 
 function MarketDetailInfo({ detail }: MarketDetailInfoProps) {
     return (
-        <div className={styles.MarketItem}>
-            <div className={styles.MarketItemContent}>
-                <div className={styles.NameCutter}>
-                    <TextField text={detail.market} />
+        <div className={detail_info_styles.MarketItem}>
+            <div className={detail_info_styles.MarketItemContent}>
+                <div className={detail_info_styles.NameCutter}>
+                    <TextField text={detail.market} isPrimary={true} />
                 </div>
                 {detail.amount && (
-                    <div className={styles.MarketAdress}>
-                        <span className={styles.HelperText}>Количество</span>
-                        <span className={styles.PrimaryText}>{detail.amount}</span>
-                        <span className={styles.HelperText}>Цена</span>
-                        <span className={styles.PrimaryText}>{detail.price}</span>
+                    <div className={detail_info_styles.MarketAddress}>
+                        <span className={detail_info_styles.HelperText}>Количество:</span>
+                        <span className={detail_info_styles.PrimaryText}>{detail.amount}</span>
+                    </div>
+                )}
+                {detail.amount && (
+                    <div className={detail_info_styles.MarketAddress}>
+                        <span className={detail_info_styles.HelperText}>Цена:</span>
+                        <span className={detail_info_styles.PrimaryText}>{detail.price}</span>
                     </div>
                 )}
 
             </div>
-            <ReactSVG src={right_arrow} />
+            {/* <ReactSVG src={right_arrow} /> */}
         </div>
     );
 }

@@ -38,3 +38,17 @@ declare module "*.svg" {
     const src: string;
     export default src;
 }
+
+declare interface Window {
+    Telegram: {
+        WebApp: {
+            BackButton: {
+                show: () => void;
+                onClick: (callback: () => void) => void;
+                hide: () => void;
+            };
+        };
+    };
+}
+
+

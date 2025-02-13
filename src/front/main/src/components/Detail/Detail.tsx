@@ -10,12 +10,11 @@ import styles from './Detail.module.css';
 interface DetailProps {
     detail: TDetail;
     onClick?: () => void;
-
+    displayPrice?: boolean;
 }
 
 
-
-function Detail({ detail, onClick }: DetailProps) {
+function Detail({ detail, onClick, displayPrice = false }: DetailProps) {
 
     return (
         <div className={styles.Detail} onClick={onClick}>
@@ -25,10 +24,13 @@ function Detail({ detail, onClick }: DetailProps) {
                     <p className={styles.HelperText}>Количество: </p>
                     <p className={styles.PrimaryText}>{detail.amount}</p>
                 </div >
+                {displayPrice && <div className={styles.DetailCountWrapper}>
+                    <p className={styles.HelperText}>Цена: </p>
+                    <p className={styles.PrimaryText}>{detail.price}</p>
+                </div>}
             </div >
             <div className={styles.DetailRight}>
-                < div className={
-                    styles.DetailNumberWrapper}>
+                < div className={styles.DetailNumberWrapper}>
                     <p className={styles.HelperText}>Номер запчасти</p>
                     <p className={styles.PrimaryText}>{detail.vin}</p>
                 </div >

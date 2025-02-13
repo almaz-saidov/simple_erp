@@ -2,7 +2,7 @@ import React from "react";
 import CardHeader from "../../components/CardHeader";
 import Input from '../../components/Input'
 import Detail from "../../components/Detail/Detail";
-import { SyncLoader } from 'react-spinners'
+import { SyncLoader } from 'react-spinners';
 import { useEffect, useState, useContext } from 'react';
 import { fetchDetailsNew, deleteDetailById } from "../../services/Api";
 import { MarketContext } from '../../markets/MarketContext';
@@ -10,14 +10,15 @@ import SlidePanel from "../../components/slide_panel/SlidePanel";
 import { DeleteButton } from '../../components/SubmitButton';
 import toast from 'react-hot-toast';
 import { TDetail } from '../../types/Detail';
-import { searchDetails } from '../../services/DetailApi';
+import { searchDetailsCommon } from '../../services/DetailApi';
+import { useNavigate } from 'react-router-dom';
 
 // @ts-ignore
-import styles from './Search.module.css';
+import styles from './CommonSearch.module.css';
 // @ts-ignore
 import '../../styles/Components.css';
 
-function Search() {
+function CommonSearch() {
     const [detailNumber, setDetailNumber] = useState('');
     const [data, setData] = useState<TDetail[]>([]);
     const [loading, setLoading] = useState<boolean>(false);
@@ -25,10 +26,13 @@ function Search() {
     const { value, setValue } = useContext(MarketContext);
     const [selectedItem, setSelectedItem] = useState<TDetail>();
     const [isPanelOpen, setIsPanelOpen] = useState(false);
+    const navigate = useNavigate();
 
     const handleItemClick = (item: any) => {
         setSelectedItem(item);
-        setIsPanelOpen(true);
+        // setIsPanelOpen(true);
+        // console.log("O$KO")
+        navigate(`/common/detail/${item.vin}`, { state: item });
     };
 
     const closePanel = () => {
@@ -38,9 +42,9 @@ function Search() {
     const loadDetails = () => {
         if (data.length == 0) {
             return (
-                <div className={styles.NumberDoesNotExist} >
-                    < span > Ничего < br /> не найдено</span >
-                </div >
+                <div className="NumberDoesNotExist" >
+                    <span>Ничего <br /> не найдено</span>
+                </div>
             )
         }
 
@@ -57,7 +61,7 @@ function Search() {
 
     const lookForDetails = async () => {
         setLoading(true);
-        const details = await searchDetails(detailNumber, value.id);
+        const details = await searchDetailsCommon(detailNumber);
         setData(details);
         setLoading(false);
     }
@@ -84,40 +88,42 @@ function Search() {
     }
 
     return (
-        <div className={styles.Search}>
-            <CardHeader label="Поиск" marketName={value.name} />
-            <Input label=""
-                hint="Номер запчасти"
-                isDynamic={true}
-                isLong={false}
-                setParentText={setDetailNumber}
-                isSearch={true}
-                iconOnClick={lookForDetails}
-            />
-            {loading ?
-                <div className='LoaderWrapper'>
-                    <SyncLoader color="#A7A7A7" />
-                </div>
-                :
+        <div className={styles.CommonSearch}>
+            <div className={styles.Search}>
+                <CardHeader label="Поиск" marketName={value.name} />
+                <Input label=""
+                    hint="Номер запчасти"
+                    isDynamic={true}
+                    isLong={false}
+                    setParentText={setDetailNumber}
+                    isSearch={true}
+                    iconOnClick={lookForDetails}
+                />
+                {loading ?
+                    <div className='LoaderWrapper'>
+                        <SyncLoader color="#A7A7A7" />
+                    </div>
+                    :
 
-                < div className={styles.SearchContent}>
-                    {loadDetails()}
-                </div>}
-            {selectedItem &&
-                <SlidePanel
-                    isOpen={isPanelOpen}
-                    onClose={closePanel}
-                    children={
-                        <div>
-                            <Detail detail={selectedItem} />
-                            <DeleteButton onClick={getDeleteFunc(selectedItem.vin)} />
-                        </div>
-                    }
-                />}
-        </div >
+                    < div className={styles.SearchContent}>
+                        {loadDetails()}
+                    </div>}
+                {selectedItem &&
+                    <SlidePanel
+                        isOpen={isPanelOpen}
+                        onClose={closePanel}
+                        children={
+                            <div>
+                                <Detail detail={selectedItem} />
+                                <DeleteButton onClick={getDeleteFunc(selectedItem.vin)} />
+                            </div>
+                        }
+                    />}
+            </div >
 
+        </div>
 
     );
 }
 
-export default Search;
+export default CommonSearch;

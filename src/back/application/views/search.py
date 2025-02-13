@@ -112,8 +112,8 @@ def entire_search_detail():
     )
 
 
-@bp.post('/api/change-detail')
-def change_detail():
+@bp.post('/api/change-detail/<int:detail_id>')
+def change_detail(detail_id):
     data = request.get_json()
 
     if not data:
@@ -123,9 +123,9 @@ def change_detail():
             mimetype="application/json",
         )
     
-    detail_id = data['detail_id']
     name = data['name']
     vin = data['vin']
+    market_id = data['market_id']
 
     if not SyncORM.is_valid_vin(vin):
         return Response(
@@ -138,7 +138,7 @@ def change_detail():
         )
     
     try:
-        SyncORM.change_detail(detail_id, name, vin)
+        SyncORM.change_detail(detail_id, name, vin, market_id)
         
         return Response(
             json.dumps({

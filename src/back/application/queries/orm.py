@@ -258,10 +258,18 @@ class SyncORM:
             return serialized_details
     
     @staticmethod
-    def change_detail(detail_id, name, vin):
+    def change_detail(detail_id, name, vin, market_id):
         with session_factory() as session:
-            query = update(Detail).where(Detail.id == detail_id).values(name=name, vin=vin)
-            session.execute(query)
+            detail = session.query(Detail).filter(Detail.vin == vin, Detail.market_id == market_id).one_or_none()
+
+            if detail:    
+                query = update(Detail).where(Detail.vin == vin, Detail.market_id == market_id).values(name=name, vin=vin)
+                session.execute(query)
+                session.query(Detail).filter_by(id=detail_id).delete()
+            else:
+                query = update(Detail).where(Detail.vin == vin, Detail.market_id == market_id).values(name=name, vin=vin)
+                session.execute(query)
+            
             session.commit()
 
     @staticmethod
@@ -359,14 +367,21 @@ class SyncORM:
             session.commit()  # Зафиксируем изменения в Purchase
             return purchase
 
-    #? Пример добавления ID пользователя в сессию:
-# Когда пользователь входит в систему, вы, вероятно, добавляете его ID в сессию примерно так:
+    @staticmethod
+    def update_purchase(purchase_id, amount, date, price, detail_name):
+        with session_factory() as session:
+            purchase_to_update = session.query(Purchase).filter(Purchase.id == purchase_id).one_or_none()
+            current_amount = purchase_to_update.amount
+            
+            detail_to_update = session.query(Detail).filter(Detail.id == purchase_to_update.detail_id).one_or_none()
+            if detail_to_update.amount - current_amount + amount < 0:
+                raise Exception('Error')
+            query = update(Detail).where(Detail.id == detail_to_update.id).values(amount=detail_to_update.amount - current_amount + amount)
+            session.execute(query)
 
-# python
-# Копировать код
-# session['user_id'] = user.id  # user.id — это ID пользователя, взятый из вашей базы данных.
-# После этого в любом маршруте вы сможете получить ID пользователя, как показано выше.
-
+            query = update(Purchase).where(Purchase.id == purchase_id).values(amount=amount, add_to_shop_date=date, price=price, name=detail_name)
+            session.execute(query)
+            session.commit()
 
     @staticmethod
     def get_purchase_history(user_id: int, start_date: Optional[str] = None, end_date: Optional[str] = None):
@@ -446,6 +461,22 @@ class SyncORM:
         with session_factory() as session:
             sell = session.query(Sell).filter(Sell.id == sell_id, Sell.market_id == market_id).one_or_none()
             return sell
+
+    @staticmethod
+    def update_sell(sell_id, amount, date, price, seller):
+        with session_factory() as session:
+            sell_to_update = session.query(Sell).filter(Sell.id == sell_id).one_or_none()
+            current_amount = sell_to_update.amount
+            
+            detail_to_update = session.query(Detail).filter(Detail.id == sell_to_update.detail_id).one_or_none()
+            if detail_to_update.amount - amount + current_amount < 0:
+                raise Exception('Error')
+            query = update(Detail).where(Detail.id == detail_to_update.id).values(amount=detail_to_update.amount - amount + current_amount)
+            session.execute(query)
+
+            query = update(Sell).where(Sell.id == sell_id).values(amount=amount, sell_from_shop_date=date, price=price, seller=seller)
+            session.execute(query)
+            session.commit()
 
     # ----------------------Returns Methods -------------------
     @staticmethod

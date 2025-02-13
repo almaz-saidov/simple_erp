@@ -80,6 +80,9 @@ def history_sell(sell_id):
                 status=HTTPStatus.BAD_REQUEST,
                 mimetype="application/json",
             )
+        else:
+            SyncORM.update_sell(sell_id, data["amount"], data["date"], data["price"], data["seller"])
+
     else:
         # Для GET запроса создаем пустой объект данных
         data = {}
@@ -144,6 +147,9 @@ def history_purchase(purchase_id):
                 status=HTTPStatus.BAD_REQUEST,
                 mimetype="application/json",
             )
+        else:
+            SyncORM.update_purchase(purchase_id, data["amount"], data["date"], data["price"], data["detail_name"])
+            
     else:
         # Для GET запроса создаем пустой объект данных
         data = {}

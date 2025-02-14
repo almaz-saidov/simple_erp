@@ -42,10 +42,10 @@ def search_detail():
     if not details:
         return Response(
             json.dumps({
-                "success": False,
-                "message": f"Деталь с VIN {vin} не найдена. Количество: 0."
+                "success": True,
+                "details": []
             }),
-            status=HTTPStatus.NOT_FOUND,
+            status=HTTPStatus.OK,
             mimetype="application/json",
         )
 

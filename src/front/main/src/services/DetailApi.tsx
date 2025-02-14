@@ -13,7 +13,7 @@ export const searchDetails = (vin: string, market_id: string): Promise<TDetail[]
         },
     })
         .then((response) => {
-            return response.data;
+            return response.data.details;
         })
 
         .catch((error) => {
@@ -22,6 +22,7 @@ export const searchDetails = (vin: string, market_id: string): Promise<TDetail[]
             } else {
                 console.error("Ошибка при получении данных:", error);
             }
+            throw error;
             return [];
         });
 
@@ -81,19 +82,23 @@ export const searchDetailsCommon = (vin: string): Promise<TDetail[]> => {
 
 
 export const searchDetailInMarkets = async (vin: string): Promise<TDetail[]> => {
-
     try {
         const markets: TMarket[] = await fetchMarkets();
+
+        // Создаем промисы для каждого маркета
         const detailPromises = markets.map(async market => {
             const details = await searchDetails(vin, market.id);
             return details[0];
         });
+
+        // Ожидаем завершения всех промисов
         const results = await Promise.all(detailPromises);
+
+        // "Уплощаем" массив результатов
         const allDetails = results.flat();
         return allDetails;
     } catch (error) {
-        console.error(error);
+        console.error('Ошибка при поиске деталей:', error);
         throw new Error('Не удалось найти деталь');
     }
-
-}
+};

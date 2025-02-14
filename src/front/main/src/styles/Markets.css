@@ -119,10 +119,11 @@
     }
 }
 
-.MarketAdress {
+.MarketAddress {
     display: flex;
-    flex-direction: column;
+    /* flex-direction: column; */
     gap: 5px;
+    align-items: center;
 }
 
 .MarketItem .TextField {
@@ -134,7 +135,7 @@
 .MarketItemContent {
     display: flex;
     flex-direction: column;
-    gap: 10px;
+    gap: 15px;
 }
 
 .NameCutter {

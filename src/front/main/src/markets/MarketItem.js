@@ -20,8 +20,8 @@ function MarketItem(props) {
                 </div>
                 {
                     market.address && (
-                        <div className='MarketAdress'>
-                            <span className='HelperText'>Адрес</span>
+                        <div className='MarketAddress'>
+                            <span className='HelperText'>Адрес:</span>
                             <span className='PrimaryText'>{market.address}</span>
                         </div>
                     )

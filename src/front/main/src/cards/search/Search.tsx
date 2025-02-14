@@ -57,8 +57,14 @@ function Search() {
 
     const lookForDetails = async () => {
         setLoading(true);
-        const details = await searchDetails(detailNumber, value.id);
-        setData(details);
+        try {
+            const details = await searchDetails(detailNumber, value.id);
+            setData(details);
+        } catch (e) {
+            console.log(e);
+            toast.error('Не удалось найти детали.');
+        }
+
         setLoading(false);
     }
 

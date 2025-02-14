@@ -124,22 +124,61 @@ input[type="number"]:focus {
 }
 
 .LongTextField .Text,
-.TextField .Text {
+.TextField .Text,
+.TextField .TextFieldPrimary {
     height: 50px;
     color: var(--color-primary-dark-text);
     background-color: var(--color-input-background);
-    padding: 15px 5px;
+    padding-top: 15px;
+    padding-bottom: 15px;
     border: solid 1px;
     border-radius: 5px;
     border-color: var(--color-base-border);
     box-sizing: border-box;
+    
+    padding-top: 15px;
+    padding-bottom: 15px;
+    padding-right: 10px;
+    padding-left: 10px;
 }
+
+@media (max-width: 400px) {
+
+    .Text,
+    .TextField .TextFieldPrimary {
+        font-size: 20px;
+        line-height: 20px;
+    }
+
+}
+
+@media (min-width: 401px) and (max-width: 800px) {
+
+    .Text,
+    .TextField .TextFieldPrimary {
+        font-size: 16px;
+        line-height: 20px;
+    }
+
+}
+
+@media (min-width: 1201px) {
+
+    .Text,
+    .TextField .TextFieldPrimary {
+        font-size: 20px;
+        line-height: 20px;
+    }
+
+}
+
 
 .TextField .LongTextField .TextDescription {
     color: var(--color-secondary-text);
 }
 
-.TextField .LongTextField .Text {
+.TextField .LongTextField .Text,
+.TextField .TextFieldPrimary {
     color: var(--color-primary-text);
 }
 

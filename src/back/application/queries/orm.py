@@ -283,16 +283,18 @@ class SyncORM:
                 details = query.offset(offset).limit(limit)
             else:
                 details = query.filter(Detail.vin.ilike(f'%{vin}%')).offset(offset).limit(limit)
-            
+            amount = sum([detail.amount for detail in details])
             # Преобразуем ORM-объекты в словари
-            serialized_details = [
-                {
-                    "vin": detail.vin,
-                    "name": detail.name,
-                    "amount": detail.amount,
-                }
-                for detail in details
-            ]
+            if details:
+                serialized_details = [
+                    {
+                        "vin": details[0].vin,
+                        "name": details[0].name,
+                        "amount": amount,
+                    }
+                ]
+            else:
+                serialized_details = [{}]
             
             return serialized_details
 

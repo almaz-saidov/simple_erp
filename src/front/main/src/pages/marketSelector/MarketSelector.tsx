@@ -28,7 +28,7 @@ function MarketSelector() {
     const [markets, setMarkets] = useState<TMarket[]>([]);
     const { value, setValue } = useContext(MarketContext);
     const navigate = useNavigate();
-    
+
     useEffect(() => {
         const fetchMarketsWrapper = async () => {
             try {
@@ -88,31 +88,33 @@ function MarketSelector() {
 
 
     return (
-        <div className={styles.MarketSelector}>
-            {loading ?
-                <div className={styles.LoaderWrapper}>
-                    <SyncLoader color="#A7A7A7" />
-                </div>
-                : <>
-                    <h1>Выберите магазин</h1>
-                    <div className={styles.MarketsList}>
-                        <div className={styles.MarketListScroll}>
-                            {displayMarketsList()}
-                        </div>
+        <div className={styles.MarketSelectorWrapper}>
+            <div className={styles.MarketSelector}>
+                {loading ?
+                    <div className={styles.LoaderWrapper}>
+                        <SyncLoader color="#A7A7A7" />
                     </div>
-                    <footer>
-                        <button className={styles.CommonSearchButton} onClick={onCommonSearchClick} >
-                            <ReactSVG src={search_icon} />
-                        </button >
-                        <button className={styles.CreateMarketButton} onClick={onCreateMarketButtonClick} >
-                            <div className={styles.CrossHorizontal} />
-                            <div className={styles.CrossVertical} />
-                        </button >
-                    </footer>
+                    : <>
+                        <h1>Выберите магазин</h1>
+                        <div className={styles.MarketsList}>
+                            <div className={styles.MarketListScroll}>
+                                {displayMarketsList()}
+                            </div>
+                        </div>
+                        <footer>
+                            <button className={styles.CommonSearchButton} onClick={onCommonSearchClick} >
+                                <ReactSVG src={search_icon} />
+                            </button >
+                            <button className={styles.CreateMarketButton} onClick={onCreateMarketButtonClick} >
+                                <div className={styles.CrossHorizontal} />
+                                <div className={styles.CrossVertical} />
+                            </button >
+                        </footer>
 
-                </>
-            }
-        </div >
+                    </>
+                }
+            </div >
+        </div>
     );
 }
 

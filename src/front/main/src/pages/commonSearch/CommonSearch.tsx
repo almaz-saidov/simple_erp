@@ -90,7 +90,7 @@ function CommonSearch() {
     return (
         <div className={styles.CommonSearch}>
             <div className={styles.Search}>
-                <CardHeader label="Поиск" marketName={value.name} />
+                <CardHeader label="Поиск" isMarketNameVisible={false} />
                 <Input label=""
                     hint="Номер запчасти"
                     isDynamic={true}

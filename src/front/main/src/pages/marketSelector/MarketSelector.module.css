@@ -10,6 +10,13 @@
 
 }
 
+.MarketSelectorWrapper {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    height: 100vh;
+}
+
 .MarketSelector {
     box-sizing: border-box;
     width: 100%;
@@ -140,6 +147,7 @@
 
 .NameCutter {
     width: auto;
+   
 }
 
 .MarketsList {

@@ -47,7 +47,7 @@ function Search() {
         return (<div className={styles.DetailsWrapper}>
             {
                 data.map((el, index) => (
-                    <Detail detail={el} key={index} onClick={() => handleItemClick(el)} />
+                    <Detail detail={el} key={index} onClick={() => handleItemClick(el)} displayPrice={true} />
                 ))
             }
             <div className='Space' />

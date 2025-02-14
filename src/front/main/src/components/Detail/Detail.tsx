@@ -31,7 +31,7 @@ function Detail({ detail, onClick, displayPrice = false }: DetailProps) {
             </div >
             <div className={styles.DetailRight}>
                 < div className={styles.DetailNumberWrapper}>
-                    <p className={styles.HelperText}>Номер запчасти</p>
+                    <p className={styles.HelperText} id={styles.detail_number_label}>Номер запчасти</p>
                     <p className={styles.PrimaryText}>{detail.vin}</p>
                 </div >
                 <div className={styles.RightArrowWrapper}>
@@ -39,6 +39,7 @@ function Detail({ detail, onClick, displayPrice = false }: DetailProps) {
                         styles.RightArrow} src={right_arrow_icon} />
                 </div>
             </div >
+
 
         </div >
     );

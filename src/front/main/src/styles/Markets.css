@@ -140,6 +140,7 @@
 
 .NameCutter {
     width: auto;
+    max-width: fit-content;
 }
 
 .MarketsList {

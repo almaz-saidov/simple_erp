@@ -2,7 +2,8 @@ import re
 from datetime import datetime
 from typing import Optional
 
-from sqlalchemy import and_, literal, select, update
+from sqlalchemy import and_, literal, select, update, func
+from sqlalchemy.orm import aliased
 
 from application.database import Base, engine, session_factory # движок, сессии, базовый класс
 from application.models import Detail, Purchase, Sell, Return, User, AirReturn, MarketUserMapper, Market
@@ -61,7 +62,7 @@ def get_records_return_air_return(vin_filter, date_from, date_before, market_id)
 
         # Применяем фильтры, если они заданы
         if vin_filter:
-            return_query = return_query.filter(Return.vin.ilike(f"%{vin_filter}%"))
+            return_query = return_query.filter(Detail.vin.ilike(f"%{vin_filter}%"))
             air_return_query = air_return_query.filter(AirReturn.vin.ilike(f"%{vin_filter}%"))
         if date_from:
             return_query = return_query.filter(Return.return_date >= date_from)
@@ -108,12 +109,12 @@ def get_records_purchases(vin_filter, date_from, date_before, market_id):
             Purchase.who_added,
             Purchase.market_id,
             Detail.vin,
-            literal('postupleniya').label('type')  # Указываем тип записи
+            literal('postupleniya').label('type')
         ).join(Detail, Detail.id == Purchase.detail_id).filter(Purchase.market_id == market_id)
 
         filters = []
         if vin_filter:
-            filters.append(Purchase.detail.vin.ilike(f"%{vin_filter}%"))
+            filters.append(Detail.vin.ilike(f"%{vin_filter}%"))
         if date_from:
             filters.append(Purchase.add_to_shop_date >= date_from)
         if date_before:
@@ -151,7 +152,7 @@ def get_records_sales(vin_filter, date_from, date_before, market_id):
         ).join(Detail, Detail.id == Sell.detail_id).filter(Sell.market_id == market_id)
         filters = []
         if vin_filter:
-            filters.append(Sell.vin.ilike(f"%{vin_filter}%"))
+            filters.append(Detail.vin.ilike(f"%{vin_filter}%"))
         if date_from:
             filters.append(Sell.sell_from_shop_date >= date_from)
         if date_before:
@@ -231,12 +232,12 @@ class SyncORM:
     # ----------------------Detail Methods -------------------
 
     @staticmethod
-    def get_detail_by_vin(vin: str, market_id: int, offset: int = 0, limit: int = 25):
+    def get_detail_by_vin(vin: str, market_id: int, offset: int=0, limit: int=100):
         """Получить детали по VIN"""
         with session_factory() as session:
             vin = reformat_vin(vin)
             query = session.query(Detail)
-            market = session.query(Market).filter_by(Market.id == market_id).one_or_none()
+            market = session.query(Market).filter(Market.id == market_id).one_or_none()
 
             if vin == '':
                 details = query.filter(Detail.market_id == market_id).offset(offset).limit(limit)
@@ -273,28 +274,37 @@ class SyncORM:
             session.commit()
 
     @staticmethod
-    def entire_search_by_vin(vin: str, offset: int = 0, limit: int = 25):
+    def entire_search_by_vin(vin: str, offset: int=0, limit: int=100):
         """Получить детали по VIN"""
         with session_factory() as session:
             vin = reformat_vin(vin)
-            query = session.query(Detail)
 
             if vin == '':
-                details = query.offset(offset).limit(limit)
+                details = session.query(\
+                    Detail.vin,\
+                    func.max(Detail.name).label('name'),\
+                    func.sum(Detail.amount).label('amount'))\
+                    .group_by(Detail.vin)\
+                    .offset(offset)\
+                    .limit(limit)
             else:
-                details = query.filter(Detail.vin.ilike(f'%{vin}%')).offset(offset).limit(limit)
-            amount = sum([detail.amount for detail in details])
+                details = session.query(\
+                    Detail.vin,\
+                    func.max(Detail.name).label('name'),\
+                    func.sum(Detail.amount).label('amount'))\
+                    .group_by(Detail.vin)\
+                    .filter(Detail.vin.ilike(f'%{vin}%'))\
+                    .offset(offset)\
+                    .limit(limit)
             # Преобразуем ORM-объекты в словари
-            if details:
-                serialized_details = [
-                    {
-                        "vin": details[0].vin,
-                        "name": details[0].name,
-                        "amount": amount,
-                    }
-                ]
-            else:
-                serialized_details = [{}]
+            serialized_details = [
+                {
+                    "vin": detail.vin,
+                    "name": detail.name,
+                    "amount": detail.amount,
+                }
+                for detail in details
+            ]
             
             return serialized_details
 

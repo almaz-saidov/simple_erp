@@ -55,6 +55,7 @@ function MarketSelector() {
             if (user_status)
                 if (user_status !== "StatusObject.admin") {
                     // markets[0] && navigate(`/markets/${markets[0].id}`);
+                    window.Telegram.WebApp.BackButton.hide();
                 } else {
                     window.Telegram.WebApp.BackButton.hide();
                 }

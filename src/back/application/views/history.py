@@ -81,7 +81,7 @@ def history_sell(sell_id):
                 mimetype="application/json",
             )
         else:
-            SyncORM.update_sell(sell_id, data["amount"], data["date"], data["price"], data["seller"])
+            SyncORM.update_sell(sell_id, int(data["amount"]), data["date"], data["price"], data["seller"])
 
     else:
         # Для GET запроса создаем пустой объект данных
@@ -148,7 +148,7 @@ def history_purchase(purchase_id):
                 mimetype="application/json",
             )
         else:
-            SyncORM.update_purchase(purchase_id, data["amount"], data["date"], data["price"], data["detail_name"])
+            SyncORM.update_purchase(purchase_id, int(data["amount"]), data["date"], data["price"], data["detail_name"])
             
     else:
         # Для GET запроса создаем пустой объект данных

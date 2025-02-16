@@ -247,6 +247,7 @@ class SyncORM:
             # Преобразуем ORM-объекты в словари
             serialized_details = [
                 {
+                    'id': detail.id,
                     'vin': detail.vin,
                     'name': detail.name,
                     'amount': detail.amount,
@@ -259,16 +260,17 @@ class SyncORM:
             return serialized_details
     
     @staticmethod
-    def change_detail(detail_id, name, vin, market_id):
+    def change_detail(detail_id, new_name, new_vin, market_id):
         with session_factory() as session:
-            detail = session.query(Detail).filter(Detail.vin == vin, Detail.market_id == market_id).one_or_none()
+            print('\ninside method\n')
+            detail = session.query(Detail).filter(Detail.vin == new_vin, Detail.market_id == market_id).one_or_none()
 
-            if detail:    
-                query = update(Detail).where(Detail.vin == vin, Detail.market_id == market_id).values(name=name, vin=vin)
+            if detail:
+                query = update(Detail).where(Detail.id == detail.id).values(name=new_name, vin=new_vin)
                 session.execute(query)
                 session.query(Detail).filter_by(id=detail_id).delete()
             else:
-                query = update(Detail).where(Detail.vin == vin, Detail.market_id == market_id).values(name=name, vin=vin)
+                query = update(Detail).where(Detail.id == detail_id).values(name=new_name, vin=new_vin)
                 session.execute(query)
             
             session.commit()
@@ -478,7 +480,8 @@ class SyncORM:
     def update_sell(sell_id, amount, date, price, seller):
         with session_factory() as session:
             sell_to_update = session.query(Sell).filter(Sell.id == sell_id).one_or_none()
-            current_amount = sell_to_update.amount
+            if sell_to_update:
+                current_amount = sell_to_update.amount
             
             detail_to_update = session.query(Detail).filter(Detail.id == sell_to_update.detail_id).one_or_none()
             if detail_to_update.amount - amount + current_amount < 0:

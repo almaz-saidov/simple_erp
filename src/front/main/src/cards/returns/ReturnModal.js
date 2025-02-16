@@ -180,7 +180,14 @@ const ReturnModal = ({ isOpen, onClose, returnData, isCreating, isAir, isHistory
                         <>
                             <div className='EditReturn'>
                                 {isHistory ?
-                                    <TextField textDescription="Номер запчасти" text={vin} />
+                                    < Input
+                                        label="Номер запчасти"
+                                        hint={vin}
+                                        isDynamic={true}
+                                        maxLength={11}
+                                        isNeedText={false}
+                                        disabled={true}
+                                    />
                                     : < Input
                                         label="Номер запчасти"
                                         hint="A22222222"
@@ -273,10 +280,15 @@ const ReturnModal = ({ isOpen, onClose, returnData, isCreating, isAir, isHistory
                                     isNeedText={isBadInput}
                                 />
                                 {isHistory ?
-                                    <TextField
-                                        textDescription="User"
-                                        text={whoAdded}
-                                        isLong={true} />
+                                    < Input
+                                        label="User"
+                                        hint={whoAdded}
+                                        isDynamic={true}
+                                        maxLength={11}
+                                        isNeedText={false}
+                                        disabled={true}
+                                        isLong={true}
+                                    />
                                     : <></>}
 
                             </div>

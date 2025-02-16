@@ -92,7 +92,7 @@ const DetailModal: FC<SellsModalProps> = ({ isOpen, onClose, detail, updateDetai
             <div className="ModalContent">
                 <div className={styles.DetailModalMain}>
                     <header className='ModalHeader'>
-                        <h1>{`vin ${detail.vin}`}</h1>
+                        <h1>Цау Цау</h1>
                         <button className="backButton" onClick={onClose}><ReactSVG src={right_arrow_icon} /> Назад</button>
                     </header>
                     {loading ?

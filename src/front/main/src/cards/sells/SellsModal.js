@@ -62,7 +62,7 @@ const SellsModal = ({ isOpen, onClose, itemData, updateSell }) => {
 
     const getPurchase = () => {
         return {
-            vin: itemData.id,
+            vin: itemData.detailNumber,
             amount: parseInt(item.count),
             date: item.date,
             price: parseFloat(item.price),
@@ -102,9 +102,13 @@ const SellsModal = ({ isOpen, onClose, itemData, updateSell }) => {
         if (isBadPurchase()) {
             setIsNeedText(true);
             notify();
-        } else if (ethanol.price !== item.price || ethanol.date !== item.date || item.name !== ethanol.name) {
+        } else if (ethanol.price !== item.price || ethanol.date !== item.date || item.name !== ethanol.name || item.count !== ethanol.count) {
             setIsNeedText(false);
-            updateSell(item, setLoading);
+            updateSell(item, itemData.id, setLoading);
+        } else {
+            toast('Ничего не изменилось!', {
+                icon: '🤔',
+            });
         }
     }
 
@@ -121,12 +125,27 @@ const SellsModal = ({ isOpen, onClose, itemData, updateSell }) => {
                             <SyncLoader color="#A7A7A7" />
                         </div> :
                         <div className='HistoryModalItem'>
-                            <TextField textDescription="Номер запчасти" text={itemData.detailNumber} />
+                            < Input
+                                label="Номер запчасти"
+                                hint={itemData.detailNumber}
+                                isDynamic={true}
+                                maxLength={11}
+                                isNeedText={false}
+                                disabled={true}
+                            />
                             <Input label="Количество" hint="000" parentText={item.count} value={item.count} setParentText={(value) => { setItem({ ...item, count: value }) }} type="number" isDynamic={true} maxlength={10} isNeedText={isNeedText} />
                             <Input label="Дата поступления" parentText={item.date} value={item.date} setParentText={(value) => { setItem({ ...item, date: value }) }} type="date" isDynamic={true} maxlength={10} isNeedText={isNeedText} />
                             <Input label="Цена" hint="00 000.00 ₽" parentText={item.price} value={item.price} setParentText={(value) => { setItem({ ...item, price: value }) }} type="number" isDynamic={true} maxlength={15} isNeedText={isNeedText} />
                             <Input label="Продавец" hint="Женя" isLong={true} parentText={item.name} value={item.name} setParentText={(value) => { setItem({ ...item, name: value }) }} type="text" isDynamic={true} maxlength={40} isNeedText={isNeedText} />
-                            <TextField textDescription="User" text={item.whoAdded} />
+                            < Input
+                                label="User"
+                                hint={item.whoAdded}
+                                isDynamic={true}
+                                maxLength={11}
+                                isNeedText={false}
+                                disabled={true}
+                                isLong={true}
+                            />
                         </div>
                     }
 

@@ -207,7 +207,7 @@ export const fetchPurchasesById = async (itemId, market_id) => {
     const parseData = (data) => {
         return {
             count: data.purchase.amount,
-            date: formatDateToDisplay(data.purchase.date),
+            date: formatDateToSend(data.purchase.date),
             detailName: data.purchase.detail_name,
             price: data.purchase.price,
             detailNumber: data.purchase.vin,
@@ -226,7 +226,7 @@ export const fetchSellById = async (itemId, market_id) => {
     const parseData = (data) => {
         return {
             count: data.sell.amount,
-            date: formatDateToDisplay(data.sell.date),
+            date: formatDateToSend(data.sell.date),
             name: data.sell.name,
             price: data.sell.price,
             detailNumber: data.sell.vin,

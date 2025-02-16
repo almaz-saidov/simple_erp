@@ -104,7 +104,7 @@ export const searchDetailInMarkets = async (vin: string): Promise<TDetail[]> => 
 };
 
 export const editDetail = async (detail: TDetail, market_id: number): Promise<boolean> => {
-    const url = `${API_URL}/change-detail/${detail.vin || ""}`;
+    const url = `${API_URL}/change-detail/${detail.id || ""}`;
     const data = {
         name: detail.name,
         vin: detail.vin,

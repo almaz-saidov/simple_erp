@@ -102,3 +102,25 @@ export const searchDetailInMarkets = async (vin: string): Promise<TDetail[]> => 
         throw new Error('Не удалось найти деталь');
     }
 };
+
+export const editDetail = async (detail: TDetail, market_id: number): Promise<boolean> => {
+    const url = `${API_URL}/change-detail/${detail.vin || ""}`;
+    const data = {
+        name: detail.name,
+        vin: detail.vin,
+        market_id: market_id,
+    }
+    return axios.post(url, data, {
+        headers: {
+            'Content-Type': 'application/json',
+        }
+    })
+        .then((response) => {
+            console.log(response.data)
+            return response.data.status;
+        })
+
+        .catch((error) => {
+            throw error;
+        });
+};

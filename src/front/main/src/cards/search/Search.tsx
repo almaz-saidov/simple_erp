@@ -11,6 +11,8 @@ import { DeleteButton } from '../../components/SubmitButton';
 import toast from 'react-hot-toast';
 import { TDetail } from '../../types/Detail';
 import { searchDetails } from '../../services/DetailApi';
+import DetailModal from '../../components/DetailModal/DetailModal';
+import { editDetail } from "../../services/DetailApi";
 
 // @ts-ignore
 import styles from './Search.module.css';
@@ -25,10 +27,13 @@ function Search() {
     const { value, setValue } = useContext(MarketContext);
     const [selectedItem, setSelectedItem] = useState<TDetail>();
     const [isPanelOpen, setIsPanelOpen] = useState(false);
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const toggleDetailModal = () => setIsModalOpen(!isModalOpen);
 
     const handleItemClick = (item: any) => {
         setSelectedItem(item);
-        setIsPanelOpen(true);
+        toggleDetailModal();
+        // setIsPanelOpen(true);
     };
 
     const closePanel = () => {
@@ -89,6 +94,21 @@ function Search() {
         }
     }
 
+    const updateDetail = async (newDetail: TDetail) => {
+
+        toast.promise(editDetail(newDetail, value.id), {
+            loading: 'Обновляем...',
+            success: (data: any) => {
+                toggleDetailModal();
+                lookForDetails();
+                setSelectedItem(undefined);
+                return `Деталь обновлена`
+            },
+            error: (err: any) => `Не удалось обновить деталь`,
+        },)
+
+    }
+
     return (
         <div className={styles.Search}>
             <CardHeader label="Поиск" marketName={value.name} />
@@ -120,6 +140,9 @@ function Search() {
                         </div>
                     }
                 />}
+            {selectedItem ? <DetailModal key={selectedItem.vin} isOpen={isModalOpen} onClose={toggleDetailModal} updateDetail={updateDetail} detail={selectedItem as TDetail} /> :
+                null}
+
         </div >
 
 

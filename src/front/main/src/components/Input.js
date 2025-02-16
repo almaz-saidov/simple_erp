@@ -18,7 +18,8 @@ function Input(props) {
         isSearch,
         maxLength,
         isNeedText,
-        iconOnClick
+        iconOnClick,
+        disabled,
     } = props;
 
     Input.defaultProps = {
@@ -33,6 +34,7 @@ function Input(props) {
         isSearch: false,
         maxLength: 100,
         isNeedText: false,
+        disabled: false,
         // iconOnClick: undefined,
 
     }
@@ -92,6 +94,7 @@ function Input(props) {
                             onKeyDown={handleKeyDown}
                             value={text}
                             maxLength={maxLength ? maxLength : 255}
+                            disabled={disabled}
                             required
                         />}
 

@@ -14,6 +14,8 @@ import { isFirstEarlier } from "../../common/common"
 import { MarketContext } from '../../markets/MarketContext'
 import PurchaseModal from "../purchases/PurchaseModal";
 import SellsModal from "../sells/SellsModal";
+import { editSell } from "../../services/SalesApi";
+import { editPurchase } from "../../services/PurchaseApi";
 
 import '../../styles/Card.css';
 import '../../styles/Cards/History.css';
@@ -72,30 +74,31 @@ function History() {
         }
     };
 
-    const handleUpdateSell = async (sell, setLoading) => {
+    const handleUpdateSell = async (sell, sell_id, setLoading) => {
         const successMessage = 'Выдача обновлена';
         try {
             setLoading(true);
-            await updateSell(sell);
+            console.log(sell);
+            await editSell(sell, sell_id, value.id);
             if (isReturnModalOpen) {
                 togglePurchaseModal();
             }
             loadData();
-            toast.success(successMessage);
+            toast.success('А когда не изменяли!');
             setLoading(false);
         } catch (e) {
             // Обработка ошибок
             console.error('Ошибка в handleApiResponse:', e);
-            toast.error('Что-то пошло не так');
+            toast.error('Дал дал ушёл');
             setLoading(false);
         }
     };
 
-    const handleUpdatePurchase = async (purchase) => {
+    const handleUpdatePurchase = async (purchase, purchase_id) => {
         const successMessage = 'Продажа обновлена';
         try {
             setLoading(true);
-            await updatePurchase(purchase);
+            await editPurchase(purchase, purchase_id, value.id);
             if (isReturnModalOpen) {
                 toggleSellModal();
             }

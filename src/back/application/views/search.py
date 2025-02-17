@@ -122,12 +122,13 @@ def change_detail(detail_id):
             status=HTTPStatus.BAD_REQUEST,
             mimetype="application/json",
         )
-    
-    name = data['name']
-    vin = data['vin']
+    print('DATA',data)
+    new_name = data['name']
+    new_vin = data['vin']
     market_id = data['market_id']
 
-    if not SyncORM.is_valid_vin(vin):
+    if not SyncORM.is_valid_vin(new_vin):
+        print('incorrect VIN')
         return Response(
             json.dumps({
                 "success": False,
@@ -138,7 +139,8 @@ def change_detail(detail_id):
         )
     
     try:
-        SyncORM.change_detail(detail_id, name, vin, market_id)
+        print('\ninside try\n')
+        SyncORM.change_detail(detail_id, new_name, new_vin, market_id)
         
         return Response(
             json.dumps({

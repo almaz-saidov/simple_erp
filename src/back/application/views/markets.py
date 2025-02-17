@@ -15,8 +15,7 @@ def markets():
     user_id = user_data.get('id')
 
     user_status = SyncORM.get_user_status(user_id)
-    print(user_status)
-
+    # print(user_status)
     if user_status == 'admin':
         markets = SyncORM.get_all_markets()
         return jsonify({'records': [{'id': market.id, 'name': market.name, 'address': market.address} for market in markets]}), 200

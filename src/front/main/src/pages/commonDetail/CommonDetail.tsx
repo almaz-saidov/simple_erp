@@ -18,6 +18,7 @@ import styles from './CommonDetail.module.css';
 // @ts-ignore
 import detail_info_styles from './MarketDetailInfo.module.css';
 
+
 function CommonDetail() {
     const location = useLocation();
     const detail = location.state;

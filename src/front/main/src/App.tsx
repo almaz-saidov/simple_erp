@@ -66,7 +66,9 @@ function App() {
                 allowedStatuses={['admin']} />} />
             <Route path="common/search"
               element={<ProtectedRoute
-                element={<CommonSearch />}
+                element={<CommonSearch
+                  backButtonOnCick={backButtonOnCick}
+                  setBackButtonOnCick={setBackButtonOnClick} />}
                 allowedStatuses={['admin', 'worker', 'seller']} />} />
             <Route path="common/detail/:vin"
               element={<ProtectedRoute

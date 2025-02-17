@@ -18,7 +18,12 @@ import styles from './CommonSearch.module.css';
 // @ts-ignore
 import '../../styles/Components.css';
 
-function CommonSearch() {
+interface MarketSelectorProps {
+    backButtonOnCick: boolean;
+    setBackButtonOnCick: any;
+}
+
+function CommonSearch({ backButtonOnCick, setBackButtonOnCick }: MarketSelectorProps) {
     const [detailNumber, setDetailNumber] = useState('');
     const [data, setData] = useState<TDetail[]>([]);
     const [loading, setLoading] = useState<boolean>(false);
@@ -32,6 +37,7 @@ function CommonSearch() {
         setSelectedItem(item);
         // setIsPanelOpen(true);
         // console.log("O$KO")
+        window.Telegram.WebApp.BackButton.show();
         navigate(`/common/detail/${item.vin}`, { state: item });
     };
 
@@ -65,6 +71,23 @@ function CommonSearch() {
         setData(details);
         setLoading(false);
     }
+
+    useEffect(() => {
+        if (localStorage.getItem('user_status') === 'seller') {
+            const goBack = () => {
+                try {
+                    navigate(-1);
+                } catch (e) {
+                    console.log('debug__', e);
+                }
+            };
+            window.Telegram.WebApp.BackButton.hide();
+            if (!backButtonOnCick) {
+                setBackButtonOnCick(true);
+                window.Telegram.WebApp.BackButton.onClick(goBack);
+            }
+        }
+    }, [])
 
     useEffect(() => {
         lookForDetails();

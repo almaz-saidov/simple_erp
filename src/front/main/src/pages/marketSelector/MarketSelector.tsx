@@ -69,10 +69,10 @@ function MarketSelector({ backButtonOnCick, setBackButtonOnCick }: MarketSelecto
     }, []);
 
     useEffect(() => {
+        const user_status = localStorage.getItem('user_status');
+        if (user_status)
+            setUserStatus(user_status)
         if (markets.length > 0) {
-            const user_status = localStorage.getItem('user_status');
-            if (user_status)
-                setUserStatus(user_status)
             if (user_status !== "admin") {
                 markets[0] && navigate(`/markets/${markets[0].id}`);
             }

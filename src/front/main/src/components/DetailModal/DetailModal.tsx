@@ -145,7 +145,11 @@ const DetailModal: FC<SellsModalProps> = ({ isOpen, onClose, detail, updateDetai
                     }
 
                 </div>
-                <IssuanceButton onClick={submitButtonClick} label="Изменить Деталь" disabled={loading} />
+                <IssuanceButton
+                    onClick={submitButtonClick}
+                    label="Изменить Деталь"
+                    disabled={loading}
+                    needConfirmation={true} />
 
             </div>
 

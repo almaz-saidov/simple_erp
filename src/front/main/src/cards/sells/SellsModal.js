@@ -150,7 +150,11 @@ const SellsModal = ({ isOpen, onClose, itemData, updateSell }) => {
                     }
 
                 </div>
-                <IssuanceButton onClick={submitButtonClick} label="Сохранить поступление" disabled={loading} />
+                <IssuanceButton
+                    onClick={submitButtonClick}
+                    label="Сохранить поступление"
+                    disabled={loading}
+                    needConfirmation={true} />
             </div>
 
         </div >

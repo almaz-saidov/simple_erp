@@ -72,10 +72,7 @@ function MarketSelector({ backButtonOnCick, setBackButtonOnCick }: MarketSelecto
             const user_status = localStorage.getItem('user_status');
             if (user_status)
                 if (user_status !== "admin") {
-                    window.Telegram.WebApp.BackButton.hide();
                     markets[0] && navigate(`/markets/${markets[0].id}`);
-                } else {
-                    window.Telegram.WebApp.BackButton.show();
                 }
         }
     }, [markets])

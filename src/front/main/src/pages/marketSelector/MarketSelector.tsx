@@ -34,6 +34,7 @@ function MarketSelector({ backButtonOnCick, setBackButtonOnCick }: MarketSelecto
     const [selected_market_id, setSelectedMarketId] = useState('');
     const [markets, setMarkets] = useState<TMarket[]>([]);
     const { value, setValue } = useContext(MarketContext);
+    const [userStatus, setUserStatus] = useState<string>();
     const location = useLocation();
     const navigate = useNavigate();
 
@@ -71,9 +72,10 @@ function MarketSelector({ backButtonOnCick, setBackButtonOnCick }: MarketSelecto
         if (markets.length > 0) {
             const user_status = localStorage.getItem('user_status');
             if (user_status)
-                if (user_status !== "admin") {
-                    markets[0] && navigate(`/markets/${markets[0].id}`);
-                }
+                setUserStatus(user_status)
+            if (user_status !== "admin") {
+                markets[0] && navigate(`/markets/${markets[0].id}`);
+            }
         }
     }, [markets])
 
@@ -118,15 +120,16 @@ function MarketSelector({ backButtonOnCick, setBackButtonOnCick }: MarketSelecto
                                 {displayMarketsList()}
                             </div>
                         </div>
-                        <footer>
-                            <button className={styles.CommonSearchButton} onClick={onCommonSearchClick} >
-                                <ReactSVG src={search_icon} />
-                            </button >
-                            <button className={styles.CreateMarketButton} onClick={onCreateMarketButtonClick} >
-                                <div className={styles.CrossHorizontal} />
-                                <div className={styles.CrossVertical} />
-                            </button >
-                        </footer>
+                        {userStatus && userStatus === 'admin' &&
+                            <footer>
+                                <button className={styles.CommonSearchButton} onClick={onCommonSearchClick} >
+                                    <ReactSVG src={search_icon} />
+                                </button >
+                                <button className={styles.CreateMarketButton} onClick={onCreateMarketButtonClick} >
+                                    <div className={styles.CrossHorizontal} />
+                                    <div className={styles.CrossVertical} />
+                                </button >
+                            </footer>}
 
                     </>
                 }

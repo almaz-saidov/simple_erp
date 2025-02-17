@@ -44,7 +44,15 @@ function MarketSelector() {
 
         })
 
-
+        const goBack = () => {
+            if (window.history.length > 1) {
+                navigate(-1);
+            } else {
+                navigate('/markets');
+            }
+        };
+        window.Telegram.WebApp.BackButton.hide();
+        window.Telegram.WebApp.BackButton.onClick(() => { goBack() })
     }, []);
 
     useEffect(() => {
@@ -52,32 +60,33 @@ function MarketSelector() {
         if (markets.length > 0) {
             const user_status = localStorage.getItem('user_status');
 
-            if (user_status)
-                if (user_status !== "StatusObject.admin") {
-                    // markets[0] && navigate(`/markets/${markets[0].id}`);
-                    window.Telegram.WebApp.BackButton.hide();
-                } else {
-                    window.Telegram.WebApp.BackButton.hide();
-                }
+            // if (user_status)
+            //     if (user_status !== "StatusObject.admin") {
+            //         // markets[0] && navigate(`/markets/${markets[0].id}`);
+            //         window.Telegram.WebApp.BackButton.hide();
+            //     } else {
+            //         window.Telegram.WebApp.BackButton.hide();
+            //     }
         }
     }, [markets])
 
     const onMarketClick = (market: TMarket) => {
         setValue(market);
-        window.Telegram.WebApp.BackButton.show();
-        window.Telegram.WebApp.BackButton.onClick(() => { navigate("/markets") })
+
         navigate(`/markets/${market.id}`);
     }
 
     const onCommonSearchClick = () => {
         window.Telegram.WebApp.BackButton.show();
-        window.Telegram.WebApp.BackButton.onClick(() => { navigate("/markets") })
+        // window.Telegram.WebApp.BackButton.show();
+        // window.Telegram.WebApp.BackButton.onClick(() => { navigate("/markets") })
         navigate(`/common/search`);
     }
 
     const onCreateMarketButtonClick = () => {
         window.Telegram.WebApp.BackButton.show();
-        window.Telegram.WebApp.BackButton.onClick(() => { navigate("/markets") })
+        // window.Telegram.WebApp.BackButton.show();
+        // window.Telegram.WebApp.BackButton.onClick(() => { navigate("/markets") })
         navigate(`/markets/create`);
     }
 

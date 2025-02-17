@@ -1,7 +1,7 @@
 
 import React from 'react';
 import { useEffect, useState } from 'react';
-import { BrowserRouter, Routes, Route, Navigate, useNavigate } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, Navigate, useNavigate, useLocation } from 'react-router-dom';
 import { ToasterWithMax } from './components/ToasterWithMax';
 import Market from './markets/Market';
 import MarketSelector from './pages/marketSelector/MarketSelector';

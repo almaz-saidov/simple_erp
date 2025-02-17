@@ -40,15 +40,7 @@ declare module "*.svg" {
 }
 
 declare interface Window {
-    Telegram: {
-        WebApp: {
-            BackButton: {
-                show: () => void;
-                onClick: (callback: () => void) => void;
-                hide: () => void;
-            };
-        };
-    };
+    Telegram: any;
 }
 
 

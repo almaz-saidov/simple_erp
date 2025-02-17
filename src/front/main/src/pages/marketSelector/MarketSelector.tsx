@@ -1,5 +1,6 @@
 import React from 'react';
 import { Fragment, useEffect, useState } from 'react';
+import { useLocation } from 'react-router-dom';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import { useNavigate } from 'react-router-dom';
 import { MarketContext } from '../../markets/MarketContext';
@@ -22,11 +23,18 @@ const darkTheme = createTheme({
 });
 
 
-function MarketSelector() {
+
+interface MarketSelectorProps {
+    backButtonOnCick: boolean;
+    setBackButtonOnCick: any;
+}
+
+function MarketSelector({ backButtonOnCick, setBackButtonOnCick }: MarketSelectorProps) {
     const [loading, setLoading] = useState(true);
     const [selected_market_id, setSelectedMarketId] = useState('');
     const [markets, setMarkets] = useState<TMarket[]>([]);
     const { value, setValue } = useContext(MarketContext);
+    const location = useLocation();
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -40,39 +48,41 @@ function MarketSelector() {
                 setLoading(false);
             }
         };
-        fetchMarketsWrapper().then((server_markets) => { }).catch(() => {
-
+        fetchMarketsWrapper().then((server_markets) => {
+        }).catch((e) => {
+            console.log('debug__ fetch markets err', e);
         })
 
         const goBack = () => {
-            if (window.history.length > 1) {
+            try {
                 navigate(-1);
-            } else {
-                navigate('/markets');
+            } catch (e) {
+                console.log('debug__', e);
             }
         };
         window.Telegram.WebApp.BackButton.hide();
-        window.Telegram.WebApp.BackButton.onClick(() => { goBack() })
+        if (!backButtonOnCick) {
+            setBackButtonOnCick(true);
+            window.Telegram.WebApp.BackButton.onClick(goBack);
+        }
     }, []);
 
     useEffect(() => {
-
         if (markets.length > 0) {
             const user_status = localStorage.getItem('user_status');
-
-            // if (user_status)
-            //     if (user_status !== "StatusObject.admin") {
-            //         // markets[0] && navigate(`/markets/${markets[0].id}`);
-            //         window.Telegram.WebApp.BackButton.hide();
-            //     } else {
-            //         window.Telegram.WebApp.BackButton.hide();
-            //     }
+            if (user_status)
+                if (user_status !== "admin") {
+                    window.Telegram.WebApp.BackButton.hide();
+                    markets[0] && navigate(`/markets/${markets[0].id}`);
+                } else {
+                    window.Telegram.WebApp.BackButton.show();
+                }
         }
     }, [markets])
 
     const onMarketClick = (market: TMarket) => {
         setValue(market);
-
+        window.Telegram.WebApp.BackButton.show();
         navigate(`/markets/${market.id}`);
     }
 

@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { BrowserRouter, Routes, Route, Navigate, useNavigate, useLocation } from 'react-router-dom';
 import { ToasterWithMax } from './components/ToasterWithMax';
 import Market from './markets/Market';
@@ -17,13 +17,15 @@ import './styles/App.css';
 
 function App() {
 
+  const [backButtonOnCick, setBackButtonOnClick] = useState(false);
+
   return (
     <ModalProvider>
       <MarketProvider>
         <BrowserRouter>
           <Routes>
             <Route path="markets/:market_id" element={<Market />} />
-            <Route path="markets" element={<MarketSelector />} />
+            <Route path="markets" element={<MarketSelector backButtonOnCick={backButtonOnCick} setBackButtonOnCick={setBackButtonOnClick} />} />
             <Route path="markets/create" element={<CreateMarket />} />
             <Route path="common/search" element={<CommonSearch />} />
             <Route path="common/detail/:vin" element={<CommonDetail />} />

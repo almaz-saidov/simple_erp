@@ -78,7 +78,7 @@ function Input(props) {
     }, [parentText])
 
     return (
-        <div className={isLong ? "LongInputWrapper" : "InputWrapper"}>
+        <div className={isLong ? "LongInputWrapper" : "InputWrapper"} style={{ opacity: disabled ? 0.5 : 1 }} >
             <label>{label}</label>
             <div className={isNeedText ? "NeedText" : "NotNeedText"}>
                 <div className='SearchInput'>
@@ -96,6 +96,7 @@ function Input(props) {
                             maxLength={maxLength ? maxLength : 255}
                             disabled={disabled}
                             required
+
                         />}
 
                     {isSearch ? (

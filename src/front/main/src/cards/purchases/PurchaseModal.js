@@ -102,7 +102,7 @@ const PurchaseModal = ({ isOpen, onClose, itemData, updatePurchase }) => {
         if (isBadPurchase()) {
             setIsNeedText(true);
             notify();
-        } else if (ethanol.price !== item.price || ethanol.date !== item.date || item.detailName !== ethanol.count || item.count !== ethanol.count) {
+        } else if (ethanol.price !== item.price || ethanol.date !== item.date || item.detailName !== ethanol.detailName || item.count !== ethanol.count) {
             setIsNeedText(false);
             updatePurchase(item, itemData.id, setLoading);
         } else {
@@ -128,6 +128,7 @@ const PurchaseModal = ({ isOpen, onClose, itemData, updatePurchase }) => {
                             < Input
                                 label="Номер запчасти"
                                 hint={itemData.detailNumber}
+                                value={itemData.detailNumber}
                                 isDynamic={true}
                                 maxLength={11}
                                 isNeedText={false}
@@ -139,7 +140,7 @@ const PurchaseModal = ({ isOpen, onClose, itemData, updatePurchase }) => {
                             <Input label="Название запчасти" hint="Рычаг" isLong={true} parentText={item.detailName} value={item.detailName} setParentText={(value) => { setItem({ ...item, detailName: value }) }} type="text" isDynamic={true} maxlength={40} isNeedText={isNeedText} />
                             < Input
                                 label="User"
-                                hint={item.whoAdded}
+                                value={item.whoAdded}
                                 isDynamic={true}
                                 maxLength={11}
                                 isNeedText={false}

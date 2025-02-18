@@ -127,7 +127,7 @@ const SellsModal = ({ isOpen, onClose, itemData, updateSell }) => {
                         <div className='HistoryModalItem'>
                             < Input
                                 label="Номер запчасти"
-                                hint={itemData.detailNumber}
+                                value={itemData.detailNumber}
                                 isDynamic={true}
                                 maxLength={11}
                                 isNeedText={false}
@@ -139,7 +139,7 @@ const SellsModal = ({ isOpen, onClose, itemData, updateSell }) => {
                             <Input label="Продавец" hint="Женя" isLong={true} parentText={item.name} value={item.name} setParentText={(value) => { setItem({ ...item, name: value }) }} type="text" isDynamic={true} maxlength={40} isNeedText={isNeedText} />
                             < Input
                                 label="User"
-                                hint={item.whoAdded}
+                                value={item.whoAdded}
                                 isDynamic={true}
                                 maxLength={11}
                                 isNeedText={false}

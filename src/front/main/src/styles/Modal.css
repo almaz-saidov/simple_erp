@@ -89,6 +89,7 @@
     display: flex;
     gap: 5px;
     background: none;
+    align-items: center;
 }
 
 .ModalContent .SubmitButton {

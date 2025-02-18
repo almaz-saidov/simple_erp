@@ -83,6 +83,7 @@ body {
     .NumberDoesNotExist {
         font-size: 28px;
         line-height: 28px;
+        /* line-height: 28px; */
     }
 
     .Checkbox label {
@@ -152,6 +153,7 @@ body {
 
     .NumberDoesNotExist {
         font-size: 34px;
+        line-height: 34px;
     }
 
     .Checkbox label {

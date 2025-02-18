@@ -6,10 +6,18 @@ import React, { useState } from 'react';
 
 
 export function IssuanceButton(props) {
-    const { label, onClick, disabled } = props;
+    const { label, onClick, disabled, needConfirmation } = props;
+    const { openModal } = useModal();
 
     const handleClick = () => {
-        onClick && onClick();
+        if (!needConfirmation) {
+            onClick && onClick();
+        }
+        else {
+            openModal(() => {
+                onClick && onClick();
+            });
+        }
     }
 
     return (
@@ -35,12 +43,12 @@ export const ConfirmationModal = ({ isVisible, onClose, onConfirm }) => {
         <div className="SubmitModal">
             <div className="SubmitModalWrapper" onClick={onClose}>
                 <div className="SubmitModalContent" onClick={(e) => e.stopPropagation()}>
-                    <h2 className="PrimaryText">Вы уверены, что хотите удалить этот элемент?</h2>
+                    <h2 className="PrimaryText">Вы уверены, что хотите<br /> изменить этот элемент?</h2>
                     <div className="SubmitDeleteButtonsContainer">
                         <button className="SubmitButton" onClick={onClose}>
                             Нет
                         </button>
-                        <button className="DeleteButton" onClick={handleConfirm}>
+                        <button className="SubmitButton" onClick={handleConfirm}>
                             Да
                         </button>
                     </div>

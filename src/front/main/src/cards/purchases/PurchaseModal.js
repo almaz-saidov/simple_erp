@@ -150,7 +150,11 @@ const PurchaseModal = ({ isOpen, onClose, itemData, updatePurchase }) => {
                     }
 
                 </div>
-                <IssuanceButton onClick={submitButtonClick} label="Сохранить поступление" disabled={loading} />
+                <IssuanceButton
+                    onClick={submitButtonClick}
+                    label="Сохранить поступление"
+                    disabled={loading}
+                    needConfirmation={true} />
             </div>
 
         </div >

@@ -59,7 +59,7 @@ function App() {
                 }
             };
 
-            initializeAuth('https://asm3ceps.ru/api/test/auth');
+            initializeAuth('https://asm3ceps.ru/api/auth');
 
         } catch (e) {
             timeoutReached && setLoading(false);
@@ -71,7 +71,7 @@ function App() {
 
     useEffect(() => {
         if (!loading && timeoutReached && isAuthorized) {
-            navigate('/front/test');
+            navigate('/front');
             window.location.reload();
         }
     }, [loading, timeoutReached, navigate]);

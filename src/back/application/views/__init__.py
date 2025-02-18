@@ -1,6 +1,6 @@
 from flask import Blueprint
 
-bp = Blueprint('main', __name__, url_prefix='/test')
+bp = Blueprint('main', __name__)
 
 from application.views import search
 from application.views import purchases

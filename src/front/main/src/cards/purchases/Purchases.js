@@ -46,7 +46,7 @@ function Purchases() {
             loading: 'Создание',
             success: () => {
                 resetPurchaseInput();
-                return 'Выдача создана';
+                return 'Поступление создано';
             },
             error: 'Что то пошло не так',
         });

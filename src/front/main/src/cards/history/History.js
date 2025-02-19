@@ -95,7 +95,7 @@ function History() {
     };
 
     const handleUpdatePurchase = async (purchase, purchase_id) => {
-        const successMessage = 'Продажа обновлена';
+        const successMessage = 'Поступление обновлено';
         try {
             setLoading(true);
             await editPurchase(purchase, purchase_id, value.id);

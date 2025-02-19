@@ -117,7 +117,7 @@ const PurchaseModal = ({ isOpen, onClose, itemData, updatePurchase }) => {
             <div className="ModalContent">
                 <div className='PurchaseModalMain'>
                     <header className='ModalHeader'>
-                        <h1>Выдача</h1>
+                        <h1>Поступление</h1>
                         <button className="backButton" onClick={onClose}><LeftArrow /> Назад</button>
                     </header>
                     {loading ?

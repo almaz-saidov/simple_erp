@@ -12,7 +12,7 @@ from . import bp
 
 
 @bp.post('/api/sales')
-@init_data_checker
+# @init_data_checker
 def sales():
     """
     Ручка для добавления новой продажи через JSON.

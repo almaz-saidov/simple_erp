@@ -11,7 +11,7 @@ from . import bp
 
 
 @bp.post('/api/purchases')
-@init_data_checker
+# @init_data_checker
 def purchases():
     """
     Ручка для добавления новой покупки через JSON.

@@ -8,7 +8,7 @@ from . import bp
 
 
 @bp.route('/api/auth', methods=['GET', 'POST'])
-@initial_init_data_checker
+# @initial_init_data_checker
 def telegram_auth():
     telegram_data = TelegramInitData(request.get_json().get('initData'))
     user_data = telegram_data.to_dict().get('user')

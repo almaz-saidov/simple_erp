@@ -9,7 +9,7 @@ from . import bp
 
 
 @bp.get('/api/search')
-@init_data_checker
+# @init_data_checker
 def search_detail():
     """
     Поиск детали по VIN через JSON.
@@ -63,7 +63,7 @@ def search_detail():
 
 
 @bp.get('/api/entire-search')
-@init_data_checker
+# @init_data_checker
 def entire_search_detail():
     vin = request.args.get("vin", "")
     page = request.args.get("page", 1, type=int)

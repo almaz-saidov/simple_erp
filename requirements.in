@@ -16,7 +16,7 @@ Flask==3.1.0
 Flask-Login==0.6.3
 Flask-SQLAlchemy==3.1.1
 Flask-WTF==1.2.2
-flas-cors==3.0.10
+flask-cors==3.0.10
 fonttools==4.55.0
 greenlet==3.1.1
 h11==0.14.0

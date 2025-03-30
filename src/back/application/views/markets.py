@@ -8,7 +8,7 @@ from . import bp
 
 
 @bp.get('/api/markets')
-@init_data_checker
+# @init_data_checker
 def markets():
     telegram_data = TelegramInitData(request.cookies.get('initData'))
     user_data = telegram_data.to_dict().get('user')
@@ -35,7 +35,7 @@ def markets():
 
 
 @bp.post('/api/markets')
-@init_data_checker
+# @init_data_checker
 def create_market():
     if not request.is_json:
         return jsonify({'error': 'Request body must be JSON'}), 400

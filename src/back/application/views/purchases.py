@@ -1,6 +1,7 @@
 from http import HTTPStatus
 
 from flask import Response, json, request
+from flask_jwt_extended import jwt_required
 
 # from application import app
 from application.forms import PurchaseForm
@@ -11,7 +12,7 @@ from . import bp
 
 
 @bp.post('/api/purchases')
-# @init_data_checker
+@jwt_required()
 def purchases():
     """
     Ручка для добавления новой покупки через JSON.

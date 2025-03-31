@@ -8,13 +8,11 @@ from . import bp
 
 
 @bp.get('/front')
-# # @init_data_checker
 def front():
     return render_template('/build/index.html')
 
 
 @bp.route('/static-front/<path:path>')
-# # @init_data_checker
 def static_index_build(path):
     print(os.path.join('./application/templates/build/static/'))
     return send_from_directory(os.path.join(os.getcwd(),'./application/templates/build/static/'), path)

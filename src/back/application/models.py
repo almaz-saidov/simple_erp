@@ -4,6 +4,7 @@ from typing import Annotated, Optional
 
 from sqlalchemy import Date, String, Integer, ForeignKey, Enum, Boolean, func, text, BigInteger
 from sqlalchemy.orm import Mapped, mapped_column, relationship
+from werkzeug.security import generate_password_hash, check_password_hash
 
 from application.database import Base
 
@@ -30,6 +31,16 @@ class User(Base):
     name: Mapped[str] = mapped_column(String, nullable=False)
     surname: Mapped[Optional[str]] = mapped_column(String, nullable=True)
     status: Mapped[StatusObject] = mapped_column(Enum(StatusObject), default=StatusObject.worker)
+    username: Mapped[str] = mapped_column(String, unique=True, nullable=False)  # Логин
+    password_hash: Mapped[str] = mapped_column(String, nullable=False) # Хеш пароля
+
+    # Метод для установки пароля (автоматически хеширует)
+    def set_password(self, password):
+        self.password_hash = generate_password_hash(password)
+    
+    # Метод для проверки пароля
+    def check_password(self, password):
+        return check_password_hash(self.password_hash, password)
 
 
 class MarketUserMapper(Base):

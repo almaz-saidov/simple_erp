@@ -1,6 +1,7 @@
 from http import HTTPStatus
 
 from flask import Response, json, request
+from flask_jwt_extended import jwt_required
 
 # from application import app
 from application.forms import AirReturnForm, ReturnForm, SalesForm, PurchaseForm
@@ -11,7 +12,7 @@ from . import bp
 
 
 @bp.get('/api/history')
-# @init_data_checker
+@jwt_required()
 def history():
     """
     Получение записей истории в формате JSON с использованием Response.
@@ -120,7 +121,7 @@ def history_sell(sell_id):
 
 
 @bp.route("/api/history/purchase/<int:purchase_id>", methods=["GET", "POST"])
-# @init_data_checker
+@jwt_required()
 def history_purchase(purchase_id):
     if request.method == "POST":
         # Получаем данные из JSON запроса
@@ -188,7 +189,7 @@ def history_purchase(purchase_id):
 
 
 @bp.route("/api/history/returns/<int:return_id>", methods=["GET", "POST"])
-# @init_data_checker
+@jwt_required()
 def history_return(return_id):
     return_type = request.args.get("type")  # Получаем параметр типа возврата из URL или формы
     market_id = request.args.get('market_id', type=int)

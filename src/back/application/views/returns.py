@@ -1,6 +1,7 @@
 from http import HTTPStatus
 
 from flask import Response, json, request
+from flask_jwt_extended import jwt_required
 
 # from application import app
 from application.forms import ReturnForm, AirReturnForm
@@ -11,7 +12,7 @@ from . import bp
 
 
 @bp.get('/api/returns')
-# @init_data_checker
+@jwt_required()
 def returns():
     market_id = request.args.get('market_id', type=int)
     air_ret = SyncORM.get_active_airret_items(market_id)
@@ -51,7 +52,7 @@ def returns():
 
 
 @bp.post('/api/returns/create_return')
-# @init_data_checker
+@jwt_required()
 def create_return():
     """
     Ручка для создания возврата через JSON.
@@ -132,7 +133,7 @@ def create_return():
 
 
 @bp.route('/api/returns/create_air_return', methods=["POST"])
-# @init_data_checker
+@jwt_required()
 def create_air_return():
     """
     Ручка для создания возврата через JSON.
@@ -222,7 +223,7 @@ def create_air_return():
         )
 
 @bp.route('/api/returns/<int:return_id>', methods=["GET", "POST", "DELETE"])
-# @init_data_checker
+@jwt_required()
 def check_return(return_id):
     return_type = request.args.get("type")  # Получаем параметр типа возврата из URL
     market_id = request.args.get('market_id', type=int)

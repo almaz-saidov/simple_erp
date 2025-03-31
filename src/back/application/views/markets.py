@@ -1,4 +1,5 @@
 from flask import jsonify, request
+from flask_jwt_extended import jwt_required
 
 # from application import app
 from application.queries.orm import SyncORM
@@ -8,7 +9,7 @@ from . import bp
 
 
 @bp.get('/api/markets')
-# @init_data_checker
+@jwt_required()
 def markets():
     user_data = request.cookies.get('user')
     user_id = user_data.get('id')
@@ -34,7 +35,7 @@ def markets():
 
 
 @bp.post('/api/markets')
-# @init_data_checker
+@jwt_required()
 def create_market():
     if not request.is_json:
         return jsonify({'error': 'Request body must be JSON'}), 400

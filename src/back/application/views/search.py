@@ -1,6 +1,7 @@
 from http import HTTPStatus
 
 from flask import json, request, Response
+from flask_jwt_extended import jwt_required
 
 # from application import app
 from application.queries.orm import SyncORM
@@ -9,7 +10,7 @@ from . import bp
 
 
 @bp.get('/api/search')
-# @init_data_checker
+@jwt_required()
 def search_detail():
     """
     Поиск детали по VIN через JSON.
@@ -63,7 +64,7 @@ def search_detail():
 
 
 @bp.get('/api/entire-search')
-# @init_data_checker
+@jwt_required()
 def entire_search_detail():
     vin = request.args.get("vin", "")
     page = request.args.get("page", 1, type=int)
@@ -113,6 +114,7 @@ def entire_search_detail():
 
 
 @bp.post('/api/change-detail/<int:detail_id>')
+@jwt_required()
 def change_detail(detail_id):
     data = request.get_json()
 

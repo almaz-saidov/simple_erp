@@ -1,20 +1,20 @@
-from flask import jsonify, make_response, request
+from flask import jsonify, request
+from flask_jwt_extended import create_access_token
 
 # from application import app
 from application.queries.orm import SyncORM
-from application.utils import initial_init_data_checker
-from application.utils.init_data import TelegramInitData
 from . import bp
 
 
-@bp.route('/api/auth', methods=['GET', 'POST'])
-# @initial_init_data_checker
-def telegram_auth():
-    telegram_data = TelegramInitData(request.get_json().get('initData'))
-    user_data = telegram_data.to_dict().get('user')
-    user_id = user_data.get('id')
-    
-    response = make_response(jsonify({'user_status': f'{SyncORM.get_user_status(user_id)}', 'status': 'Cookie was set!'}))
-    response.set_cookie('initData', request.get_json().get('initData'), path='/', httponly=True, secure=True, samesite='None')
-    response.status_code = 200
-    return response
+@bp.route('/login', methods=['POST'])
+def login():
+    data = request.get_json()
+    username = data.get("username")
+    password = data.get("password")
+
+    user = SyncORM.get_user_by_username(username)  # Ищем пользователя
+    if not user or not user.check_password(password):  # Проверяем пароль
+        return jsonify({"error": "Неверный логин или пароль"}), 401
+
+    access_token = create_access_token(identity=user.id)
+    return jsonify({"access_token": access_token}), 200

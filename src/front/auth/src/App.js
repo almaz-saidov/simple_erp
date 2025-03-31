@@ -1,11 +1,9 @@
-import { useEffect, useState, Fragment } from 'react';
-import { SyncLoader } from 'react-spinners';
-import { ReactComponent as FailIcon } from './assets/auth_fail_icon.svg';
-import { useNavigate } from 'react-router-dom';
-import { retrieveLaunchParams } from "@telegram-apps/sdk";
+import { Fragment, useEffect, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
+import { ReactComponent as FailIcon } from './assets/auth_fail_icon.svg'
 
-import './styles/App.css';
-import "./styles/LoaderWrapper.css";
+import './styles/App.css'
+import "./styles/LoaderWrapper.css"
 
 function App() {
     const [loading, setLoading] = useState(true);
@@ -19,50 +17,58 @@ function App() {
             setTimeoutReached(true);
             setLoading(false);
         }, 3000); // Задержка на 3 секунды
+        localStorage.setItem('user_status', "admin");
+        setIsAuthorized(true);
 
         try {
-            const csrfToken = "almaz-ymeet-delat-graz";
-            const init_data = retrieveLaunchParams().initDataRaw;
-            //console.log(init_data);
+            // localStorage.setItem('user_status', data.user_status);
+            // setIsAuthorized(true);
+            // const csrfToken = "almaz-ymeet-delat-graz";
+            // const init_data = retrieveLaunchParams().initDataRaw;
+            // //console.log(init_data);
 
-            const initializeAuth = async (postUrl) => {
-                try {
+            // const initializeAuth = async (postUrl) => {
+            //     try {
 
-                    //console.log("RESPONSE__TRY");
-                    const response = await fetch(postUrl, {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json',
-                            'Token': csrfToken,
-                        },
-                        body: JSON.stringify(
-                            {
-                                initData: init_data,
-                            }
-                        ),
-                    });
-                    //console.log("RESPONSE__1", response);
-                    if (!response.ok) {
-                        throw new Error('Network response was not ok');
-                    }
-                    const data = await response.json();
-                    console.log("RESPONSE_DATA", data);
-                    //console.log("USER_STATUS", data.user_status);
-                    localStorage.setItem('user_status', data.user_status);
-                    setIsAuthorized(true);
-                    // Теперь этот редирект будет происходить в следующем useEffect 
-                    timeoutReached && setLoading(false); // Обновляем состояние загрузки
-                    return; // Выходим из функции
-                } catch (error) {
-                    timeoutReached && setLoading(false);
-                    console.error('Ошибка при авторизации:', error);
-                }
-            };
-
-            initializeAuth('https://asm3ceps.ru/api/auth');
+            //         //console.log("RESPONSE__TRY");
+            //         const response = await fetch(postUrl, {
+            //             method: 'POST',
+            //             headers: {
+            //                 'Content-Type': 'application/json',
+            //                 'Token': csrfToken,
+            //             },
+            //             body: JSON.stringify(
+            //                 {
+            //                     initData: init_data,
+            //                 }
+            //             ),
+            //         });
+            //         //console.log("RESPONSE__1", response);
+            //         if (!response.ok) {
+            //             throw new Error('Network response was not ok');
+            //         }
+            //         const data = await response.json();
+            //         console.log("RESPONSE_DATA", data);
+            //         //console.log("USER_STATUS", data.user_status);
+            //         localStorage.setItem('user_status', data.user_status);
+            //         setIsAuthorized(true);
+                    
+            //         // Теперь этот редирект будет происходить в следующем useEffect 
+            //         timeoutReached && setLoading(false); // Обновляем состояние загрузки
+            //         return; // Выходим из функции
+            //     } catch (error) {
+            //         timeoutReached && setLoading(false);
+            //         console.error('Ошибка при авторизации:', error);
+            //     }
+            // };
+            // localStorage.setItem('user_status', "admin");
+            // setIsAuthorized(true);
+            // // Теперь этот редирект будет происходить в следующем useEffect 
+            // timeoutReached && setLoading(false); // Обновляем состояние загрузки
+            // // initializeAuth('https://asm3ceps.ru/api/auth');
 
         } catch (e) {
-            timeoutReached && setLoading(false);
+            // timeoutReached && setLoading(false);
             console.log("Error", e.message);
         }
 
@@ -75,7 +81,7 @@ function App() {
             window.location.reload();
         }
     }, [loading, timeoutReached, navigate]);
-
+    
     return (
         <div className="App">
             {loading || isAuthorized ? (

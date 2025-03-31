@@ -10,8 +10,7 @@ from . import bp
 @bp.get('/api/markets')
 # @init_data_checker
 def markets():
-    telegram_data = TelegramInitData(request.cookies.get('initData'))
-    user_data = telegram_data.to_dict().get('user')
+    user_data = request.cookies.get('user')
     user_id = user_data.get('id')
 
     user_status = SyncORM.get_user_status(user_id)
@@ -39,8 +38,7 @@ def markets():
 def create_market():
     if not request.is_json:
         return jsonify({'error': 'Request body must be JSON'}), 400
-    telegram_data = TelegramInitData(request.cookies.get('initData'))
-    user_data = telegram_data.to_dict().get('user')
+    user_data = request.cookies.get('user')
     try:
         name = request.json.get('name')
         address = request.json.get('address')

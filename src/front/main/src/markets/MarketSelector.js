@@ -1,14 +1,13 @@
-import '../styles/App.css';
+import '../styles/App.css'
 import '../styles/Markets.css'
 
-import { Fragment, useEffect, useState, ReactSvg } from 'react';
-import { ThemeProvider, createTheme } from '@mui/material/styles';
-import { useNavigate } from 'react-router-dom';
-import { MarketContext } from './MarketContext';
-import React, { useContext } from 'react';
-import { fetchMarkets } from '../services/MarketsApi';
-import { SyncLoader } from 'react-spinners';
-import MarketItem from './MarketItem';
+import { createTheme } from '@mui/material/styles'
+import React, { ReactSvg, useContext, useEffect, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
+import { SyncLoader } from 'react-spinners'
+import { fetchMarkets } from '../services/MarketsApi'
+import { MarketContext } from './MarketContext'
+import MarketItem from './MarketItem'
 
 
 
@@ -52,27 +51,20 @@ function MarketSelector() {
                 if (user_status !== "StatusObject.admin") {
                     // markets[0] && navigate(`/markets/${markets[0].id}`);
                 } else {
-                    window.Telegram.WebApp.BackButton.hide();
                 }
         }
     }, [markets])
 
     const onMarketClick = (market) => {
         setValue(market);
-        window.Telegram.WebApp.BackButton.show();
-        window.Telegram.WebApp.BackButton.onClick(() => { navigate("/markets") })
         navigate(`/markets/${market.id}`);
     }
 
     const onCreateMarketButtonClick = () => {
-        window.Telegram.WebApp.BackButton.show();
-        window.Telegram.WebApp.BackButton.onClick(() => { navigate("/markets") })
         navigate(`/markets/create`);
     }
 
     const onCommonSearchButtonClick = () => {
-        window.Telegram.WebApp.BackButton.show();
-        window.Telegram.WebApp.BackButton.onClick(() => { navigate("/markets") })
         navigate(`/markets/create`);
     }
 

@@ -1,22 +1,21 @@
-import React from "react";
-import CardHeader from "../../components/CardHeader";
+import { useContext, useEffect, useState } from 'react'
+import toast from 'react-hot-toast'
+import { useNavigate } from 'react-router-dom'
+import { SyncLoader } from 'react-spinners'
+import CardHeader from "../../components/CardHeader"
+import Detail from "../../components/Detail/Detail"
 import Input from '../../components/Input'
-import Detail from "../../components/Detail/Detail";
-import { SyncLoader } from 'react-spinners';
-import { useEffect, useState, useContext } from 'react';
-import { fetchDetailsNew, deleteDetailById } from "../../services/Api";
-import { MarketContext } from '../../markets/MarketContext';
-import SlidePanel from "../../components/slide_panel/SlidePanel";
-import { DeleteButton } from '../../components/SubmitButton';
-import toast from 'react-hot-toast';
-import { TDetail } from '../../types/Detail';
-import { searchDetailsCommon } from '../../services/DetailApi';
-import { useNavigate } from 'react-router-dom';
+import SlidePanel from "../../components/slide_panel/SlidePanel"
+import { DeleteButton } from '../../components/SubmitButton'
+import { MarketContext } from '../../markets/MarketContext'
+import { deleteDetailById } from "../../services/Api"
+import { searchDetailsCommon } from '../../services/DetailApi'
+import { TDetail } from '../../types/Detail'
 
 // @ts-ignore
-import styles from './CommonSearch.module.css';
+import styles from './CommonSearch.module.css'
 // @ts-ignore
-import '../../styles/Components.css';
+import '../../styles/Components.css'
 
 interface MarketSelectorProps {
     backButtonOnCick: boolean;
@@ -37,7 +36,6 @@ function CommonSearch({ backButtonOnCick, setBackButtonOnCick }: MarketSelectorP
         setSelectedItem(item);
         // setIsPanelOpen(true);
         // console.log("O$KO")
-        window.Telegram.WebApp.BackButton.show();
         navigate(`/common/detail/${item.vin}`, { state: item });
     };
 
@@ -81,10 +79,8 @@ function CommonSearch({ backButtonOnCick, setBackButtonOnCick }: MarketSelectorP
                     console.log('debug__', e);
                 }
             };
-            window.Telegram.WebApp.BackButton.hide();
             if (!backButtonOnCick) {
                 setBackButtonOnCick(true);
-                window.Telegram.WebApp.BackButton.onClick(goBack);
             }
         }
     }, [])

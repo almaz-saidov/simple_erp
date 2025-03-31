@@ -1,19 +1,16 @@
-import React from 'react';
-import { Fragment, useEffect, useState } from 'react';
-import { useLocation } from 'react-router-dom';
-import { ThemeProvider, createTheme } from '@mui/material/styles';
-import { useNavigate } from 'react-router-dom';
-import { MarketContext } from '../../markets/MarketContext';
-import { useContext } from 'react';
-import { fetchMarkets } from '../../services/MarketsApi';
-import { SyncLoader } from 'react-spinners';
-import MarketItem from '../../markets/MarketItem';
-import { TMarket } from '../../types/Market';
-import { ReactSVG } from "react-svg";
-import search_icon from '../../assets/search_icon.svg';
+import { createTheme } from '@mui/material/styles'
+import { useContext, useEffect, useState } from 'react'
+import { useLocation, useNavigate } from 'react-router-dom'
+import { SyncLoader } from 'react-spinners'
+import { ReactSVG } from "react-svg"
+import search_icon from '../../assets/search_icon.svg'
+import { MarketContext } from '../../markets/MarketContext'
+import MarketItem from '../../markets/MarketItem'
+import { fetchMarkets } from '../../services/MarketsApi'
+import { TMarket } from '../../types/Market'
 
 // @ts-ignore
-import styles from './MarketSelector.module.css';
+import styles from './MarketSelector.module.css'
 
 
 const darkTheme = createTheme({
@@ -61,11 +58,6 @@ function MarketSelector({ backButtonOnCick, setBackButtonOnCick }: MarketSelecto
                 console.log('debug__', e);
             }
         };
-        window.Telegram.WebApp.BackButton.hide();
-        if (!backButtonOnCick) {
-            setBackButtonOnCick(true);
-            window.Telegram.WebApp.BackButton.onClick(goBack);
-        }
     }, []);
 
     useEffect(() => {
@@ -81,21 +73,14 @@ function MarketSelector({ backButtonOnCick, setBackButtonOnCick }: MarketSelecto
 
     const onMarketClick = (market: TMarket) => {
         setValue(market);
-        window.Telegram.WebApp.BackButton.show();
         navigate(`/markets/${market.id}`);
     }
 
-    const onCommonSearchClick = () => {
-        window.Telegram.WebApp.BackButton.show();
-        // window.Telegram.WebApp.BackButton.show();
-        // window.Telegram.WebApp.BackButton.onClick(() => { navigate("/markets") })
+    const onCommonSearchClick = () => { 
         navigate(`/common/search`);
     }
 
     const onCreateMarketButtonClick = () => {
-        window.Telegram.WebApp.BackButton.show();
-        // window.Telegram.WebApp.BackButton.show();
-        // window.Telegram.WebApp.BackButton.onClick(() => { navigate("/markets") })
         navigate(`/markets/create`);
     }
 

@@ -216,6 +216,14 @@ class SyncORM:
             return session.query(User).filter_by(username=username).first()
 
     @staticmethod
+    def get_user_by_id(userid):
+        """
+        Получить id пользователя.
+        """
+        with session_factory() as session:
+            return session.query(User).filter_by(id=userid).first()
+
+    @staticmethod
     def get_user_status(user_id):
         """
         Получить статус пользователя.

@@ -1,5 +1,6 @@
+from http import HTTPStatus
 from flask import jsonify, request
-from flask_jwt_extended import jwt_required
+from flask_jwt_extended import get_jwt_identity, jwt_required
 
 # from application import app
 from application.queries.orm import SyncORM
@@ -11,6 +12,16 @@ from . import bp
 @bp.get('/api/markets')
 @jwt_required()
 def markets():
+
+    current_user_id = get_jwt_identity()
+    # Получаем объект пользователя из БД
+    user = SyncORM.get_user_by_id(current_user_id)
+    if not user:
+        return jsonify({
+            "success": False,
+            "error_message": "User not found"
+        }), HTTPStatus.UNAUTHORIZED
+    
     user_data = request.cookies.get('user')
     user_id = user_data.get('id')
 
@@ -37,6 +48,16 @@ def markets():
 @bp.post('/api/markets')
 @jwt_required()
 def create_market():
+
+    current_user_id = get_jwt_identity()
+    # Получаем объект пользователя из БД
+    user = SyncORM.get_user_by_id(current_user_id)
+    if not user:
+        return jsonify({
+            "success": False,
+            "error_message": "User not found"
+        }), HTTPStatus.UNAUTHORIZED
+    
     if not request.is_json:
         return jsonify({'error': 'Request body must be JSON'}), 400
     user_data = request.cookies.get('user')

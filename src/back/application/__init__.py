@@ -8,6 +8,8 @@ from flask_sqlalchemy import SQLAlchemy
 from config.config import settings
 from application.views import bp
 
+from flask_jwt_extended import JWTManager
+
 #! Создание приложения
 app = Flask(__name__)
 
@@ -40,3 +42,16 @@ from application import forms
 from application import database
 from application import queries
 from application import utils
+
+# Add JWT-TOKEN
+
+app.config['JWT_SECRET_KEY'] = 'your-secret-key'  # Лучше использовать переменные окружения
+app.config['JWT_TOKEN_LOCATION'] = ['cookies']
+app.config['JWT_COOKIE_SECURE'] = True  # Только HTTPS в production
+app.config['JWT_COOKIE_CSRF_PROTECT'] = True  # Защита от CSRF
+app.config['JWT_ACCESS_COOKIE_PATH'] = '/'
+app.config['JWT_REFRESH_COOKIE_PATH'] = '/'
+app.config['JWT_COOKIE_SAMESITE'] = 'Lax'  # или 'Strict'
+
+jwt = JWTManager(app)
+

@@ -1,7 +1,7 @@
 from http import HTTPStatus
 
-from flask import Response, json, request
-from flask_jwt_extended import jwt_required
+from flask import Response, json, jsonify, request
+from flask_jwt_extended import jwt_required, get_jwt_identity
 
 # from application import app
 from application.forms import AirReturnForm, ReturnForm, SalesForm, PurchaseForm
@@ -10,13 +10,23 @@ from application.utils.checker import init_data_checker
 from application.utils.init_data import TelegramInitData
 from . import bp
 
-
 @bp.get('/api/history')
 @jwt_required()
 def history():
     """
     Получение записей истории в формате JSON с использованием Response.
     """
+    current_user_id = get_jwt_identity()
+    
+    # Получаем объект пользователя из БД
+    user = SyncORM.get_user_by_id(current_user_id)
+    if not user:
+        return jsonify({
+            "success": False,
+            "error_message": "User not found"
+        }), HTTPStatus.UNAUTHORIZED
+    
+
     # Получаем параметры из запроса
     record_type = request.args.get('type', default='vozvraty', type=str)
     vin_filter = request.args.get('like', default='', type=str)
@@ -55,8 +65,19 @@ def history():
 
 
 @bp.route("/api/history/sell/<int:sell_id>", methods=["GET", "POST"])
+@jwt_required()
 # @init_data_checker
 def history_sell(sell_id):
+
+    current_user_id = get_jwt_identity() 
+    # Получаем объект пользователя из БД
+    user = SyncORM.get_user_by_id(current_user_id)
+    if not user:
+        return jsonify({
+            "success": False,
+            "error_message": "User not found"
+        }), HTTPStatus.UNAUTHORIZED
+    
     if request.method == "POST":
         # Получаем данные из JSON запроса
         data = request.get_json()
@@ -123,6 +144,16 @@ def history_sell(sell_id):
 @bp.route("/api/history/purchase/<int:purchase_id>", methods=["GET", "POST"])
 @jwt_required()
 def history_purchase(purchase_id):
+
+    current_user_id = get_jwt_identity()
+    # Получаем объект пользователя из БД
+    user = SyncORM.get_user_by_id(current_user_id)
+    if not user:
+        return jsonify({
+            "success": False,
+            "error_message": "User not found"
+        }), HTTPStatus.UNAUTHORIZED
+    
     if request.method == "POST":
         # Получаем данные из JSON запроса
         data = request.get_json()
@@ -191,6 +222,16 @@ def history_purchase(purchase_id):
 @bp.route("/api/history/returns/<int:return_id>", methods=["GET", "POST"])
 @jwt_required()
 def history_return(return_id):
+
+    current_user_id = get_jwt_identity()
+    # Получаем объект пользователя из БД
+    user = SyncORM.get_user_by_id(current_user_id)
+    if not user:
+        return jsonify({
+            "success": False,
+            "error_message": "User not found"
+        }), HTTPStatus.UNAUTHORIZED
+    
     return_type = request.args.get("type")  # Получаем параметр типа возврата из URL или формы
     market_id = request.args.get('market_id', type=int)
     returned = None

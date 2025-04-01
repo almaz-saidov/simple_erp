@@ -1,7 +1,7 @@
 from http import HTTPStatus
 
-from flask import json, request, Response
-from flask_jwt_extended import jwt_required
+from flask import json, jsonify, request, Response
+from flask_jwt_extended import get_jwt_identity, jwt_required
 
 # from application import app
 from application.queries.orm import SyncORM
@@ -15,6 +15,16 @@ def search_detail():
     """
     Поиск детали по VIN через JSON.
     """
+
+    current_user_id = get_jwt_identity()
+    # Получаем объект пользователя из БД
+    user = SyncORM.get_user_by_id(current_user_id)
+    if not user:
+        return jsonify({
+            "success": False,
+            "error_message": "User not found"
+        }), HTTPStatus.UNAUTHORIZED
+    
     vin = request.args.get("vin", "")
     page = request.args.get("page", 1, type=int)
     per_page = request.args.get("per_page", 25, type=int)
@@ -66,6 +76,16 @@ def search_detail():
 @bp.get('/api/entire-search')
 @jwt_required()
 def entire_search_detail():
+
+    current_user_id = get_jwt_identity()
+    # Получаем объект пользователя из БД
+    user = SyncORM.get_user_by_id(current_user_id)
+    if not user:
+        return jsonify({
+            "success": False,
+            "error_message": "User not found"
+        }), HTTPStatus.UNAUTHORIZED
+    
     vin = request.args.get("vin", "")
     page = request.args.get("page", 1, type=int)
     per_page = request.args.get("per_page", 25, type=int)
@@ -116,6 +136,16 @@ def entire_search_detail():
 @bp.post('/api/change-detail/<int:detail_id>')
 @jwt_required()
 def change_detail(detail_id):
+
+    current_user_id = get_jwt_identity()
+    # Получаем объект пользователя из БД
+    user = SyncORM.get_user_by_id(current_user_id)
+    if not user:
+        return jsonify({
+            "success": False,
+            "error_message": "User not found"
+        }), HTTPStatus.UNAUTHORIZED
+    
     data = request.get_json()
 
     if not data:

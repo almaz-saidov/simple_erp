@@ -1,7 +1,7 @@
 from http import HTTPStatus
 
-from flask import Response, json, request
-from flask_jwt_extended import jwt_required
+from flask import Response, json, jsonify, request
+from flask_jwt_extended import get_jwt_identity, jwt_required
 
 # from application import app
 from application.forms import ReturnForm, AirReturnForm
@@ -14,6 +14,16 @@ from . import bp
 @bp.get('/api/returns')
 @jwt_required()
 def returns():
+
+    current_user_id = get_jwt_identity()
+    # Получаем объект пользователя из БД
+    user = SyncORM.get_user_by_id(current_user_id)
+    if not user:
+        return jsonify({
+            "success": False,
+            "error_message": "User not found"
+        }), HTTPStatus.UNAUTHORIZED
+    
     market_id = request.args.get('market_id', type=int)
     air_ret = SyncORM.get_active_airret_items(market_id)
     default_ret = SyncORM.get_active_ret_items(market_id)
@@ -58,6 +68,15 @@ def create_return():
     Ручка для создания возврата через JSON.
     """
 
+    current_user_id = get_jwt_identity()
+    # Получаем объект пользователя из БД
+    user = SyncORM.get_user_by_id(current_user_id)
+    if not user:
+        return jsonify({
+            "success": False,
+            "error_message": "User not found"
+        }), HTTPStatus.UNAUTHORIZED
+    
     # Получаем данные из JSON-запроса
     data = request.get_json()
 
@@ -138,6 +157,16 @@ def create_air_return():
     """
     Ручка для создания возврата через JSON.
     """
+
+    current_user_id = get_jwt_identity()
+    # Получаем объект пользователя из БД
+    user = SyncORM.get_user_by_id(current_user_id)
+    if not user:
+        return jsonify({
+            "success": False,
+            "error_message": "User not found"
+        }), HTTPStatus.UNAUTHORIZED
+    
     # Получаем данные из JSON-запроса
     data = request.get_json()
 
@@ -225,6 +254,16 @@ def create_air_return():
 @bp.route('/api/returns/<int:return_id>', methods=["GET", "POST", "DELETE"])
 @jwt_required()
 def check_return(return_id):
+
+    current_user_id = get_jwt_identity()
+    # Получаем объект пользователя из БД
+    user = SyncORM.get_user_by_id(current_user_id)
+    if not user:
+        return jsonify({
+            "success": False,
+            "error_message": "User not found"
+        }), HTTPStatus.UNAUTHORIZED
+    
     return_type = request.args.get("type")  # Получаем параметр типа возврата из URL
     market_id = request.args.get('market_id', type=int)
     returned = None

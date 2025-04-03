@@ -5,24 +5,26 @@ from datetime import timedelta
 # from application import app
 from application.queries.orm import SyncORM
 from . import bp
+from config.config import settings
 
-
-@bp.route('/login', methods=['POST'])
+@bp.route('/api/login', methods=['POST'])
 def login():
     data = request.get_json()
-    username = data.get("username")
+    username = data.get("login")
     password = data.get("password")
+    print(f"username: {username}, {password}")
 
     user = SyncORM.get_user_by_username(username)  # Ищем пользователя
+    print(f"user: {user}")
     if not user or not user.check_password(password):  # Проверяем пароль
         return jsonify({"error": "Неверный логин или пароль"}), 401
 
     # Создаем токен с установкой срока действия
     access_token = create_access_token(
-        identity=user.id,
+        identity=str(user.id),
         expires_delta=timedelta(hours=1)
     )
-    
+
     # Создаем ответ
     response = make_response(jsonify({
         "message": "Успешная авторизация",

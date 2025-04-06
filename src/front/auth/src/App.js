@@ -48,8 +48,8 @@ function App() {
                 .then(res => {
                     setState('idol');
                     toast.success('URA');
-                    // navigate('/front');
-                    // window.location.reload();
+                    navigate('/front');
+                    window.location.reload();
                 })
                 .catch(e => {
                     setState('error');

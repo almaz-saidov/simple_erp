@@ -47,8 +47,8 @@ from application import utils
 
 app.config['JWT_SECRET_KEY'] = 'your-secret-key'  # Лучше использовать переменные окружения
 app.config['JWT_TOKEN_LOCATION'] = ['cookies']
-app.config['JWT_COOKIE_SECURE'] = True  # Только HTTPS в production
-app.config['JWT_COOKIE_CSRF_PROTECT'] = True  # Защита от CSRF
+app.config['JWT_COOKIE_SECURE'] = False  # Только HTTPS в production
+app.config['JWT_COOKIE_CSRF_PROTECT'] = False  # Защита от CSRF
 app.config['JWT_ACCESS_COOKIE_PATH'] = '/'
 app.config['JWT_REFRESH_COOKIE_PATH'] = '/'
 app.config['JWT_COOKIE_SAMESITE'] = 'Lax'  # или 'Strict'

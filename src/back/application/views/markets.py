@@ -59,13 +59,16 @@ def create_market():
         }), HTTPStatus.UNAUTHORIZED
     
     if not request.is_json:
+        print("LOX1")
         return jsonify({'error': 'Request body must be JSON'}), 400
     user_data = request.cookies.get('user')
     try:
         name = request.json.get('name')
         address = request.json.get('address')
+        print(f"{name}-{address}-{user_data.get('id')}")
         SyncORM.cerate_market(user_data.get('id'), name, address)
     except Exception as e:
+        print("LOX2")
         return jsonify({'error': f'{e}'}), 400
 
     return jsonify({'message': 'Success'}), 201

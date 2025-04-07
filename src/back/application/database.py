@@ -3,7 +3,8 @@ from sqlalchemy.orm import DeclarativeBase, sessionmaker
 
 from config.config import settings
 
-
+print(f"{settings.DATABASE_URL_psycopg}")
+print(f"{settings.DB_USER} {settings.DB_PASS}")
 #! Создаем движок для db
 engine = create_engine(
 	url=settings.DATABASE_URL_psycopg,

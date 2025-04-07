@@ -54,9 +54,7 @@ def sales():
     date = data['date']
     price = data['price']
     name = data['name']
-    telegram_data = TelegramInitData(request.cookies.get('initData'))
-    user_data = telegram_data.to_dict().get('user')
-    who_added = user_data.get('id')
+    who_added = user.id
     # who_added = 1
     market_id = request.args.get('market_id', type=int)
 

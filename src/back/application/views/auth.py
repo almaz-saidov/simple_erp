@@ -23,6 +23,7 @@ def login():
     access_token = create_access_token(
         identity=str(user.id),
         expires_delta=timedelta(hours=1)
+
     )
 
     # Создаем ответ

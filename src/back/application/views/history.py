@@ -314,9 +314,8 @@ def history_return(return_id):
             returned.price = data.get("price", returned.price)
             returned.comment = data.get("comment", returned.comment)
             returned.is_end = data.get("is_compleat", returned.is_end)
-            telegram_data = TelegramInitData(request.cookies.get('initData'))
-            user_data = telegram_data.to_dict().get('user')
-            returned.who_added = user_data.get('id')
+            
+            returned.who_added = user.id
             # returned.who_added = 56123
 
             # Для AirReturn добавляем обработку поля другого магазина

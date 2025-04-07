@@ -21,17 +21,15 @@ def markets():
             "success": False,
             "error_message": "User not found"
         }), HTTPStatus.UNAUTHORIZED
-    
-    user_data = request.cookies.get('user')
-    user_id = user_data.get('id')
 
-    user_status = SyncORM.get_user_status(user_id)
+
+    user_status = SyncORM.get_user_status(user.id)
     # print(user_status)
     if user_status == 'admin' or user_status == 'seller':
         markets = SyncORM.get_all_markets()
         return jsonify({'records': [{'id': market.id, 'name': market.name, 'address': market.address} for market in markets]}), 200
     elif user_status == 'worker':
-        market = SyncORM.get_market(user_id)
+        market = SyncORM.get_market(user.id)
         return jsonify({'records': [{'id': market.id, 'name': market.name, 'address': market.address}]})
     # markets_list = [
     #     {
@@ -50,6 +48,7 @@ def markets():
 def create_market():
 
     current_user_id = get_jwt_identity()
+    print(current_user_id)
     # Получаем объект пользователя из БД
     user = SyncORM.get_user_by_id(current_user_id)
     if not user:
@@ -61,12 +60,11 @@ def create_market():
     if not request.is_json:
         print("LOX1")
         return jsonify({'error': 'Request body must be JSON'}), 400
-    user_data = request.cookies.get('user')
     try:
         name = request.json.get('name')
         address = request.json.get('address')
-        print(f"{name}-{address}-{user_data.get('id')}")
-        SyncORM.cerate_market(user_data.get('id'), name, address)
+        print(f"{name}-{address}-{user.id}")
+        SyncORM.cerate_market(user.id, name, address)
     except Exception as e:
         print("LOX2")
         return jsonify({'error': f'{e}'}), 400

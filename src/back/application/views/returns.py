@@ -116,9 +116,7 @@ def create_return():
     price = data['price']
     comment = data['comment']
     is_compleat = data['is_compleat']
-    telegram_data = TelegramInitData(request.cookies.get('initData'))
-    user_data = telegram_data.to_dict().get('user')
-    who_added = user_data.get('id')
+    who_added = user.id
     # who_added = 1
     market_id = request.args.get('market_id', type=int)
 
@@ -217,9 +215,7 @@ def create_air_return():
     another_shop = data['another_shop']
     comment = data['comment']
     is_compleat = data['is_compleat']
-    telegram_data = TelegramInitData(request.cookies.get('initData'))
-    user_data = telegram_data.to_dict().get('user')
-    who_added = user_data.get('id')
+    who_added = user.id
     # who_added = 1
     market_id = request.args.get('market_id', type=int)
 
@@ -354,9 +350,7 @@ def check_return(return_id):
             returned.price = data.get("price", returned.price)
             returned.comment = data.get("comment", returned.comment)
             returned.is_end = data.get("is_compleat", returned.is_end)
-            telegram_data = TelegramInitData(request.cookies.get('initData'))
-            user_data = telegram_data.to_dict().get('user')
-            returned.who_added = user_data.get('id')
+            returned.who_added = user.id
             # returned.who_added = 56123
 
             # Для AirReturn добавляем обработку поля другого магазина

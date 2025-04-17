@@ -1,20 +1,19 @@
 
-import React from 'react';
-import { useEffect, useState, useRef } from 'react';
-import { BrowserRouter, Routes, Route, Navigate, useNavigate, useLocation } from 'react-router-dom';
-import { ToasterWithMax } from './components/ToasterWithMax';
-import Market from './markets/Market';
-import MarketSelector from './pages/marketSelector/MarketSelector';
-import CreateMarket from './markets/CreateMarket';
-import { MarketProvider } from './markets/MarketContext';
-import { ModalProvider, useModal } from './components/SubmitModalContext';
-import { ConfirmationModal } from './components/SubmitButton';
-import CommonSearch from './pages/commonSearch/CommonSearch';
-import CommonDetail from './pages/commonDetail/CommonDetail';
-import ProtectedRoute from './components/ProtectedRoute/ProductRoute';
+import { useEffect, useState } from 'react'
+import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom'
+import ProtectedRoute from './components/ProtectedRoute/ProductRoute'
+import { ConfirmationModal } from './components/SubmitButton'
+import { ModalProvider, useModal } from './components/SubmitModalContext'
+import { ToasterWithMax } from './components/ToasterWithMax'
+import CreateMarket from './markets/CreateMarket'
+import Market from './markets/Market'
+import { MarketProvider } from './markets/MarketContext'
+import CommonDetail from './pages/commonDetail/CommonDetail'
+import CommonSearch from './pages/commonSearch/CommonSearch'
+import MarketSelector from './pages/marketSelector/MarketSelector'
 
 // @ts-ignore
-import './styles/App.css';
+import './styles/App.css'
 
 function App() {
 

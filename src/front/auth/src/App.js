@@ -35,7 +35,7 @@ function App() {
         setState('loading');
 
         setTimeout(async() => {
-            await fetch('http://192.168.10.10/api/login', {
+            await fetch('http://192.168.207.137/api/login', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -46,8 +46,8 @@ function App() {
                 }),
             })
                 .then(res => {
+                    localStorage.setItem('user_status','admin')
                     setState('idol');
-                    toast.success('URA');
                     navigate('/front');
                     window.location.reload();
                 })

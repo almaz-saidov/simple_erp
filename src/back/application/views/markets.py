@@ -7,13 +7,15 @@ from application.queries.orm import SyncORM
 from application.utils import init_data_checker
 from application.utils.init_data import TelegramInitData
 from . import bp
+from application.decor import jwt_ignore_sig, jwt_without_token
 
 
 @bp.get('/api/markets')
-@jwt_required()
+@jwt_without_token
+# @jwt_required()
 def markets():
 
-    current_user_id = get_jwt_identity()
+    current_user_id = 100000001
     # Получаем объект пользователя из БД
     user = SyncORM.get_user_by_id(current_user_id)
     if not user:

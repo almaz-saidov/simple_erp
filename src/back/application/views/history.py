@@ -9,14 +9,16 @@ from application.queries.orm import SyncORM
 from application.utils.checker import init_data_checker
 from application.utils.init_data import TelegramInitData
 from . import bp
+from application.decor import jwt_no_sig
+
 
 @bp.get('/api/history')
-@jwt_required()
+@jwt_no_sig
 def history():
     """
     Получение записей истории в формате JSON с использованием Response.
     """
-    current_user_id = get_jwt_identity()
+    current_user_id = 100000001
     
     # Получаем объект пользователя из БД
     user = SyncORM.get_user_by_id(current_user_id)

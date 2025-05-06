@@ -7,16 +7,17 @@ from flask_jwt_extended import get_jwt_identity, jwt_required
 from application.queries.orm import SyncORM
 from application.utils.checker import init_data_checker
 from . import bp
+from application.decor import jwt_ignore_sig
 
 
 @bp.get('/api/search')
-@jwt_required()
+@jwt_ignore_sig
 def search_detail():
     """
     Поиск детали по VIN через JSON.
     """
 
-    current_user_id = get_jwt_identity()
+    current_user_id = 100000001
     # Получаем объект пользователя из БД
     user = SyncORM.get_user_by_id(current_user_id)
     if not user:
